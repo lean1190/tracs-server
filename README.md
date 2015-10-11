@@ -1,13 +1,23 @@
-===
--- mongod
 Para levantar la base
+```
+#!javascript
+mongod
+```
 
-===
--- npm install
 Para instalar las dependencias
+```
+#!javascript
+npm install
+```
 
--- npm start
 Para levantar el server en development
+```
+#!javascript
+npm start
+```
 
--- set NODE_ENV=production && npm start
 Para levantar el server en production
+```
+#!javascript
+set NODE_ENV=production && npm start
+```
