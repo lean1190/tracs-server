@@ -2,21 +2,17 @@
 
 /* globals require, module */
 
-
-//ESTA HABRIA QUE BORRARLA, Y CAMBIARLE EL NOMBRE A LA OTRA
-
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
-    googleId: Number,
-    name: String,
-    phone: String,
-    email: String,
-    photo: String,
-
-    accessToken: String,
-    refreshToken: String,
+var PatientSchema = new Schema({
+    
+    firstName:String,
+    lastName:String,
+    homeAddress: String,
+    diagnoses:[{type : Schema.Types.ObjectId, ref : 'Diagnosis'}]
 });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("Patient", PatientSchema);
+
+    
