@@ -14,14 +14,18 @@ var mongoose = require("mongoose"),
  */
 var database = function Database(settings) {
     "use strict";
+
+    this.db = {};
     this.settings = settings;
     this.connect = function () {
+        var self = this;
         var databaseUrl = this.settings.connectionUrl;
         mongoose.connect(databaseUrl);
         var connection = mongoose.connection;
         connection.on("error", console.error.bind(console, "[ERROR] - MongoDB: CONNECTION ERROR"));
         connection.once("open", function () {
             logger.info("MongoDB: CONNECTION OK => " + databaseUrl);
+            self.db = mongoose.connection.db;
         });
     };
 };

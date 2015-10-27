@@ -9,7 +9,7 @@ var TreatmentSchema = new Schema({
     
     description: String,
     profile: {type : Schema.Types.ObjectId, ref : 'Profile'}, 
-    patient: {type : Schema.Types.ObjectId, ref : 'Profile'}
+    patient: {type : Schema.Types.ObjectId, ref : 'Patient'}
 });
 
 module.exports = mongoose.model("Treatment", TreatmentSchema);
