@@ -5,15 +5,14 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-
 var DiagnosisSchema = new Schema({
     
-    description: String,
-    date: Date,
+    description: { type: String, required: true },
+    date: { type: Date, required: true },
     treatment: String,
-    medication: String,
-    inCaseOfEmergency: String
+    inCaseOfCrisis: String,
+    medications: [{type : Schema.Types.ObjectId, ref : "Medication"}]
+
 });
     
-module.exports = mongoose.model("Diagnosis", DiagnosistSchema);
-    
+module.exports = mongoose.model("Diagnosis", DiagnosisSchema);

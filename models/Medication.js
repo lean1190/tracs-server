@@ -5,17 +5,17 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
+var MedicationSchema = new Schema({
 
-    googleId: { type: Number, required: true },
-    name: { type: String, required: true },
-    about: String,
-    telephone: String,
-    picture: String,
-    accessToken: String,
-    refreshToken: String,
-    treatments:[{type : Schema.Types.ObjectId, ref : 'Treatment'}]
+    drug: { type: String, required: true },
+    dosis: { type: String, required: true },
+    frequence: { type: String, required: true },
+    reminders: [
+        {
+            interval: int
+        }
+    ]
 
 });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("Diagnosis", MedicationSchema);

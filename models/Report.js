@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 
 var ReportSchema = new Schema({
     
-    title: String,
+    title: { type: String, required: true },
     driveFileId: Number
 });
 

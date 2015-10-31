@@ -7,7 +7,8 @@ var Schema = mongoose.Schema;
 
 var NoteSchema = new Schema({
     
-    description: String,
+    description: { type: String, required: true },
+    date: { type: Date, required: true },
     tags: [String],
     //attachmentFiles:[{type : Schema.Types.ObjectId, ref : 'AttachmentFile'}]
 });
@@ -15,4 +16,3 @@ var NoteSchema = new Schema({
 module.exports = mongoose.model("Note", NoteSchema);
 
            
-    
