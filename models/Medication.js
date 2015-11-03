@@ -18,4 +18,4 @@ var MedicationSchema = new Schema({
 
 });
 
-module.exports = mongoose.model("Diagnosis", MedicationSchema);
+module.exports = mongoose.model("Medication", MedicationSchema);

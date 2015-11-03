@@ -16,4 +16,4 @@ var ProfileSchema = new Schema({
     //chats:
 });
 
-module.exports = mongoose.model("Patient", PatientSchema);
+module.exports = mongoose.model("Profile", ProfileSchema);
