@@ -16,4 +16,9 @@ var ProfileSchema = new Schema({
     //chats:
 });
 
+ProfileSchema.prototype.getProfiles = function() {
+
+    ProfileSchema.find().populate('notes' 'notifications' 'reports' 'accessRoles').exec()
+};
+
 module.exports = mongoose.model("Profile", ProfileSchema);

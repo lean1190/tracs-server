@@ -16,5 +16,10 @@ var PatientSchema = new Schema({
 
 });
 
+PatientSchema.prototype.getPatients = function(){
+
+    PatientSchema.find().populate('diagnoses').exec()
+};
+
 module.exports = mongoose.model("Patient", PatientSchema);
 

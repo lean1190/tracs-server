@@ -18,4 +18,10 @@ var UserSchema = new Schema({
 
 });
 
+UserSchema.prototype.getUsers = function(){
+
+    UserSchema.find().populate('treatments').exec()
+};
+
+
 module.exports = mongoose.model("User", UserSchema);

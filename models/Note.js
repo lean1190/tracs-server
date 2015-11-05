@@ -10,8 +10,16 @@ var NoteSchema = new Schema({
     description: { type: String, required: true },
     date: { type: Date, required: true },
     tags: [String],
-    //attachmentFiles:[{type : Schema.Types.ObjectId, ref : 'AttachmentFile'}]
+    isComplex: { type:Boolean, required: true},
+    attachmentFiles:[{type : Schema.Types.ObjectId, ref : 'AttachmentFile'}]
+
 });
+
+NoteSchema.prototype.findNotes = function(){
+
+    NoteSchema.find().populate('attachmentFiles').exect();
+
+}
 
 module.exports = mongoose.model("Note", NoteSchema);
 
