@@ -14,14 +14,8 @@ var UserSchema = new Schema({
     picture: String,
     accessToken: String,
     refreshToken: String,
-    treatments:[{type : Schema.Types.ObjectId, ref : 'Treatment'}]
+    treatments:[{type : Schema.Types.ObjectId, ref : "Treatment"}]
 
 });
-
-UserSchema.prototype.getUsers = function(){
-
-    UserSchema.find().populate('treatments').exec()
-};
-
 
 module.exports = mongoose.model("User", UserSchema);

@@ -12,10 +12,9 @@ var TreatmentSchema = new Schema({
     patient: {type : Schema.Types.ObjectId, ref : 'Patient'}
 });
 
-TreatmentSchema.prototype.getTreatments = function(){
-
+/*TreatmentSchema.prototype.getTreatments = function(){
     TreatmentSchema.find().populate('profile' 'patient').exec()
-};
+};*/
 
 
 module.exports = mongoose.model("Treatment", TreatmentSchema);

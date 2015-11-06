@@ -3,11 +3,10 @@
 /* globals require, module, console */
 
 require("../models/User");
+require("../models/Treatment");
 
 var mongoose = require("mongoose"),
     User = mongoose.model("User"),
-    GenericMongooseWrapper = require("../utils/GenericMongooseWrapper"),
-    userQuerier = new GenericMongooseWrapper("User", "../models/User"),
     utilsHelper = require("../utils/UtilsHelper");
 
 var UserService = {},
@@ -32,36 +31,34 @@ UserService.removeImageSize = function (imageUrl) {
 UserService.findAll = function () {
     "use strict";
 
-    return userQuerier.find();
+    // return User.find().populate("treatments").exec();
+    return User.find().exec();
 };
 
 // Return a User with specified ID
 UserService.findById = function (userId) {
     "use strict";
 
-    return userQuerier.findById(userId);
+    return User.findById(userId).exec();
 };
 
 // Return a User with specified name
 UserService.findByName = function (name) {
     "use strict";
 
-    return userQuerier.find({
+    return User.find({
         name: name
-    });
+    }).exec();
 };
 
 // Add a new User
 UserService.addUser = function (reqUser) {
     "use strict";
 
-    reqUser.watchRound = reqUser.watchRound || -1;
-    reqUser.schedule = reqUser.schedule || [];
-
     var newUser = new User(reqUser);
 
-    return userQuerier.save(newUser).then(function (user) {
-        return user[0];
+    return User.save(newUser).then(function (user) {
+        return user;
     }, function (err) {
         return err;
     });
