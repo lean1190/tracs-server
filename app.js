@@ -10,6 +10,7 @@ var // Config modules
     CommonRouter = require("./routers/CommonRouter"),
     SessionRouter = require("./routers/SessionRouter"),
     UserRouter = require("./routers/UserRouter"),
+    TreatmentRouter = require ("./routers/TreatmentRouter"),
 
     // Environment configs
     config = require("./utils/Config");
@@ -22,7 +23,8 @@ db.connect();
 var app = new Application({path: __dirname, folder: "public"}, [
     {route: "/", handler: CommonRouter},
     {route: "/auth", handler: SessionRouter},
-    {route: "/users", handler: UserRouter}
+    {route: "/users", handler: UserRouter},
+    {route: "/treatment", handler: TreatmentRouter}
 ]);
 
 module.exports = app;
