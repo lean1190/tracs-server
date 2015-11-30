@@ -8,6 +8,6 @@ var express = require("express"),
 
 /* Basic treatment information */
 
-
+router.get("/treatmentCreate", TreatmentController.addTreatment);
 
 module.exports = router;

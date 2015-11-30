@@ -12,7 +12,7 @@ var mongoose = require("mongoose"),
 var TreatmentService = {},
     self = TreatmentService;
 
-UserService.addTreatment = function (req, res) {
+UserService.addTreatment = function (req) {
 
     "use strict";
     var newTreatment = new Treatment();
@@ -22,9 +22,7 @@ UserService.addTreatment = function (req, res) {
     newPatient.birthDate = req.patientBirthDate;
     newPatient.description = req.patientDescription;
 
-/*
-El tratamiento tendria que tener asignado al usuario en el modelo. Ahora no se si el Perfil tambien tiene que tener asignado al usuario, no se, como que siento que falta una pata para especificar el perfil del usuario.
-*/
+//El tratamiento tendria que tener asignado al usuario en el modelo. Ahora no se si el Perfil tambien tiene que tener asignado al usuario, no se, como que siento que falta una pata para especificar el perfil del usuario.
 
     newTreatment.description = req.description;
 
@@ -37,9 +35,6 @@ El tratamiento tendria que tener asignado al usuario en el modelo. Ahora no se s
             return err;
         });
     });
-}
-
-
-
+};
 
 module.exports = TreatmentService;
