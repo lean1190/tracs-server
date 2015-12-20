@@ -12,7 +12,7 @@ var mongoose = require("mongoose"),
 var TreatmentService = {},
     self = TreatmentService;
 
-UserService.addTreatment = function (req) {
+TreatmentService.addTreatment = function (req) {
 
     "use strict";
     var newTreatment = new Treatment();
@@ -35,6 +35,6 @@ UserService.addTreatment = function (req) {
             return err;
         });
     });
-};
+}
 
 module.exports = TreatmentService;

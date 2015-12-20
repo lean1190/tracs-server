@@ -30,7 +30,7 @@ var app = function Application(publicSettings, routers) {
     // -------------------------
     // MUST BE IN THIS ORDER! =S
     // -------------------------
-    expressApp.use(express.static(path.join(publicSettings.path, publicSettings.folder)));
+    expressApp.use(express.static(path.join(publicSettings.path + "/public", publicSettings.folder)));
     expressApp.use(cookieParser());
     expressApp.use(bodyParser.json());
     expressApp.use(bodyParser.urlencoded({

@@ -10,15 +10,17 @@ var ProfileSchema = new Schema({
     description: { type: String, required: true },
     isAdmin: { type: Boolean, required: true },
     notes: [{type : Schema.Types.ObjectId, ref : 'Note'}],
-    notifications:[ {type : Schema.Types.ObjectId, ref : 'Notification'}],
+    notifications:[{type : Schema.Types.ObjectId, ref : 'Notification'}],
     reports: [{type : Schema.Types.ObjectId, ref : 'Report'}],
-    accessRoles: [{type : Schema.Types.objectId, ref: 'AccessRole'}]
+    accessRoles: [{type : Schema.Types.ObjectId, ref: 'AccessRole'}]
     //chats:
 });
 
+/*
 ProfileSchema.prototype.getProfiles = function() {
 
     ProfileSchema.find().populate('notes' 'notifications' 'reports' 'accessRoles').exec()
 };
+*/
 
 module.exports = mongoose.model("Profile", ProfileSchema);

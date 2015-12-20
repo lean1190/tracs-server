@@ -6,10 +6,12 @@ var express = require("express"),
     router = express.Router(),
     UserController = require("../controllers/UserController");
 
+
+
+
 /* Basic user information */
 router.get("/", UserController.findAll);
 router.post("/", UserController.addUser);
-
 router.get("/:id", UserController.findById);
 router.put("/:id", UserController.updateUser);
 router.delete("/:id", UserController.deleteUser);

@@ -6,6 +6,8 @@ var UserService = require("../services/UserService");
 
 var UserController = {};
 
+
+
 /**
  *  ===============================
  *  ==== BASIC USER OPERATIONS ====
@@ -24,6 +26,8 @@ UserController.findAll = function (req, res) {
 
 // Return a User with specified ID
 UserController.findById = function (req, res) {
+
+
     "use strict";
     UserService.findById(req.params.id).then(function (user) {
         res.status(200).jsonp(user);

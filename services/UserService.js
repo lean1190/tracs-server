@@ -12,6 +12,8 @@ var mongoose = require("mongoose"),
 var UserService = {},
     self = UserService;
 
+
+
 /**
  *  ===============================
  *  ==== BASIC USER OPERATIONS ====

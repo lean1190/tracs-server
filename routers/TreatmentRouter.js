@@ -7,7 +7,7 @@ var express = require("express"),
     TreatmentController = require("../controllers/TreatmentController");
 
 /* Basic treatment information */
-
-router.get("/treatmentCreate", TreatmentController.addTreatment);
+console.log("vino al treatmentRouter");
+router.put("/treatmentCreate", TreatmentController.addTreatment);
 
 module.exports = router;
