@@ -8,6 +8,6 @@ var express = require("express"),
 
 /* Basic treatment information */
 console.log("vino al treatmentRouter");
-router.put("/treatmentCreate", TreatmentController.addTreatment);
+router.post("/treatmentCreate", TreatmentController.addTreatment);
 
 module.exports = router;
