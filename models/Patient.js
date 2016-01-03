@@ -8,10 +8,12 @@ var Schema = mongoose.Schema;
 var PatientSchema = new Schema({
     
     name: { type: String, required: true },
+    DNI: {type: String, required:true},
     homeAddress: String,
     birthDate: Date,
     picture: String,
     description: String,
+    phoneNumber: String,
     diagnoses:[{type : Schema.Types.ObjectId, ref : "Diagnosis"}]
 
 });
