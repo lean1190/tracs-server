@@ -10,11 +10,11 @@ var UserSchema = new Schema({
     googleId: { type: Number, required: true },
     name: { type: String, required: true },
     about: String,
-    telephone: String,
+    phoneNumber: String,
     picture: String,
     accessToken: String,
     refreshToken: String,
-    treatments:[{type : Schema.Types.ObjectId, ref : "Treatment"}]
+    profiles:[{type : Schema.Types.ObjectId, ref : "Profile"}]
 
 });
 

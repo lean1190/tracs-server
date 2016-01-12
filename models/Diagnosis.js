@@ -9,15 +9,14 @@ var DiagnosisSchema = new Schema({
     
     description: { type: String, required: true },
     date: { type: Date, required: true },
-    treatment: String,
     inCaseOfCrisis: String,
     medications: [{type : Schema.Types.ObjectId, ref : "Medication"}]
 
 });
 
-DiagnosisSchema.prototype.getDiagnoses = function(){
+/*DiagnosisSchema.prototype.getDiagnoses = function(){
 
     DiagnosisSchema.find().populate('medications').exec()
 };
-    
+    */
 module.exports = mongoose.model("Diagnosis", DiagnosisSchema);

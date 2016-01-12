@@ -5,11 +5,10 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-var MedicationSchema = new Schema({
+var SessionSchema = new Schema({
 
-    drug: { type: String, required: true },
-    dosis: { type: String, required: true },
-    frequence: { type: String, required: true }
+    description: String,
+    remaining: number;
 });
 
-module.exports = mongoose.model("Medication", MedicationSchema);
+module.exports = mongoose.model("Session", SessionSchema);

@@ -9,12 +9,14 @@ var PatientSchema = new Schema({
     
     name: { type: String, required: true },
     DNI: {type: String, required:true},
-    homeAddress: String,
+    address: String,
     birthDate: Date,
     picture: String,
-    description: String,
+    generalDescription: String,
     phoneNumber: String,
-    diagnoses:[{type : Schema.Types.ObjectId, ref : "Diagnosis"}]
+    diagnoses:[{type : Schema.Types.ObjectId, ref : "Diagnosis"}],
+    profiles:[{type : Schema.Types.ObjectId, ref : "Profile"}],
+    treatment:[{type : Schema.Types.ObjectId, ref : "Treatment"}]
 
 });
 

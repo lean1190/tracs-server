@@ -8,7 +8,7 @@ var Schema = mongoose.Schema;
 var TreatmentSchema = new Schema({
     
     description: { type: String, required: true },
-    profile: {type : Schema.Types.ObjectId, ref : 'Profile'}, 
+    sessions: {type : Schema.Types.ObjectId, ref : 'Session'},
     patient: {type : Schema.Types.ObjectId, ref : 'Patient'}
 });
 
