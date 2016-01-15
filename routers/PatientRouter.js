@@ -5,6 +5,6 @@ var express = require("express"),
 /* Basic Patient information */
 console.log("vino al PatienttRouter");
 //router.get("/", PatientController.findAll);
-router.post("/", PatientController.addPatient);
+router.post("/", PatientController.add);
 
 module.exports = router;

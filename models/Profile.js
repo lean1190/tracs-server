@@ -7,14 +7,14 @@ var Schema = mongoose.Schema;
 
 var ProfileSchema = new Schema({
     
-    description: { type: String, required: true },
+    description: String,
     isAdmin: { type: Boolean, required: true },
     notes: [{type : Schema.Types.ObjectId, ref : 'Note'}],
     notifications:[{type : Schema.Types.ObjectId, ref : 'Notification'}],
     reports: [{type : Schema.Types.ObjectId, ref : 'Report'}],
     accessRoles: [{type : Schema.Types.ObjectId, ref: 'AccessRole'}],
     patient:[{type : Schema.Types.ObjectId, ref : "Patient"}],
-    user:[{type : Schema.Types.ObjectId, ref : "User"}],
+    user:{type : Schema.Types.ObjectId, ref : "User"},
     patientOpinion:[{type : Schema.Types.ObjectId, ref : "PatientOpinion"}]
     //chats:
 });
