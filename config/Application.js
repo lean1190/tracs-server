@@ -8,9 +8,7 @@ var express = require("express"),
     morganLogger = require("morgan"),
     cookieParser = require("cookie-parser"),
     bodyParser = require("body-parser"),
-    Passport = require("./Passport"),
-    logger = require("../utils/Logger"),
-    config = require("../utils/Config");
+    logger = require("../utils/Logger");
 
 /**
  * The main express application constructor, setups the middleware
@@ -36,15 +34,6 @@ var app = function Application(publicSettings, routers) {
     expressApp.use(bodyParser.urlencoded({
         extended: false
     }));
-
-    // ===== PASSPORT SETUP with Google OAuth2
-    var passport = new Passport({
-        sessionSecret: config.session_secret,
-        googleClientId: config.google_client_id,
-        googleClientSecret: config.google_client_secret,
-        authCallbackUrl: config.google_callback_url
-    });
-    passport.register(expressApp);
 
     expressApp.use(morganLogger("combined", { "stream": logger.stream }));
     expressApp.use(cors());

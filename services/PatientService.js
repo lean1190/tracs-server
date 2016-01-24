@@ -7,8 +7,6 @@ require("../models/Treatment");
 require("../models/Diagnosis");
 require("../models/Profile");
 
-
-
 var mongoose = require("mongoose"),
     Patient  = mongoose.model("Patient");
 
