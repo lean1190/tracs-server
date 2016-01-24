@@ -34,39 +34,42 @@ PatientController.add = function (req, res) {
     newPatient.description = "description"//req.patientDescription;
     newPatient.DNI = "35792525";
 
-
-    /*PatientService.add(newPatient).then(function(patient){
+    console.log(newPatient);
+    PatientService.add(newPatient).then(function(patient){
         res.jsonp(patient);
     }, function(err){
         return res.status(500).send(err.message);
-    });*/
+    });
 
 //El tratamiento tendria que tener asignado al usuario en el modelo. Ahora no se si el Perfil tambien tiene que tener asignado al usuario, no se, como que siento que falta una pata para especificar el perfil del usuario.
 
-    newPatient.save(function(err, patient){
+
+// EL POSTA//
+    /*newPatient.save(function(err, patient){
 
         if (err) return console.error(err);
 
         var newProfile = new Profile();
         newProfile.isAdmin= true;
         newProfile.patient = patient._id;
-        newProfile.user = patient._id; //LO GUARDA CON EL DEL PACIENTE POR EL MOMENTO, HASTA TENER EL DEL USUARIO
-
+        newProfile.user = "56986b129a1971d812b0050a"; //LO GUARDA CON un hardcode por el momento, hasta que podamos guardar el ID en el localstorage
 
         newProfile.save(function(err, profile){
 
             if (err) return console.error(err);
             res.jsonp(patient)
 
+        });*/
+
+// EL POSTA//
 
 
-        });
 
-       /* if (err) return console.error(err);
+    /* if (err) return console.error(err);
         //newTreatment.patient = patient._id;
 
-        res.jsonp(patient);*/
-    });
+        res.jsonp(patient);
+    });*/
 
 
     /* PatientService.add(function(err, patient){

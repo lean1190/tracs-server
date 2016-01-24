@@ -12,6 +12,7 @@ var // Config modules
     UserRouter = require("./routers/UserRouter"),
     TreatmentRouter = require ("./routers/TreatmentRouter"),
     PatientRouter = require("./routers/PatientRouter"),
+    ProfileRouter = require("./routers/ProfileRouter"),
 
     // Environment configs
     config = require("./utils/Config");
@@ -26,7 +27,8 @@ var app = new Application({path: __dirname, folder: "public"}, [
     {route: "/session", handler: SessionRouter},
     {route: "/users", handler: UserRouter},
     {route: "/treatment", handler: TreatmentRouter},
-    {route: "/patient", handler: PatientRouter}
+    {route: "/patient", handler: PatientRouter},
+    {route: "/profile", handler: ProfileRouter}
 ]);
 
 module.exports = app;
