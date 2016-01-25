@@ -6,9 +6,6 @@ var express = require("express"),
     router = express.Router(),
     UserController = require("../controllers/UserController");
 
-
-
-
 /* Basic user information */
 router.get("/", UserController.findAll);
 router.post("/", UserController.addUser);

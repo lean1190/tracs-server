@@ -3,18 +3,9 @@
 /* globals require, module, console */
 
 var express = require("express"),
-    router = express.Router();
+    router = express.Router(),
+    SessionController = require("../controllers/SessionController");
 
-router.get("/login", function (req, res) {
-    "use strict";
-    console.log("Server google id", req.params.googleId);
-    res.status(200).jsonp(true);
-});
-
-router.get("/logout", function (req, res) {
-    "use strict";
-    req.logout();
-    res.redirect("/");
-});
+router.get("/login", SessionController.login);
 
 module.exports = router;

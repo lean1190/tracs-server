@@ -12,24 +12,10 @@ var mongoose = require("mongoose"),
 var UserService = {},
     self = UserService;
 
-
-
 /**
- *  ===============================
- *  ==== BASIC USER OPERATIONS ====
- *  ===============================
+ * Recupera todos los usuarios
+ * @returns {Array} el arreglo con todos los usuarios
  */
-
-// Remove the image resize parameter after the extension
-// Google set it to the profile photo
-UserService.removeImageSize = function (imageUrl) {
-    "use strict";
-    var parametersPosition = imageUrl.indexOf("?");
-
-    return imageUrl.substring(0, parametersPosition !== -1 ? parametersPosition : imageUrl.length);
-};
-
-// Return all users
 UserService.findAll = function () {
     "use strict";
 
@@ -37,36 +23,55 @@ UserService.findAll = function () {
     return User.find().exec();
 };
 
-// Return a User with specified ID
+/**
+ * Recupera un usuario por el id
+ * @param   {number} userId el id del usuario
+ * @returns {object} el usuario recuperado
+ */
 UserService.findById = function (userId) {
     "use strict";
 
     return User.findById(userId).exec();
 };
 
-// Return a User with specified name
-UserService.findByName = function (name) {
+/**
+ * Recupera un usuario por el id de Google
+ * @param   {number} googleId el id de Google
+ * @returns {object} el usuario recuperado
+ */
+UserService.findByGoogleId = function (googleId) {
     "use strict";
-
-    return User.find({
-        name: name
-    }).exec();
+    console.log("$$$$ Llego hasta el UserService.findByGoogleId", googleId);
+    return User.find({ googleId: googleId }).exec();
 };
 
-// Add a new User
+/**
+ * Agrega un usuario nuevo
+ * @param   {object} reqUser el usuario con los datos básicos
+ * @returns {object} el usuario guardado
+ */
 UserService.addUser = function (reqUser) {
     "use strict";
-
+    console.log("$$$$ Llego hasta el UserService.addUser", reqUser);
+    reqUser.profiles = [];
     var newUser = new User(reqUser);
 
+    console.log("$$$$ Usuario del modelo", newUser);
+
     return User.save(newUser).then(function (user) {
+        console.log("$$$$ Se guardo okey", user);
         return user;
     }, function (err) {
+        console.log("$$$$ Se rompio", err);
         return err;
     });
 };
 
-// Update an existing User
+/**
+ * Actualiza los datos de un usuario
+ * @param   {object} reqUser el usuario con los datos a actualizar
+ * @returns {object} el usuario actualizado
+ */
 UserService.updateUser = function (reqUser) {
     "use strict";
     return userQuerier.findById(reqUser.id).then(function (user) {
@@ -80,41 +85,19 @@ UserService.updateUser = function (reqUser) {
     });
 };
 
-// Delete a User with specified ID
+/**
+ * Borra un usuario por id
+ * @param   {number}  userId el id del usuario a borrar
+ * @returns {boolean} true si se guardó correctamente
+ */
 UserService.deleteUser = function (userId) {
     "use strict";
-    return userQuerier.findById(userId).then(function (user) {
-        userQuerier.remove(user).then(function () {
+    return User.findById(userId).then(function (user) {
+        User.remove(user).then(function () {
             return true;
         }, function (err) {
             return err;
         });
-    });
-};
-
-// Find or create a user based on its Google id
-UserService.findOrCreateUserWithGoogleProfile = function (googleProfile, accessToken, refreshToken) {
-    "use strict";
-
-    return userQuerier.findOne({
-        googleId: googleProfile.id
-    }).then(function (user) {
-        if (utilsHelper.isEmpty(user)) {
-            var profilePhoto = self.removeImageSize(googleProfile.photos[0].value);
-            return self.addUser({
-                googleId: googleProfile.id,
-                name: googleProfile.displayName,
-                phone: 15444999,
-                email: googleProfile.emails[0].value,
-                profilePhoto: profilePhoto,
-                accessToken: accessToken,
-                refreshToken: refreshToken
-            });
-        } else {
-            return user;
-        }
-    }, function (err) {
-        return err;
     });
 };
 
