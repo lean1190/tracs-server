@@ -12,7 +12,7 @@ SessionController.login = function (req, res) {
     reqUser.accessToken = req.query.accessToken;
     reqUser.refreshToken = req.query.refreshToken;
     reqUser.googleId = req.query.googleId;
-    reqUser.email = req.query.googleId;
+    reqUser.email = req.query.email;
     reqUser.name = req.query.name;
     reqUser.picture = req.query.picture;
 

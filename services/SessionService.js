@@ -3,10 +3,10 @@
 /* globals require, module, console */
 
 var UserService = require("./UserService"),
-    utilsHelper = require("../utils/UtilsHelper");
+    utilsHelper = require("../utils/UtilsHelper"),
+    logger = require("../utils/Logger");
 
-var SessionService = {},
-    self = SessionService;
+var SessionService = {};
 
 /**
  * Busca un usuario por el id de Google, si no lo encuentra
@@ -16,15 +16,16 @@ var SessionService = {},
 SessionService.findOrCreateUser = function (reqUser) {
     "use strict";
 
+    //UserService.deleteAllUsers();
+
     return UserService.findByGoogleId(reqUser.googleId).then(function (foundUser) {
         // Si no se encontró el usuario
         if (utilsHelper.isEmpty(foundUser)) {
+            logger.info("No se encontró el usuario con id de Google " + reqUser.googleId + ", se crea uno nuevo");
             return UserService.addUser(reqUser).then(function (user) {
-                console.log("User in SessionService", user);
                 return user;
             });
         } else {
-            console.log("$$$$ Usuario encontrado!", foundUser);
             return foundUser;
         }
     });

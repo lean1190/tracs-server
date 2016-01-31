@@ -7,10 +7,9 @@ require("../models/Treatment");
 
 var mongoose = require("mongoose"),
     User = mongoose.model("User"),
-    utilsHelper = require("../utils/UtilsHelper");
+    logger = require("../utils/Logger");
 
-var UserService = {},
-    self = UserService;
+var UserService = {};
 
 /**
  * Recupera todos los usuarios
@@ -41,8 +40,13 @@ UserService.findById = function (userId) {
  */
 UserService.findByGoogleId = function (googleId) {
     "use strict";
-    console.log("$$$$ Llego hasta el UserService.findByGoogleId", googleId);
-    return User.find({ googleId: googleId }).exec();
+
+    return User.find({ googleId: googleId }).exec().then(function (user) {
+        return user[0];
+    }, function (err) {
+        logger.error("Ocurrió un error al buscar al usuario con id de Google " + googleId, err);
+        return err;
+    });
 };
 
 /**
@@ -52,17 +56,19 @@ UserService.findByGoogleId = function (googleId) {
  */
 UserService.addUser = function (reqUser) {
     "use strict";
-    console.log("$$$$ Llego hasta el UserService.addUser", reqUser);
-    reqUser.profiles = [];
+
+    reqUser.profiles = reqUser.profiles || [];
+    reqUser.about = reqUser.about || "";
+    reqUser.phoneNumber = reqUser.phoneNumber || "";
+    reqUser.accessToken = reqUser.accessToken || "";
+    reqUser.refreshToken = reqUser.refreshToken || "";
+
     var newUser = new User(reqUser);
 
-    console.log("$$$$ Usuario del modelo", newUser);
-
-    return User.save(newUser).then(function (user) {
-        console.log("$$$$ Se guardo okey", user);
+    return newUser.save().then(function (user) {
         return user;
     }, function (err) {
-        console.log("$$$$ Se rompio", err);
+        logger.error("Ocurrió un error al guardar al usuario con id de Google " + reqUser.googleId, err);
         return err;
     });
 };
@@ -74,7 +80,7 @@ UserService.addUser = function (reqUser) {
  */
 UserService.updateUser = function (reqUser) {
     "use strict";
-    return userQuerier.findById(reqUser.id).then(function (user) {
+    /*return userQuerier.findById(reqUser.id).then(function (user) {
         user.name = reqUser.name || user.name;
         user.phone = reqUser.phone || user.phone;
         user.email = reqUser.email || user.email;
@@ -82,7 +88,7 @@ UserService.updateUser = function (reqUser) {
         user.schedule = reqUser.schedule || user.schedule;
 
         return userQuerier.save(user);
-    });
+    });*/
 };
 
 /**
@@ -96,9 +102,19 @@ UserService.deleteUser = function (userId) {
         User.remove(user).then(function () {
             return true;
         }, function (err) {
+            logger.error("Ocurrió un error al borrar al usuario con id " + userId, err);
             return err;
         });
     });
+};
+
+/**
+ * Borra todos los usuarios de la base
+ * ### SOLO PARA USO POR CÓDIGO Y TESTING, SIN CONTROLLER (alto peligro) ###
+ */
+UserService.deleteAllUsers = function() {
+    "use strict";
+    User.remove({}, function() {});
 };
 
 module.exports = UserService;

@@ -9,9 +9,10 @@ var UserSchema = new Schema({
 
     googleId: { type: Number, required: true },
     name: { type: String, required: true },
+    email: { type: String, required: true },
+    picture: { type: String, required: true },
     about: String,
     phoneNumber: String,
-    picture: String,
     accessToken: String,
     refreshToken: String,
     profiles:[{type : Schema.Types.ObjectId, ref : "Profile"}]
