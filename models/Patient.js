@@ -14,7 +14,7 @@ var PatientSchema = new Schema({
     picture: String,
     generalDescription: String,
     phoneNumber: String,
-    diagnoses:[{type : Schema.Types.ObjectId, ref : "Diagnosis"}],
+    diagnosis:[{type : Schema.Types.ObjectId, ref : "Diagnosis"}],
     profiles:[{type : Schema.Types.ObjectId, ref : "Profile"}],
     treatment:[{type : Schema.Types.ObjectId, ref : "Treatment"}]
 
