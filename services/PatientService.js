@@ -15,7 +15,7 @@ var PatientService = {},
     self = PatientService;
 
 
-PatientService.add = function(newPatient){
+PatientService.add = function(newPatient,adminNr){
     "use strict";
     console.log("Patient Serv Add");
 
@@ -35,7 +35,7 @@ PatientService.add = function(newPatient){
         var newProfile = new Profile();
         newProfile.isAdmin= true;
         newProfile.patient = patient._id;
-        newProfile.user = "56986b129a1971d812b0050a"; //LO GUARDA CON un hardcode por el momento, hasta que podamos guardar el ID en el localstorage
+        newProfile.user = adminNr; //LO GUARDA CON un hardcode por el momento, hasta que podamos guardar el ID en el localstorage
 
 
         newProfile.save(function(err, profile){
