@@ -14,6 +14,24 @@ var mongoose = require("mongoose"),
 var PatientService = {},
     self = PatientService;
 
+/*PatientService.findAll = function () {
+    "use strict";
+
+    // return User.find().populate("treatments").exec();
+    Profile.find({ user: "56986b129a1971d812b0050a" }).populate('patient').exec(function (err, patients) {
+    if (err) return console.error(err);
+    return patients;
+  // prints "The creator is Aaron"
+    })
+};*/
+
+PatientService.findAll = function () {
+    "use strict";
+
+        return Profile.find({user:"56986b129a1971d812b0050a"}).populate('patient').exec();
+
+};
+
 
 PatientService.add = function(newPatient,adminNr){
     "use strict";

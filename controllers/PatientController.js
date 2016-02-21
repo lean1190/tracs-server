@@ -17,9 +17,22 @@ var PatientController = {},
 
 /**
  *  ===============================
- *  ==== BASIC Treatment OPERATIONS ====
+ *  ==== BASIC Patient OPERATIONS ====
  *  ===============================
  */
+
+
+PatientController.find = function (req, res) {
+"use strict";
+
+    console.log("entre al patient find");
+    PatientService.findAll().then(function (patients) {
+        res.status(200).jsonp(patients);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
+
 
 PatientController.add = function (req, res) {
 "use strict";
