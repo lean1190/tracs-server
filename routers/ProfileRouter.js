@@ -6,11 +6,6 @@ var express = require("express"),
     router = express.Router(),
     ProfileController = require("../controllers/ProfileController");
 
-
-
-
-/* Basic user information */
-
 /*router.get("/", UserController.findAll);
 router.post("/", UserController.addUser);
 router.get("/:id", UserController.findById);

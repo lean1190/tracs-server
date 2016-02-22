@@ -4,6 +4,13 @@ Para levantar la base
 mongod
 ```
 
+Para limpiar la base
+```
+#!javascript
+use tracs-db
+db.dropDatabase();
+```
+
 Para instalar las dependencias
 ```
 #!javascript
@@ -20,4 +27,12 @@ Para levantar el server en production
 ```
 #!javascript
 set NODE_ENV=production && npm start
+```
+
+Para correr los tests
+```
+#!javascript
+npm install -g mocha
+
+set NODE_ENV=testing && mocha
 ```
