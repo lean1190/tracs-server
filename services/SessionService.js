@@ -22,9 +22,7 @@ SessionService.findOrCreateUser = function (reqUser) {
         // Si no se encontró el usuario
         if (utilsHelper.isEmpty(foundUser)) {
             logger.info("No se encontró el usuario con id de Google " + reqUser.googleId + ", se crea uno nuevo");
-            return UserService.addUser(reqUser).then(function (user) {
-                return user;
-            });
+            return UserService.addUser(reqUser);
         } else {
             return foundUser;
         }
