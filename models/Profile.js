@@ -13,7 +13,7 @@ var ProfileSchema = new Schema({
     notifications:[{type : Schema.Types.ObjectId, ref : 'Notification'}],
     reports: [{type : Schema.Types.ObjectId, ref : 'Report'}],
     accessRoles: [{type : Schema.Types.ObjectId, ref: 'AccessRole'}],
-    patient:[{type : Schema.Types.ObjectId, ref : "Patient"}],
+    patient:{type : Schema.Types.ObjectId, ref : "Patient"},
     user:{type : Schema.Types.ObjectId, ref : "User"},
     patientOpinion:[{type : Schema.Types.ObjectId, ref : "PatientOpinion"}]
     //chats:

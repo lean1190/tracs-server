@@ -2,6 +2,7 @@
 /* globals require, module, console */
 
 var PatientService = require("../services/PatientService");
+var ProfileService = require("../services/ProfileService");
 
 
 require("../models/Patient");
@@ -13,8 +14,6 @@ var PatientController = {},
 	Patient  = mongoose.model("Patient"),
     Profile = mongoose.model("Profile");
 
-
-
 /**
  *  ===============================
  *  ==== BASIC Patient OPERATIONS ====
@@ -22,11 +21,14 @@ var PatientController = {},
  */
 
 
-PatientController.find = function (req, res) {
+PatientController.findUserPatients = function (req, res) {
 "use strict";
 
-    console.log("entre al patient find");
-    PatientService.findAll().then(function (patients) {
+    console.log(req.params.id);
+    var userId = req.params.id;
+
+    ProfileService.findUserProfiles(userId).then(function (patients) {
+        console.log(patients);
         res.status(200).jsonp(patients);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -45,7 +47,7 @@ PatientController.add = function (req, res) {
 
     newPatient.name = req.body.name;//req.patientName;
     newPatient.birthDate = req.body.dateOfBirth;//"12/12/2012"
-    newPatient.description = req.body.description;//"description"
+    newPatient.generalDescription = req.body.description;//"description"
     newPatient.DNI = req.body.dni;
     newPatient.phoneNumber = req.body.phoneNr;
     newPatient.picture = "https://en.opensuse.org/images/0/0b/Icon-user.png";

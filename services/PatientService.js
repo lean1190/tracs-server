@@ -14,39 +14,22 @@ var mongoose = require("mongoose"),
 var PatientService = {},
     self = PatientService;
 
+/**
+ *  ===============================
+ *  ==== BASIC Patient OPERATIONS ====
+ *  ===============================
+ */
+
+
 /*PatientService.findAll = function () {
     "use strict";
-
-    // return User.find().populate("treatments").exec();
-    Profile.find({ user: "56986b129a1971d812b0050a" }).populate('patient').exec(function (err, patients) {
-    if (err) return console.error(err);
-    return patients;
-  // prints "The creator is Aaron"
-    })
+    return Profile.find({user:"56986b129a1971d812b0050a"}).populate('patient').exec();
 };*/
-
-PatientService.findAll = function () {
-    "use strict";
-
-        return Profile.find({user:"56986b129a1971d812b0050a"}).populate('patient').exec();
-
-};
 
 
 PatientService.add = function(newPatient,adminNr){
     "use strict";
-    console.log("Patient Serv Add");
-
-    //var patient = new Patient(req);
-
-        /*Patient.save(newPatient).then(function(err, patient){
-            if (err) return console.error(err);
-            //newTreatment.patient = patient._id;
-            return patient;
-        });*/
-
-    //return User.save(newUser).then(function (user) {
-    return newPatient.save(function(err, patient){
+     return newPatient.save(function(err, patient){
 
         if (err) return console.error(err);
 

@@ -4,7 +4,7 @@ var express = require("express"),
 
 /* Basic Patient information */
 console.log("vino al PatienttRouter");
-router.get("/", PatientController.find);
+router.get("/:id", PatientController.findUserPatients);
 router.post("/", PatientController.add);
 
 module.exports = router;

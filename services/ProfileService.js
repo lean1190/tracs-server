@@ -4,9 +4,11 @@
 
 
 require("../models/Profile");
+require("../models/Patient");
 
 var mongoose = require("mongoose"),
     Profile = mongoose.model("Profile"),
+    Patient = mongoose.model("Patient"),
 
     utilsHelper = require("../utils/UtilsHelper");
 
@@ -21,11 +23,11 @@ var ProfileService = {},
  *  ===============================
  */
 
-ProfileService.findMyProfiles = function () {
+ProfileService.findUserProfiles = function (userId) {
     "use strict";
 
-    // return Profile.find().populate("treatments").exec();
-    return Profile.find({'user': "56986b129a1971d812b0050a"}).exec();
+    return Profile.find({'user': userId}).populate('patient').exec();
+
 };
 
 module.exports = ProfileService;
