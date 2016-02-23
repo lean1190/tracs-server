@@ -25,7 +25,7 @@ db.connect();
 var app = new Application({path: __dirname, folder: "public"}, [
     {route: "/", handler: CommonRouter},
     {route: "/session", handler: SessionRouter},
-    {route: "/users", handler: UserRouter},
+    {route: "/user", handler: UserRouter},
     {route: "/treatment", handler: TreatmentRouter},
     {route: "/patient", handler: PatientRouter},
     {route: "/profile", handler: ProfileRouter}
