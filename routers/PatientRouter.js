@@ -1,3 +1,5 @@
+/* globals require, module */
+
 var express = require("express"),
     router = express.Router(),
     PatientController = require("../controllers/PatientController");

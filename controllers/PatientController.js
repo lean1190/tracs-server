@@ -1,4 +1,5 @@
 /*jshint bitwise: false, camelcase: true, curly: true, eqeqeq: true, globals: false, freeze: true, immed: true, nocomma: true, newcap: true, noempty: true, nonbsp: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, latedef: true*/
+
 /* globals require, module, console */
 
 var PatientService = require("../services/PatientService");
@@ -25,7 +26,7 @@ PatientController.findUserPatients = function (req, res) {
     var userId = req.params.id;
 
     ProfileService.findUserProfiles(userId).then(function (patients) {
-        console.log(patients);
+        console.log("### Volvio del ProfileService", patients);
         res.status(200).jsonp(patients);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -41,13 +42,9 @@ PatientController.findUserPatients = function (req, res) {
 PatientController.add = function (req, res) {
     "use strict";
 
-    console.log("Patient Controller");
-
-    console.log(req.body);
-    //var newPatient = new Patient();
     var newPatient = new Patient();
 
-    newPatient.name = req.body.name; //req.patientName;
+    newPatient.name = req.body.name;
     newPatient.birthDate = req.body.dateOfBirth; //"12/12/2012"
     newPatient.generalDescription = req.body.description; //"description"
     newPatient.DNI = req.body.dni;
