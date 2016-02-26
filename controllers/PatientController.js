@@ -10,8 +10,7 @@ require("../models/Profile");
 
 var PatientController = {},
     mongoose = require("mongoose"),
-    Patient = mongoose.model("Patient"),
-    Profile = mongoose.model("Profile");
+    Patient = mongoose.model("Patient");
 
 /**
  * Devuelve todos los perfiles de un usuario pasando su id
@@ -22,11 +21,9 @@ var PatientController = {},
 PatientController.findUserPatients = function (req, res) {
     "use strict";
 
-    console.log(req.params.id);
     var userId = req.params.id;
 
     ProfileService.findUserProfiles(userId).then(function (patients) {
-        console.log("### Volvio del ProfileService", patients);
         res.status(200).jsonp(patients);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -50,7 +47,7 @@ PatientController.add = function (req, res) {
     newPatient.DNI = req.body.dni;
     newPatient.phoneNumber = req.body.phoneNr;
     newPatient.picture = "https://en.opensuse.org/images/0/0b/Icon-user.png";
-    console.log(newPatient);
+
     PatientService.add(newPatient, req.body.admin).then(function (patient) {
         res.status(200).jsonp(patient);
     }, function (err) {

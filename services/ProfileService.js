@@ -7,12 +7,15 @@ require("../models/Profile");
 require("../models/Patient");
 
 var mongoose = require("mongoose"),
-    Profile = mongoose.model("Profile"),
-    Patient = mongoose.model("Patient");
+    Profile = mongoose.model("Profile");
 
-var ProfileService = {},
-    self = ProfileService;
+var ProfileService = {};
 
+/**
+ * Devuelve todos los perfiles de un usuario
+ * @param   {number}  userId el id del usuario para buscar los perfiles
+ * @returns {promise} una promesa con los perfiles disponibles del usuario
+ */
 ProfileService.findUserProfiles = function (userId) {
     "use strict";
 
