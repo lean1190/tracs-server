@@ -30,8 +30,8 @@ ProfileService.findUserProfiles = function (userId) {
 ProfileService.add = function(reqProfile) {
     "use strict";
 
+    console.log("llegue al profile service");
     var newProfile = new Profile(reqProfile);
-
     return newProfile.save().catch(function (error) {
         logger.error("No se pudo guardar el profile", error);
     });
