@@ -8,17 +8,19 @@ require("../models/Diagnosis");
 require("../models/Profile");
 
 var mongoose = require("mongoose"),
-    Patient  = mongoose.model("Patient");
-    Profile = mongoose.model("Profile");
+    logger = require("../utils/Logger"),
+    Patient = mongoose.model("Patient"),
+    ProfileService = require("./ProfileService");
 
-var PatientService = {},
-    self = PatientService;
+var PatientService = {};
 
 /**
- *  ===============================
- *  ==== BASIC Patient OPERATIONS ====
- *  ===============================
+ * Agrega un paciente nuevo y le asocia un perfil administrador
+ * @param   {object}  reqPatient  el paciente con los datos básicos
+ * @param   {number}  adminUserId el id del usuario administrador del nuevo paciente
+ * @returns {promise} una promesa con el paciente creado
  */
+<<<<<<< HEAD
 
 
 PatientService.getPatientDetail = function (patientId) {
@@ -42,8 +44,32 @@ PatientService.add = function(newPatient,adminNr){
 
             if (err) return console.error(err);
             return patient;
+=======
+PatientService.add = function (reqPatient, adminUserId) {
+    "use strict";
+
+    // Setea valores por defecto a los parámetros que no son obligatorios
+    reqPatient.generalDescription = reqPatient.generalDescription || "";
+    reqPatient.phoneNumber = reqPatient.phoneNumber || "";
+    reqPatient.picture = reqPatient.picture || "https://en.opensuse.org/images/0/0b/Icon-user.png";
+
+    // Crea un modelo a partir del objeto del request
+    var newPatient = new Patient(reqPatient);
+
+    return newPatient.save().then(function (patient) {
+        var newProfile = {
+            isAdmin: true,
+            patient: patient._id,
+            user: adminUserId
+        };
+
+        ProfileService.add(newProfile).catch(function (error) {
+            logger.error("No se pudo guardar el profile para el paciente con id " + patient._id, error);
+>>>>>>> origin/development
         });
-   });
+    }, function (error) {
+        logger.error("No se pudo guardar el paciente con id " + newPatient._id, error);
+    });
 };
 
 
