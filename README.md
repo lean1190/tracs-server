@@ -7,6 +7,7 @@ mongod
 Para limpiar la base
 ```
 #!javascript
+mongo
 use tracs-db
 db.dropDatabase();
 ```

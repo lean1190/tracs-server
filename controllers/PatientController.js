@@ -8,10 +8,7 @@ var ProfileService = require("../services/ProfileService");
 require("../models/Patient");
 require("../models/Profile");
 
-var PatientController = {},
-    mongoose = require("mongoose"),
-    Patient = mongoose.model("Patient"),
-    Profile = mongoose.model("Profile");
+var PatientController = {};
 
 /**
  * Devuelve todos los perfiles de un usuario pasando su id
@@ -22,11 +19,9 @@ var PatientController = {},
 PatientController.findUserPatients = function (req, res) {
     "use strict";
 
-    console.log(req.params.id);
     var userId = req.params.id;
 
     ProfileService.findUserProfiles(userId).then(function (patients) {
-        console.log("### Volvio del ProfileService", patients);
         res.status(200).jsonp(patients);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -55,15 +50,14 @@ PatientController.getPatientDetail = function (req,res){
 PatientController.add = function (req, res) {
     "use strict";
 
-    var newPatient = new Patient();
+    var newPatient = {
+        name: req.body.name,
+        birthDate: req.body.dateOfBirth, //"12/12/2012"
+        generalDescription: req.body.description, //"description"
+        DNI: req.body.dni,
+        phoneNumber: req.body.phoneNr
+    };
 
-    newPatient.name = req.body.name;
-    newPatient.birthDate = req.body.dateOfBirth; //"12/12/2012"
-    newPatient.generalDescription = req.body.description; //"description"
-    newPatient.DNI = req.body.dni;
-    newPatient.phoneNumber = req.body.phoneNr;
-    newPatient.picture = "https://en.opensuse.org/images/0/0b/Icon-user.png";
-    console.log(newPatient);
     PatientService.add(newPatient, req.body.admin).then(function (patient) {
         res.status(200).jsonp(patient);
     }, function (err) {

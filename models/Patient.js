@@ -10,7 +10,7 @@ var PatientSchema = new Schema({
     name: { type: String, required: true },
     DNI: {type: String, required:true},
     address: String,
-    birthDate: Date,
+    birthDate: {type: Date, required:true},
     picture: String,
     generalDescription: String,
     phoneNumber: String,
