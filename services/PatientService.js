@@ -8,46 +8,42 @@ require("../models/Diagnosis");
 require("../models/Profile");
 
 var mongoose = require("mongoose"),
-    Patient  = mongoose.model("Patient");
-    Profile = mongoose.model("Profile");
+    logger = require("../utils/Logger"),
+    Patient = mongoose.model("Patient"),
+    ProfileService = require("./ProfileService");
 
-var PatientService = {},
-    self = PatientService;
+var PatientService = {};
 
 /**
- *  ===============================
- *  ==== BASIC Patient OPERATIONS ====
- *  ===============================
+ * Agrega un paciente nuevo y le asocia un perfil administrador
+ * @param   {object}  reqPatient  el paciente con los datos básicos
+ * @param   {number}  adminUserId el id del usuario administrador del nuevo paciente
+ * @returns {promise} una promesa con el paciente creado
  */
-
-
-/*PatientService.findAll = function () {
+PatientService.add = function (reqPatient, adminUserId) {
     "use strict";
-    return Profile.find({user:"56986b129a1971d812b0050a"}).populate('patient').exec();
-};*/
 
+    // Setea valores por defecto a los parámetros que no son obligatorios
+    reqPatient.generalDescription = reqPatient.generalDescription || "";
+    reqPatient.phoneNumber = reqPatient.phoneNumber || "";
+    reqPatient.picture = reqPatient.picture || "https://en.opensuse.org/images/0/0b/Icon-user.png";
 
-PatientService.add = function(newPatient,adminNr){
-    "use strict";
-     return newPatient.save(function(err, patient){
+    // Crea un modelo a partir del objeto del request
+    var newPatient = new Patient(reqPatient);
 
-        if (err) return console.error(err);
+    return newPatient.save().then(function (patient) {
+        var newProfile = {
+            isAdmin: true,
+            patient: patient._id,
+            user: adminUserId
+        };
 
-        var newProfile = new Profile();
-        newProfile.isAdmin= true;
-        newProfile.patient = patient._id;
-        newProfile.user = adminNr; //LO GUARDA CON un hardcode por el momento, hasta que podamos guardar el ID en el localstorage
-
-
-        newProfile.save(function(err, profile){
-
-            if (err) return console.error(err);
-            return patient;
-
-
-
+        ProfileService.add(newProfile).catch(function (error) {
+            logger.error("No se pudo guardar el profile para el paciente con id " + patient._id, error);
         });
-   });
+    }, function (error) {
+        logger.error("No se pudo guardar el paciente con id " + newPatient._id, error);
+    });
 };
 
 
