@@ -33,6 +33,19 @@ PatientController.findUserPatients = function (req, res) {
     });
 };
 
+PatientController.getPatientDetail = function (req,res){
+
+    console.log(req.params.id);
+    var patientId = req.params.id;
+
+    PatientService.getPatientDetail(patientId).then(function (patient){
+        console.log("### Volvio del PatientService", patient);
+        res.status(200).jsonp(patient);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
+
 /**
  * Crea un nuevo paciente con un usuario administrador asociado
  * @param   {object} req {post: name, dateOfBirth, description, dni, phoneNr, admin}

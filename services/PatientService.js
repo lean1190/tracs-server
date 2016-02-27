@@ -21,31 +21,27 @@ var PatientService = {},
  */
 
 
-/*PatientService.findAll = function () {
+PatientService.getPatientDetail = function (patientId) {
     "use strict";
-    return Profile.find({user:"56986b129a1971d812b0050a"}).populate('patient').exec();
-};*/
+    return Patient.find({_id:patientId}).exec();
+};
 
 
 PatientService.add = function(newPatient,adminNr){
     "use strict";
-     return newPatient.save(function(err, patient){
+    return newPatient.save(function(err, patient){
 
         if (err) return console.error(err);
 
         var newProfile = new Profile();
         newProfile.isAdmin= true;
         newProfile.patient = patient._id;
-        newProfile.user = adminNr; //LO GUARDA CON un hardcode por el momento, hasta que podamos guardar el ID en el localstorage
-
+        newProfile.user = adminNr;
 
         newProfile.save(function(err, profile){
 
             if (err) return console.error(err);
             return patient;
-
-
-
         });
    });
 };
