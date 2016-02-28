@@ -3,9 +3,6 @@
 /* globals require, module, console */
 
 require("../models/Patient");
-require("../models/Treatment");
-require("../models/Diagnosis");
-require("../models/Profile");
 
 var mongoose = require("mongoose"),
     logger = require("../utils/Logger"),
@@ -13,6 +10,17 @@ var mongoose = require("mongoose"),
     ProfileService = require("./ProfileService");
 
 var PatientService = {};
+
+PatientService.findByDni = function (patientDni) {
+    "use strict";
+
+    return Patient.find({DNI: patientDni}).exec().then(function (patient) {
+        return patient[0];
+    }, function (error) {
+        logger.error("Ocurrió un error al buscar el paciente con DNI " + patientDni, error);
+        return error;
+    });
+};
 
 /**
  * Agrega un paciente nuevo y le asocia un perfil administrador
@@ -38,11 +46,12 @@ PatientService.add = function (reqPatient, adminUserId) {
             user: adminUserId
         };
 
-        ProfileService.add(newProfile).catch(function (error) {
+        ProfileService.add(newProfile).then(null, function (error) {
             logger.error("No se pudo guardar el profile para el paciente con id " + patient._id, error);
         });
     }, function (error) {
         logger.error("No se pudo guardar el paciente con id " + newPatient._id, error);
+        return error;
     });
 };
 
