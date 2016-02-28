@@ -28,6 +28,31 @@ PatientService.findByDni = function (patientDni) {
  * @param   {number}  adminUserId el id del usuario administrador del nuevo paciente
  * @returns {promise} una promesa con el paciente creado
  */
+<<<<<<< HEAD
+
+
+PatientService.getPatientDetail = function (patientId) {
+    "use strict";
+    return Patient.find({_id:patientId}).exec();
+};
+
+
+PatientService.add = function(newPatient,adminNr){
+    "use strict";
+    return newPatient.save(function(err, patient){
+
+        if (err) return console.error(err);
+
+        var newProfile = new Profile();
+        newProfile.isAdmin= true;
+        newProfile.patient = patient._id;
+        newProfile.user = adminNr;
+
+        newProfile.save(function(err, profile){
+
+            if (err) return console.error(err);
+            return patient;
+=======
 PatientService.add = function (reqPatient, adminUserId) {
     "use strict";
 
@@ -48,6 +73,7 @@ PatientService.add = function (reqPatient, adminUserId) {
 
         ProfileService.add(newProfile).then(null, function (error) {
             logger.error("No se pudo guardar el profile para el paciente con id " + patient._id, error);
+>>>>>>> origin/development
         });
     }, function (error) {
         logger.error("No se pudo guardar el paciente con id " + newPatient._id, error);

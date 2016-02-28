@@ -6,7 +6,12 @@ var express = require("express"),
     router = express.Router(),
     PatientController = require("../controllers/PatientController");
 
+<<<<<<< HEAD
+router.get("/:id", PatientController.findUserPatients);
+router.get("/detail/:id", PatientController.getPatientDetail);
+=======
 router.get("/user/:id", PatientController.findUserPatients);
+>>>>>>> origin/development
 router.post("/", PatientController.add);
 
 module.exports = router;
