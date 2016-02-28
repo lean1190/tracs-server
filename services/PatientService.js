@@ -11,6 +11,11 @@ var mongoose = require("mongoose"),
 
 var PatientService = {};
 
+/**
+ * Recupera un paciente por su DNI
+ * @param   {number}  patientDni el DNI del paciente a recuperar
+ * @returns {promise} una promesa con el paciente
+ */
 PatientService.findByDni = function (patientDni) {
     "use strict";
 
@@ -23,36 +28,21 @@ PatientService.findByDni = function (patientDni) {
 };
 
 /**
- * Agrega un paciente nuevo y le asocia un perfil administrador
- * @param   {object}  reqPatient  el paciente con los datos básicos
- * @param   {number}  adminUserId el id del usuario administrador del nuevo paciente
- * @returns {promise} una promesa con el paciente creado
+ * [[Description]]
+ * @param   {[[Type]]} patientId [[Description]]
+ * @returns {[[Type]]} [[Description]]
  */
-<<<<<<< HEAD
-
-
 PatientService.getPatientDetail = function (patientId) {
     "use strict";
     return Patient.find({_id:patientId}).exec();
 };
 
-
-PatientService.add = function(newPatient,adminNr){
-    "use strict";
-    return newPatient.save(function(err, patient){
-
-        if (err) return console.error(err);
-
-        var newProfile = new Profile();
-        newProfile.isAdmin= true;
-        newProfile.patient = patient._id;
-        newProfile.user = adminNr;
-
-        newProfile.save(function(err, profile){
-
-            if (err) return console.error(err);
-            return patient;
-=======
+/**
+ * Agrega un paciente nuevo y le asocia un perfil administrador
+ * @param   {object}  reqPatient  el paciente con los datos básicos
+ * @param   {number}  adminUserId el id del usuario administrador del nuevo paciente
+ * @returns {promise} una promesa con el paciente creado
+ */
 PatientService.add = function (reqPatient, adminUserId) {
     "use strict";
 
@@ -73,7 +63,6 @@ PatientService.add = function (reqPatient, adminUserId) {
 
         ProfileService.add(newProfile).then(null, function (error) {
             logger.error("No se pudo guardar el profile para el paciente con id " + patient._id, error);
->>>>>>> origin/development
         });
     }, function (error) {
         logger.error("No se pudo guardar el paciente con id " + newPatient._id, error);
