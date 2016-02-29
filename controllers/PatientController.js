@@ -2,11 +2,8 @@
 
 /* globals require, module, console */
 
-var PatientService = require("../services/PatientService");
-var ProfileService = require("../services/ProfileService");
-
-require("../models/Patient");
-require("../models/Profile");
+var PatientService = require("../services/PatientService"),
+    ProfileService = require("../services/ProfileService");
 
 var PatientController = {};
 
