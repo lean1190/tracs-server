@@ -36,7 +36,13 @@ PatientService.findByDni = function (patientDni) {
 
 PatientService.getPatientDetail = function (patientId) {
     "use strict";
-    return Patient.find({_id:patientId}).exec();
+    return Patient.find({_id:patientId}).exec().then(function (patient) {
+        return patient[0];
+    }, function (error) {
+        logger.error("Ocurrió un error al buscar los datos del paciente con ID " + patientId, error);
+        return error;
+    });
+
 };
 
 /**

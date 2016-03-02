@@ -8,9 +8,8 @@ var express = require("express"),
 
 
 
-router.get("/:id", PatientController.findUserPatients);
-router.get("/detail/:id", PatientController.getPatientDetail);
-
+//router.get("/:id", PatientController.findUserPatients);
+router.get("/patient/:id", PatientController.getPatientDetail);
 router.get("/user/:id", PatientController.findUserPatients);
 
 

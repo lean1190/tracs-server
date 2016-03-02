@@ -17,7 +17,6 @@ PatientController.findUserPatients = function (req, res) {
     "use strict";
 
     var userId = req.params.id;
-
     ProfileService.findUserProfiles(userId).then(function (patients) {
         res.status(200).jsonp(patients);
     }, function (err) {
