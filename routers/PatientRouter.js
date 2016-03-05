@@ -6,13 +6,9 @@ var express = require("express"),
     router = express.Router(),
     PatientController = require("../controllers/PatientController");
 
-
-
-router.get("/:id", PatientController.findUserPatients);
 router.get("/detail/:id", PatientController.getPatientDetail);
 
 router.get("/user/:id", PatientController.findUserPatients);
-
 
 router.post("/", PatientController.add);
 

@@ -25,13 +25,12 @@ PatientController.findUserPatients = function (req, res) {
     });
 };
 
-PatientController.getPatientDetail = function (req,res){
+PatientController.getPatientDetail = function (req, res) {
+    "use strict";
 
-    console.log(req.params.id);
     var patientId = req.params.id;
 
-    PatientService.getPatientDetail(patientId).then(function (patient){
-        console.log("### Volvio del PatientService", patient);
+    PatientService.getPatientDetail(patientId).then(function (patient) {
         res.status(200).jsonp(patient);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -49,7 +48,7 @@ PatientController.add = function (req, res) {
 
     var newPatient = {
         name: req.body.name,
-        birthDate: req.body.dateOfBirth, //"12/12/2012"
+        birthDate: req.body.birthDate, //"12/12/2012"
         generalDescription: req.body.description, //"description"
         DNI: req.body.dni,
         phoneNumber: req.body.phoneNr
