@@ -45,12 +45,40 @@ PatientService.getPatientDetail = function (patientId) {
 
 };
 
+
+
+PatientService.updatePatientDetail = function (updatedPatient) {
+    "use strict";
+
+    console.log(updatedPatient);
+    return Patient.update({_id:updatedPatient.id}, {$set:{
+
+                              picture:updatedPatient.picture,
+                              DNI:updatedPatient.DNI,
+                              name:updatedPatient.name,
+                              phoneNumber:updatedPatient.phoneNumber,
+                              generalDescription:updatedPatient.generalDescription
+                            }
+
+                                                   }).exec().then(function (patient) {
+
+        console.log(patient);
+        return patient;
+    }, function (error) {
+        logger.error("Ocurrió un error al editar los datos del paciente con ID " + updatedPatientId, error);
+        return error;
+    });
+
+};
+
+
 /**
  * Agrega un paciente nuevo y le asocia un perfil administrador
  * @param   {object}  reqPatient  el paciente con los datos básicos
  * @param   {number}  adminUserId el id del usuario administrador del nuevo paciente
  * @returns {promise} una promesa con el paciente creado
  */
+
 PatientService.add = function (reqPatient, adminUserId) {
     "use strict";
 
