@@ -17,7 +17,6 @@ PatientController.findUserPatients = function (req, res) {
     "use strict";
 
     var userId = req.params.id;
-
     ProfileService.findUserProfiles(userId).then(function (patients) {
         res.status(200).jsonp(patients);
     }, function (err) {
@@ -59,9 +58,27 @@ PatientController.add = function (req, res) {
     }, function (err) {
         return res.status(500).send(err.message);
     });
-
-    //El tratamiento tendria que tener asignado al usuario en el modelo. Ahora no se si el Perfil tambien tiene que tener asignado al usuario, no se, como que siento que falta una pata para especificar el perfil del usuario.
-
 };
+
+PatientController.updatePatientDetail = function (req,res){
+
+    console.log("llegue al patient edit");
+
+    console.log(req.body);
+    var updatedPatient = {
+        name: req.body.name,
+        birthDate: req.body.dateOfBirth, //"12/12/2012"
+        generalDescription: req.body.description, //"description"
+        DNI: req.body.dni,
+        phoneNumber: req.body.phoneNr
+    };
+
+    PatientService.updatePatientDetail(updatedPatient).then(function (patient) {
+        res.status(200).jsonp(patient);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+
+}
 
 module.exports = PatientController;

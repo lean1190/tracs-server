@@ -29,15 +29,50 @@ PatientService.findByDni = function (patientDni) {
 };
 
 /**
- * [[Description]]
- * @param   {[[Type]]} patientId [[Description]]
- * @returns {[[Type]]} [[Description]]
+ * Recupera toda la información de un paciente
+ * @param   {number}  patientId el id del paciente
+ * @returns {promise} una promesa con el total de datos de un paciente
  */
-
 PatientService.getPatientDetail = function (patientId) {
     "use strict";
-    return Patient.find({_id:patientId}).exec();
+    return Patient.find({_id:patientId}).exec().then(function (patient) {
+        return patient[0];
+    }, function (error) {
+        logger.error("Ocurrió un error al buscar los datos del paciente con ID " + patientId, error);
+        return error;
+    });
+
 };
+
+/**
+ * [[Description]]
+ * @param   {object}   updatedPatient [[Description]]
+ * @returns {[[Type]]} [[Description]]
+ */
+PatientService.updatePatientDetail = function (updatedPatient) {
+    "use strict";
+
+    console.log(updatedPatient);
+    return Patient.update({_id:updatedPatient.id}, {$set:{
+
+                              picture:updatedPatient.picture,
+                              DNI:updatedPatient.DNI,
+                              name:updatedPatient.name,
+                              phoneNumber:updatedPatient.phoneNumber,
+                              generalDescription:updatedPatient.generalDescription
+                            }
+
+                                                   }).exec().then(function (patient) {
+
+        console.log(patient);
+        return patient;
+    }, function (error) {
+        logger.error("Ocurrió un error al editar los datos del paciente con ID " + updatedPatientId, error);
+        return error;
+    });
+
+};
+
 
 /**
  * Agrega un paciente nuevo y le asocia un perfil administrador

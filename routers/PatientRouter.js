@@ -7,9 +7,10 @@ var express = require("express"),
     PatientController = require("../controllers/PatientController");
 
 router.get("/detail/:id", PatientController.getPatientDetail);
-
 router.get("/user/:id", PatientController.findUserPatients);
 
 router.post("/", PatientController.add);
+
+router.put("/:id", PatientController.updatePatientDetail);
 
 module.exports = router;
