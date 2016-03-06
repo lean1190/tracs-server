@@ -71,7 +71,7 @@ PatientController.updatePatientDetail = function (req,res){
         birthDate: req.body.birthDate, //"12/12/2012"
         generalDescription: req.body.generalDescription || "", //"description"
         DNI: req.body.DNI || "",
-        phoneNumber: req.body.phoneNr || ""
+        phoneNumber: req.body.phoneNumber || ""
     };
 
     console.log(updatedPatient);

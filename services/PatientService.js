@@ -45,16 +45,14 @@ PatientService.getPatientDetail = function (patientId) {
 };
 
 /**
- * [[Description]]
- * @param   {object}   updatedPatient [[Description]]
- * @returns {[[Type]]} [[Description]]
+ * Edita la información básica de un paciente
+ * @param   {object}  updatedPatient el paciente con los datos actualizados
+ * @returns {promise} una promesa con el paciente actualizado
  */
 PatientService.updatePatientDetail = function (updatedPatient) {
     "use strict";
-
-    console.log(updatedPatient.id);
+    console.log(updatedPatient);
     return Patient.update({_id:updatedPatient.id}, {$set:{
-
 
                               DNI:updatedPatient.DNI,
                               name:updatedPatient.name,
@@ -66,10 +64,9 @@ PatientService.updatePatientDetail = function (updatedPatient) {
 
                                                    }).exec().then(function (patient) {
 
-
-        return patient;
+    return patient;
     }, function (error) {
-        logger.error("Ocurrió un error al editar los datos del paciente con ID " + updatedPatientId, error);
+        logger.error("Ocurrió un error al editar los datos del paciente con ID " + updatedPatient.id, error);
         return error;
     });
 
