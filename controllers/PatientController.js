@@ -64,14 +64,17 @@ PatientController.updatePatientDetail = function (req,res){
 
     console.log("llegue al patient edit");
 
-    console.log(req.body);
+    //console.log(req.body);
     var updatedPatient = {
+        id: req.body._id,
         name: req.body.name,
-        birthDate: req.body.dateOfBirth, //"12/12/2012"
-        generalDescription: req.body.description, //"description"
-        DNI: req.body.dni,
-        phoneNumber: req.body.phoneNr
+        birthDate: req.body.birthDate, //"12/12/2012"
+        generalDescription: req.body.generalDescription || "", //"description"
+        DNI: req.body.DNI || "",
+        phoneNumber: req.body.phoneNr || ""
     };
+
+    console.log(updatedPatient);
 
     PatientService.updatePatientDetail(updatedPatient).then(function (patient) {
         res.status(200).jsonp(patient);
