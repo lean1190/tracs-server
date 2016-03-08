@@ -9,10 +9,10 @@ var ProfileSchema = new Schema({
     
     description: String,
     isAdmin: { type: Boolean, required: true },
-    notes: [{type : Schema.Types.ObjectId, ref : 'Note'}],
-    notifications:[{type : Schema.Types.ObjectId, ref : 'Notification'}],
-    reports: [{type : Schema.Types.ObjectId, ref : 'Report'}],
-    accessRoles: [{type : Schema.Types.ObjectId, ref: 'AccessRole'}],
+    notes: [{type : Schema.Types.ObjectId, ref : "Note"}],
+    notifications:[{type : Schema.Types.ObjectId, ref : "Notification"}],
+    reports: [{type : Schema.Types.ObjectId, ref : "Report"}],
+    accessRoles: [{type : Schema.Types.ObjectId, ref: "AccessRole"}],
     patient:{type : Schema.Types.ObjectId, ref : "Patient", required: true},
     user:{type : Schema.Types.ObjectId, ref : "User", required: true},
     patientOpinion:[{type : Schema.Types.ObjectId, ref : "PatientOpinion"}]
@@ -22,7 +22,7 @@ var ProfileSchema = new Schema({
 /*
 ProfileSchema.prototype.getProfiles = function() {
 
-    ProfileSchema.find().populate('notes' 'notifications' 'reports' 'accessRoles').exec()
+    ProfileSchema.find().populate("notes" "notifications" "reports" "accessRoles").exec()
 };
 */
 

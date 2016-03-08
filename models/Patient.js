@@ -8,15 +8,24 @@ var Schema = mongoose.Schema;
 var PatientSchema = new Schema({
     
     name: { type: String, required: true },
-    DNI: {type: String, required:true},
+    DNI: { type: String, required: true },
     address: String,
-    birthDate: {type: Date, required:true},
+    birthDate: { type: Date, required: true },
     picture: String,
     generalDescription: String,
     phoneNumber: String,
-    diagnosis:[{type : Schema.Types.ObjectId, ref : "Diagnosis"}],
-    profiles:[{type : Schema.Types.ObjectId, ref : "Profile"}],
-    treatment:[{type : Schema.Types.ObjectId, ref : "Treatment"}]
+    diagnosis: [{ type: Schema.Types.ObjectId, ref : "Diagnosis" }],
+    profiles: [{ type: Schema.Types.ObjectId, ref : "Profile" }],
+    treatment: [{ type: Schema.Types.ObjectId, ref : "Treatment" }],
+    closestPeople: [
+        {
+            personId: { type: Number, required: true },
+            name: { type: String, required: true },
+            phone: { type: String, required: true },
+            picture: { type: String, required: true },
+            priority: { type: Number, required: true }
+        }
+    ]
 
 });
 
