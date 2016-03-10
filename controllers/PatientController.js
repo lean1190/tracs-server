@@ -60,6 +60,19 @@ PatientController.add = function (req, res) {
     });
 };
 
+
+//Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
+PatientController.bulkInsert = function(req,res){
+
+    PatientService.bulkInsert().then(function(patiens){
+        res.status(200).jsonp(patients);
+
+    }, function (err){
+        return res.status(500).send(err.message);
+    });
+
+};
+
 PatientController.updatePatientDetail = function (req,res){
 
     console.log("llegue al patient edit");

@@ -72,6 +72,38 @@ PatientService.updatePatientDetail = function (updatedPatient) {
 
 };
 
+//Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
+PatientService.bulkInsert = function(){
+
+    var patients = [{name:'potato1',
+                   birthDate: '2012-01-01T03:00:00.000Z',
+                   DNI: "34567753"},
+                  {name:'potato2',
+                   birthDate: '2012-01-01T03:00:00.000Z',
+                   DNI: "34567753"}];
+
+/*Patient.collection.insert(patients, onInsert);
+
+function onInsert(err, docs) {
+    if (err) {
+        return error;
+        // TODO: handle error
+    } else {
+        console.info('%d potatoes were successfully stored.', docs.length);
+        return docs;
+    }
+}*/
+
+    Patient.collection.insert(patients).exec().then(function (insertedPatients){
+            return insertedPatients;
+}, function(error) {
+    logger.error("Ocurrió un error al editar los datos del paciente con ID");
+        return error;
+    });
+};
+
+
+
 
 /**
  * Agrega un paciente nuevo y le asocia un perfil administrador

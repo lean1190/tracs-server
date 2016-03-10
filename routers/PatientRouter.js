@@ -13,4 +13,7 @@ router.post("/", PatientController.add);
 
 router.put("/:id", PatientController.updatePatientDetail);
 
+//Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
+router.post("/bulkInsert", PatientController.bulkInsert);
+
 module.exports = router;
