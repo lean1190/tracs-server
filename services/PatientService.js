@@ -11,7 +11,6 @@ var mongoose = require("mongoose"),
 
 var PatientService = {};
 
-
 /**
  * Recupera un paciente por su DNI
  * @param   {number}  patientDni el DNI del paciente a recuperar
@@ -52,24 +51,20 @@ PatientService.getPatientDetail = function (patientId) {
 PatientService.updatePatientDetail = function (updatedPatient) {
     "use strict";
     console.log(updatedPatient);
-    return Patient.update({_id:updatedPatient.id}, {$set:{
-
-                              DNI:updatedPatient.DNI,
-                              name:updatedPatient.name,
-                              phoneNumber:updatedPatient.phoneNumber,
-                              generalDescription:updatedPatient.generalDescription,
-                              birthDate: updatedPatient.birthDate
-
-                        }
-
-                                                   }).exec().then(function (patient) {
-
-    return patient;
+    return Patient.update({_id: updatedPatient.id}, {
+        $set: {
+            DNI: updatedPatient.DNI,
+            name: updatedPatient.name,
+            phoneNumber: updatedPatient.phoneNumber,
+            generalDescription: updatedPatient.generalDescription,
+            birthDate: updatedPatient.birthDate
+        }
+    }).exec().then(function (patient) {
+        return patient;
     }, function (error) {
         logger.error("Ocurrió un error al editar los datos del paciente con ID " + updatedPatient.id, error);
         return error;
     });
-
 };
 
 //Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
@@ -120,7 +115,6 @@ PatientService.add = function (reqPatient, adminUserId) {
     reqPatient.picture = reqPatient.picture || "https://en.opensuse.org/images/0/0b/Icon-user.png";
 
     // Crea un modelo a partir del objeto del request
-
     var newPatient = new Patient(reqPatient);
 
     return newPatient.save().then(function (patient) {
