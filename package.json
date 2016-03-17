@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "node-inspector & nodemon --debug ./bin/www"
   },
   "dependencies": {
     "acl": "^0.4.9",
@@ -20,6 +20,7 @@
     "winston": "^1.0.1"
   },
   "devDependencies": {
+    "node-inspector": "^0.12.7",
     "nodemon": "^1.8.1",
     "supertest": "^1.2.0"
   }
