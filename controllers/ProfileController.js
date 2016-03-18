@@ -9,7 +9,7 @@ var ProfileController = {};
 
 /**
  *  ===============================
- *  ==== BASIC USER OPERATIONS ====
+ *  ==== BASIC Profile OPERATIONS ====
  *  ===============================
  */
 

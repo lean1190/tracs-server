@@ -15,6 +15,7 @@ var UserController = {};
  */
 
 // Return all users
+
 UserController.findAll = function (req, res) {
     "use strict";
     UserService.findAll().then(function (users) {
