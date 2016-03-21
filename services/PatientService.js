@@ -50,7 +50,7 @@ PatientService.getPatientDetail = function (patientId) {
  */
 PatientService.updatePatientDetail = function (updatedPatient) {
     "use strict";
-    console.log(updatedPatient);
+
     return Patient.update({_id: updatedPatient.id}, {
         $set: {
             DNI: updatedPatient.DNI,
@@ -98,8 +98,6 @@ function onInsert(err, docs) {
 };
 
 
-
-
 /**
  * Agrega un paciente nuevo y le asocia un perfil administrador
  * @param   {object}  reqPatient  el paciente con los datos básicos
@@ -117,21 +115,52 @@ PatientService.add = function (reqPatient, adminUserId) {
     // Crea un modelo a partir del objeto del request
     var newPatient = new Patient(reqPatient);
 
-    return newPatient.save().then(function (patient) {
-        var newProfile = {
+    var newProfile = {
             isAdmin: true,
-            patient: patient._id,
+            patient: newPatient._id,
             user: adminUserId
-        };
+    };
 
-        ProfileService.add(newProfile).then(null, function (error) {
-            logger.error("No se pudo guardar el profile para el paciente con id " + patient._id, error);
+    return ProfileService.add(newProfile).then(function(profile){
+
+        newPatient.profiles.push(profile._id);
+        return newPatient.save().then(function (patient) {
+            return patient;
+        }, function (error) {
+            logger.error("No se pudo guardar el paciente con id " + newPatient._id, error);
+
         });
+
     }, function (error) {
-        logger.error("No se pudo guardar el paciente con id " + newPatient._id, error);
-        return error;
+            logger.error("No se pudo guardar el profile para el paciente con id " + patient._id, error);
+            return error;
     });
+
 };
 
+/**
+ * Agrega un perfil a un paciente ya creado
+ * @param   {object}  newProfile  el perfil que se le va a asignar al paciente dentro de newProfile.patient
+ * @returns {promise} una promesa con el paciente modificado
+ */
+
+PatientService.addProfileToPatient = function(newProfile){
+
+    return ProfileService.add(newProfile).then(function(profile){
+
+        return Patient.findOne({_id: profile.patient}).then(function(patient){
+            patient.profiles.push(profile._id);
+            patient.save();
+        }, function (error){
+            logger.error("No se pudo obtener el paciente con id " + newProfile.patient, error);
+            return error;
+        });
+
+    }, function (error) {
+            logger.error("No se pudo guardar el profile para el paciente con id " + patient._id, error);
+            return error;
+    });
+
+}
 
 module.exports = PatientService;

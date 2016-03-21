@@ -24,6 +24,14 @@ PatientController.findUserPatients = function (req, res) {
     });
 };
 
+
+/**
+ * Obtiene los detalles de un paciente especifico
+ * @param   {object} req {get: id}
+ * @param   {object} res
+ * @returns {object} el paciente con el total de su informacion
+ */
+
 PatientController.getPatientDetail = function (req, res) {
     "use strict";
 
@@ -96,14 +104,22 @@ PatientController.add = function (req, res) {
 //Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
 PatientController.bulkInsert = function(req,res){
 
-    PatientService.bulkInsert().then(function(patiens){
-        res.status(200).jsonp(patients);
-
-    }, function (err){
-        return res.status(500).send(err.message);
-    });
-
+    PatientService.bulkInsert(function(err,patients){
+    if (err) {
+        console.log("Exploto todo");
+        // TODO: handle error
+    } else {
+        console.info('%d potatoes were successfully stored.', patients.length);
+        return patients;
+    }
+    })
 };
+/**
+ * Edita la informacion de un paciente
+ * @param   {object} req {put: id, name, dateOfBirth, generalDescription, dni, phoneNr, }
+ * @param   {object} res
+ * @returns {object} el paciente modificado
+ */
 
 PatientController.updatePatientDetail = function (req,res){
     "use strict";
@@ -119,11 +135,27 @@ PatientController.updatePatientDetail = function (req,res){
         phoneNumber: req.body.phoneNumber || ""
     };
 
-    console.log(updatedPatient);
-
     PatientService.updatePatientDetail(updatedPatient).then(function (patient) {
         res.status(200).jsonp(patient);
     }, function (err) {
+        return res.status(500).send(err.message);
+    });
+
+};
+
+PatientController.addProfileToPatient = function(req,res){
+    "use strict";
+
+    var newProfile ={
+        patient: req.params.id,
+        user: req.body.user,
+        description: req.body.description,
+        isAdmin: false
+    };
+
+    PatientService.addProfileToPatient(newProfile).then(function(patient){
+        res.status(200).jsonp(patient);
+    },function (err){
         return res.status(500).send(err.message);
     });
 

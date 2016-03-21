@@ -4,6 +4,7 @@
 
 require("../models/Profile");
 require("../models/Patient");
+require("../models/User");
 
 var mongoose = require("mongoose"),
     logger = require("../utils/Logger"),
@@ -23,6 +24,18 @@ ProfileService.findUserProfiles = function (userId) {
 };
 
 /**
+ * Devuelve todos los perfiles que tiene asignado un paciente
+ * @param   {number} patientId paciente del cual quiero saber los perfiles que tiene asignado
+ * @returns {promise} una promesa con los perfiles disponibles del usuario
+ */
+
+ProfileService.findPatientProfiles = function (patientId){
+    "use strict";
+
+    return Profile.find({"patient": patientId}).populate("user").exec();
+};
+
+/**
  * Crea un nuevo perfil
  * @param   {object}  reqProfile el perfil con los datos básicos
  * @returns {promise} una promesa con el perfil creado
@@ -32,11 +45,6 @@ ProfileService.add = function(reqProfile) {
 
     console.log("llegue al profile service");
     var newProfile = new Profile(reqProfile);
-
-    /*return newProfile.save().then(null, function (error) {
-        logger.error("No se pudo guardar el profile", error);
-        return error;
-    });*/
 
     return newProfile.save().then(function(profile){
         return profile;
