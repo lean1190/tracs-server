@@ -33,7 +33,14 @@ ProfileService.add = function(reqProfile) {
     console.log("llegue al profile service");
     var newProfile = new Profile(reqProfile);
 
-    return newProfile.save().then(null, function (error) {
+    /*return newProfile.save().then(null, function (error) {
+        logger.error("No se pudo guardar el profile", error);
+        return error;
+    });*/
+
+    return newProfile.save().then(function(profile){
+        return profile;
+    }, function (error) {
         logger.error("No se pudo guardar el profile", error);
         return error;
     });
