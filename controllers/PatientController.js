@@ -3,7 +3,8 @@
 /* globals require, module, console */
 
 var PatientService = require("../services/PatientService"),
-    ProfileService = require("../services/ProfileService");
+    ProfileService = require("../services/ProfileService"),
+    UserService = require("../services/UserService");
 
 var PatientController = {};
 
@@ -56,6 +57,17 @@ PatientController.getPatientProfiles = function (req,res){
 
     ProfileService.findPatientProfiles(patientId).then(function(users){
          res.status(200).jsonp(users);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+}
+
+PatientController.getSelectableUsers = function (req,res){
+
+    var patientId = req.params.id;
+
+    UserService.getSelectableUser(patientId).then(function(users){
+       res.status(200).jsonp(users);
     }, function (err) {
         return res.status(500).send(err.message);
     });

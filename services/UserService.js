@@ -7,7 +7,8 @@ require("../models/Treatment");
 
 var mongoose = require("mongoose"),
     User = mongoose.model("User"),
-    logger = require("../utils/Logger");
+    logger = require("../utils/Logger"),
+    ProfileService = require("./ProfileService");
 
 var UserService = {};
 
@@ -15,6 +16,7 @@ var UserService = {};
  * Recupera todos los usuarios
  * @returns {Array} el arreglo con todos los usuarios
  */
+
 UserService.findAll = function () {
     "use strict";
 
@@ -32,6 +34,30 @@ UserService.findById = function (userId) {
 
     return User.findById(userId).exec();
 };
+
+UserService.getSelectableUser = function (patientId){
+
+     return ProfileService.getPatientUsers(patientId).then(function(patientUsers){
+
+        var usersToBeIgnored =[];
+
+        patientUsers.forEach(function(item) {
+            usersToBeIgnored.push(item.user);
+        });
+
+        return User.find({_id:{$nin:usersToBeIgnored}}).then(function(selectableUsers){
+            return selectableUsers;
+        }, function (error){
+            logger.error("No se pudo obtener los usuarios seleccionables para el paciente " + patientId, error);
+            return error;
+        });
+
+    }, function (error) {
+            logger.error("No se pudo obtener los usuarios actuales del paciente" + patientId, error);
+            return error;
+    });
+
+}
 
 /**
  * Recupera un usuario por el id de Google

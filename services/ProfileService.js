@@ -32,8 +32,19 @@ ProfileService.findUserProfiles = function (userId) {
 ProfileService.findPatientProfiles = function (patientId){
     "use strict";
 
-    return Profile.find({"patient": patientId}).populate("user").exec();
+    return Profile.find({patient: patientId}).populate("user").exec();
 };
+
+ProfileService.getPatientUsers = function(patientId){
+
+    return Profile.find({patient: patientId},"user -_id").then(function(profiles){
+        return profiles;
+    }, function (error) {
+        logger.error("No se pudo obtener los usuarios relacionados al paciente", error);
+        return error;
+    });
+
+}
 
 /**
  * Crea un nuevo perfil
