@@ -45,6 +45,23 @@ PatientController.getPatientDetail = function (req, res) {
 };
 
 /**
+ * Obtiene los parcipantes relacionados a un paciente
+ * @param   {object}   req params.id el id del paciente
+ * @param   {object} res
+ * @returns {object} los participantes relacionados al paciente
+ */
+PatientController.getPatientProfiles = function (req,res){
+
+    var patientId = req.params.id;
+
+    ProfileService.findPatientProfiles(patientId).then(function(users){
+         res.status(200).jsonp(users);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+}
+
+/**
  * Crea un nuevo paciente con un usuario administrador asociado
  * @param   {object} req {post: name, dateOfBirth, description, dni, phoneNr, admin}
  * @param   {object} res
@@ -123,9 +140,7 @@ PatientController.bulkInsert = function(req,res){
 
 PatientController.updatePatientDetail = function (req,res){
     "use strict";
-    console.log("llegue al patient edit");
 
-    //console.log(req.body);
     var updatedPatient = {
         id: req.body._id,
         name: req.body.name,
@@ -160,5 +175,7 @@ PatientController.addProfileToPatient = function(req,res){
     });
 
 };
+
+
 
 module.exports = PatientController;

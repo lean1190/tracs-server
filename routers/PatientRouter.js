@@ -8,12 +8,12 @@ var express = require("express"),
 
 router.get("/detail/:id", PatientController.getPatientDetail);
 router.get("/user/:id", PatientController.findUserPatients);
-
-router.post("/", PatientController.add);
+router.get("/profiles/:id", PatientController.getPatientProfiles);
 
 router.put("/:id", PatientController.updatePatientDetail);
 router.put("/addProfileToPatient/:id", PatientController.addProfileToPatient);
 
+router.post("/", PatientController.add);
 //Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
 router.post("/bulkInsert", PatientController.bulkInsert);
 
