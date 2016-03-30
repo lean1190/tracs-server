@@ -6,18 +6,15 @@ var UserService = require("../services/UserService");
 
 var UserController = {};
 
-
-
 /**
- *  ===============================
- *  ==== BASIC USER OPERATIONS ====
- *  ===============================
+ * Recupera todos los usuarios
+ * @param   {object} req
+ * @param   {object} res
+ * @returns {Array}  un arreglo con los usuarios
  */
-
-// Return all users
-
 UserController.findAll = function (req, res) {
     "use strict";
+
     UserService.findAll().then(function (users) {
         res.status(200).jsonp(users);
     }, function (err) {
@@ -25,11 +22,15 @@ UserController.findAll = function (req, res) {
     });
 };
 
-// Return a User with specified ID
+/**
+ * Recupera un usuario por id
+ * @param   {object} req {get: id}
+ * @param   {object} res
+ * @returns {object} el usuario con id pasado por parametro
+ */
 UserController.findById = function (req, res) {
-
-
     "use strict";
+
     UserService.findById(req.params.id).then(function (user) {
         res.status(200).jsonp(user);
     }, function (err) {
@@ -68,15 +69,18 @@ UserController.addUser = function (req, res) {
     });
 };
 
-// Update an existing User
+/**
+ * Actualiza un usuario
+ * @param   {object} req {get: id}
+ * @param   {object} res
+ * @returns {object} el usuario actualizado
+ */
 UserController.updateUser = function (req, res) {
     "use strict";
 
     var reqUser = {
-        id: req.params.id,
-        name: req.body.name,
-        phone: req.body.phone,
-        email: req.body.email
+        _id: req.params.id,
+        phoneNumber: req.body.phoneNumber
     };
 
     UserService.updateUser(reqUser).then(function (user) {
