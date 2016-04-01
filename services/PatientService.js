@@ -109,7 +109,7 @@ PatientService.add = function (reqPatient, adminUserId) {
         });
 
     }, function (error) {
-        logger.error("No se pudo guardar el profile para el paciente con id " + patient._id, error);
+        logger.error("No se pudo guardar el profile para el paciente con id " + newPatient._id, error);
         return error;
     });
 
@@ -121,6 +121,7 @@ PatientService.add = function (reqPatient, adminUserId) {
  * @returns {promise} una promesa con el paciente modificado
  */
 PatientService.addProfileToPatient = function (newProfile) {
+    "use strict";
 
     return ProfileService.add(newProfile).then(function (profile) {
 
@@ -135,13 +136,12 @@ PatientService.addProfileToPatient = function (newProfile) {
         });
 
     }, function (error) {
-        logger.error("No se pudo guardar el profile para el paciente con id " + patient._id, error);
+        logger.error("No se pudo guardar el profile " + newProfile, error);
         return error;
     });
 
-}
+};
 
-D
 /**
  * Modifica las personas cercanas de un paciente determinado
  * @param   {number} patientId  el ID del paciente a modificar
@@ -149,6 +149,7 @@ D
  * @returns {promise} una promesa con el paciente modificado
  */
 PatientService.updateClosestPeople = function (patientId, updatedClosestContacts){
+    "use strict";
 
     return Patient.update({_id: patientId},{$set: { closestPeople: updatedClosestContacts}}).exec().then(function (patient) {
         return patient;
@@ -156,10 +157,11 @@ PatientService.updateClosestPeople = function (patientId, updatedClosestContacts
         logger.error("Ocurrió un error al editar las personas cercanas del paciente " + patientId, error);
         return error;
     });
-}
+};
 
 // Borrador para carga masiva de datos
 PatientService.bulkInsert = function () {
+    "use strict";
 
     var patients = [{
             name: 'potato1',
