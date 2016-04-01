@@ -77,16 +77,16 @@ PatientService.bulkInsert = function(){
                    birthDate: '2012-01-01T03:00:00.000Z',
                    DNI: "34567753"}];
 
-Patient.collection.insert(patients, onInsert);
+    Patient.collection.insert(patients, onInsert);
 
-function onInsert(err, docs) {
-    if (err) {
-        console.log("Exploto todo");
-        // TODO: handle error
-    } else {
-        console.info('%d potatoes were successfully stored.', docs.length);
-        return docs;
-    }
+    function onInsert(err, docs) {
+        if (err) {
+            console.log("Exploto todo");
+            // TODO: handle error
+        } else {
+            console.info('%d potatoes were successfully stored.', docs.length);
+            return docs;
+        }
 }
 
   /*  Patient.collection.insert(patients).exec().then(function (insertedPatients){
@@ -161,6 +161,22 @@ PatientService.addProfileToPatient = function(newProfile){
             return error;
     });
 
+}
+
+/**
+ * Modifica las personas cercanas de un paciente determinado
+ * @param   {number} patientId  el ID del paciente a modificar
+ * @param   {array} updatedClosestContact los contactos que van a pasar a ser personas cercanas
+ * @returns {promise} una promesa con el paciente modificado
+ */
+PatientService.updateClosestPeople = function (patientId, updatedClosestContacts){
+
+    return Patient.update({_id: patientId},{$set: { closestPeople: updatedClosestContacts}}).exec().then(function (patient) {
+        return patient;
+    }, function (error) {
+        logger.error("Ocurrió un error al editar las personas cercanas del paciente " + patientId, error);
+        return error;
+    });
 }
 
 module.exports = PatientService;

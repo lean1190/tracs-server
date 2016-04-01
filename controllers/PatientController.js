@@ -170,6 +170,23 @@ PatientController.updatePatientDetail = function (req,res){
 
 };
 
+PatientController.updateClosestPeople = function (req, res){
+
+    var closestPeople = req.body;
+    var patientId = req.params.id;
+    console.log(closestPeople);
+    console.log(patientId);
+
+    PatientService.updateClosestPeople(patientId,closestPeople).then(function (patient) {
+        res.status(200).jsonp(patient);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+
+}
+
+
+
 PatientController.addProfileToPatient = function(req,res){
     "use strict";
 

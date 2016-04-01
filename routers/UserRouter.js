@@ -8,9 +8,12 @@ var express = require("express"),
 
 /* Basic user information */
 router.get("/", UserController.findAll);
-router.post("/", UserController.addUser);
 router.get("/:id", UserController.findById);
+
+router.post("/", UserController.addUser);
+
 router.put("/:id", UserController.updateUser);
+
 router.delete("/:id", UserController.deleteUser);
 
 /*router.get("/name/:name", UserController.findByName);*/

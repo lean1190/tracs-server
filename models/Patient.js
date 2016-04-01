@@ -21,7 +21,7 @@ var PatientSchema = new Schema({
         {
             personId: { type: String, required: true },
             name: { type: String, required: true },
-            phone: { type: String, required: true },
+            phoneNumber: { type: String, required: true },
             picture: { type: String, required: true },
             priority: { type: Number, required: true }
         }
