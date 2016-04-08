@@ -94,28 +94,28 @@ PatientController.add = function (req, res) {
             {
                 personId: req.body.admin,
                 name: "Prueba1",
-                phone: "2214180840",
+                phoneNumber: "2214180840",
                 picture: "http://notihoy.com/site/wp-content/uploads/2015/03/emilia11-755x380.jpg",
                 priority: Math.floor((Math.random() * 3) + 1)
             },
             {
                 personId: req.body.admin,
                 name: "Prueba2",
-                phone: "2214180840",
+                phoneNumber: "2214180840",
                 picture: "http://www.hercampus.com/sites/default/files/2015/02/15/Natalie-Dormer%3A-People-Magazine-2014--01-662x883.jpg",
                 priority: Math.floor((Math.random() * 3) + 1)
             },
             {
                 personId: req.body.admin,
                 name: "Prueba3",
-                phone: "2214180840",
+                phoneNumber: "2214180840",
                 picture: "http://losandes.com.ar/files/image/15/11/image563bbefa2720d3.37124491.jpg",
                 priority: Math.floor((Math.random() * 3) + 1)
             },
             {
                 personId: req.body.admin,
                 name: "Prueba4",
-                phone: "2214180840",
+                phoneNumber: "2214180840",
                 picture: "https://i.ytimg.com/vi/x4Iu_ibISac/hqdefault.jpg",
                 priority: Math.floor((Math.random() * 3) + 1)
             }
