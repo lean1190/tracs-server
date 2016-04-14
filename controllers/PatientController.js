@@ -199,6 +199,31 @@ PatientController.addProfileToPatient = function(req,res){
 };
 
 /**
+ * Añade una nueva opinion de un perfil a un paciente determinado
+ * @param   {object} req {put: description, user, id}
+ * @param   {object} res
+ * @returns {object} el perfil modificado con la ultima opinion ingresada
+ */
+PatientController.addPatientOpinion = function (req,res){
+    "use strict";
+
+    var newOpinion = {};
+
+    var userId = req.body.user;
+    var patientId = req.params.id;
+
+    newOpinion.description = req.body.description;
+    newOpinion.date = new Date();
+
+    ProfileService.addPatientOpinion(newOpinion, userId, patientId).then(function (profile) {
+        res.status(200).jsonp(profile);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+
+};
+
+/**
  * Recupera las últimas notificaciones de un paciente
  * @param {object} req {get: id} el id del paciente
  * @param {Array}  res las notificaciones para el paciente
@@ -215,18 +240,36 @@ PatientController.getNotifications = function(req, res) {
     });
 };
 
+/**
+ * Obtiene las opiniones de los diferentes perfiles que fueron hechas sobre un paciente determinado
+ * @param   {object} req {get: id}
+ * @param   {object} res [[Description]]
+ * @returns {object} las opiniones junto a los usuarios que las hicieron
+ */
+PatientController.getPatientOpinions = function (req,res){
+    "use strict";
+
+    var patientId = req.params.id;
+
+    ProfileService.getPatientOpinions(patientId).then(function (patientOpinions) {
+        res.status(200).jsonp(patientOpinions);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
+
 //Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
 PatientController.bulkInsert = function(req,res){
     "use strict";
 
     PatientService.bulkInsert(function(err,patients){
-        if (err) {
-            console.log("Exploto todo");
-            // TODO: handle error
-        } else {
-            console.info("%d potatoes were successfully stored.", patients.length);
-            return patients;
-        }
+    if (err) {
+        console.log("Exploto todo");
+        // TODO: handle error
+    } else {
+        console.info("%d potatoes were successfully stored.", patients.length);
+        return patients;
+    }
     });
 };
 

@@ -7,7 +7,10 @@ var Schema = mongoose.Schema;
 
 var PatientOpinionSchema = new Schema({
 
-    description: { type: String, required: true }
+    description: { type: String, required: true },
+    date: { type: Date, required: true },
+    profile: { type: Schema.Types.ObjectId, ref : "Profile" }
+
 });
 
-module.exports = mongoose.model("PatientOpinion", PatientOpinionSchema;
+module.exports = mongoose.model("PatientOpinion", PatientOpinionSchema);

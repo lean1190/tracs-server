@@ -15,7 +15,7 @@ var ProfileSchema = new Schema({
     accessRoles: [{type : Schema.Types.ObjectId, ref: "AccessRole"}],
     patient:{type : Schema.Types.ObjectId, ref : "Patient", required: true},
     user:{type : Schema.Types.ObjectId, ref : "User", required: true},
-    patientOpinion:[{type : Schema.Types.ObjectId, ref : "PatientOpinion"}]
+    latestPatientOpinion:{type : Schema.Types.ObjectId, ref : "PatientOpinion"}
     //chats:
 });
 
