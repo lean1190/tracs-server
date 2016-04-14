@@ -25,14 +25,16 @@ var PatientSchema = new Schema({
             picture: { type: String, required: true },
             priority: { type: Number, required: true }
         }
+    ],
+    notifications: [
+        {
+            type: { type: String, required: true },
+            message: { type: String, required: true },
+            timeStamp: { type: Date, required: true }
+        }
     ]
 
 });
-
-/*PatientSchema.prototype.getPatients = function(){
-
-    PatientSchema.find().populate('diagnoses').exec()
-};*/
 
 module.exports = mongoose.model("Patient", PatientSchema);
 

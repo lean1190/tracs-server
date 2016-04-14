@@ -28,7 +28,6 @@ ProfileService.findUserProfiles = function (userId) {
  * @param   {number} patientId paciente del cual quiero saber los perfiles que tiene asignado
  * @returns {promise} una promesa con los perfiles disponibles del usuario
  */
-
 ProfileService.findPatientProfiles = function (patientId){
     "use strict";
 
@@ -36,6 +35,7 @@ ProfileService.findPatientProfiles = function (patientId){
 };
 
 ProfileService.getPatientUsers = function(patientId){
+    "use strict";
 
     return Profile.find({patient: patientId},"user -_id").then(function(profiles){
         return profiles;
@@ -43,8 +43,7 @@ ProfileService.getPatientUsers = function(patientId){
         logger.error("No se pudo obtener los usuarios relacionados al paciente", error);
         return error;
     });
-
-}
+};
 
 /**
  * Crea un nuevo perfil
@@ -54,7 +53,6 @@ ProfileService.getPatientUsers = function(patientId){
 ProfileService.add = function(reqProfile) {
     "use strict";
 
-    console.log("llegue al profile service");
     var newProfile = new Profile(reqProfile);
 
     return newProfile.save().then(function(profile){

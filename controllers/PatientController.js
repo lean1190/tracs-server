@@ -10,7 +10,7 @@ var PatientController = {};
 
 /**
  * Devuelve todos los perfiles de un usuario pasando su id
- * @param   {object} req {get: id}
+ * @param   {object} req {get: id} el id del usuario
  * @param   {object} res
  * @returns {Array}  el arreglo de perfiles de un usuario
  */
@@ -28,7 +28,7 @@ PatientController.findUserPatients = function (req, res) {
 
 /**
  * Obtiene los detalles de un paciente especifico
- * @param   {object} req {get: id}
+ * @param   {object} req {get: id} el id del paciente
  * @param   {object} res
  * @returns {object} el paciente con el total de su informacion
  */
@@ -47,11 +47,12 @@ PatientController.getPatientDetail = function (req, res) {
 
 /**
  * Obtiene los parcipantes relacionados a un paciente
- * @param   {object}   req params.id el id del paciente
+ * @param   {object} req {get: id} el id del paciente
  * @param   {object} res
- * @returns {object} los participantes relacionados al paciente
+ * @returns {Array}  los participantes relacionados al paciente
  */
 PatientController.getPatientProfiles = function (req,res){
+    "use strict";
 
     var patientId = req.params.id;
 
@@ -60,9 +61,16 @@ PatientController.getPatientProfiles = function (req,res){
     }, function (err) {
         return res.status(500).send(err.message);
     });
-}
+};
 
+/**
+ * Recupera los usuarios que pueden ser asignados al paciente
+ * @param   {object} req {get: id} el id del paciente
+ * @param   {object} res
+ * @returns {Array}  los usuarios que pueden ser asignados
+ */
 PatientController.getSelectableUsers = function (req,res){
+    "use strict";
 
     var patientId = req.params.id;
 
@@ -71,7 +79,7 @@ PatientController.getSelectableUsers = function (req,res){
     }, function (err) {
         return res.status(500).send(err.message);
     });
-}
+};
 
 /**
  * Crea un nuevo paciente con un usuario administrador asociado
@@ -88,6 +96,7 @@ PatientController.add = function (req, res) {
         generalDescription: req.body.description, //"description"
         DNI: req.body.dni,
         phoneNumber: req.body.phoneNr,
+        notifications: [],
 
         // Mock data!!!
         closestPeople: [
@@ -129,27 +138,12 @@ PatientController.add = function (req, res) {
     });
 };
 
-
-//Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
-PatientController.bulkInsert = function(req,res){
-
-    PatientService.bulkInsert(function(err,patients){
-    if (err) {
-        console.log("Exploto todo");
-        // TODO: handle error
-    } else {
-        console.info('%d potatoes were successfully stored.', patients.length);
-        return patients;
-    }
-    })
-};
 /**
  * Edita la informacion de un paciente
  * @param   {object} req {put: id, name, dateOfBirth, generalDescription, dni, phoneNr, }
  * @param   {object} res
  * @returns {object} el paciente modificado
  */
-
 PatientController.updatePatientDetail = function (req,res){
     "use strict";
 
@@ -171,6 +165,7 @@ PatientController.updatePatientDetail = function (req,res){
 };
 
 PatientController.updateClosestPeople = function (req, res){
+    "use strict";
 
     var closestPeople = req.body;
     var patientId = req.params.id;
@@ -183,9 +178,7 @@ PatientController.updateClosestPeople = function (req, res){
         return res.status(500).send(err.message);
     });
 
-}
-
-
+};
 
 PatientController.addProfileToPatient = function(req,res){
     "use strict";
@@ -199,12 +192,42 @@ PatientController.addProfileToPatient = function(req,res){
 
     PatientService.addProfileToPatient(newProfile).then(function(patient){
         res.status(200).jsonp(patient);
-    },function (err){
+    }, function (err){
         return res.status(500).send(err.message);
     });
 
 };
 
+/**
+ * Recupera las últimas notificaciones de un paciente
+ * @param {object} req {get: id} el id del paciente
+ * @param {Array}  res las notificaciones para el paciente
+ */
+PatientController.getNotifications = function(req, res) {
+    "use strict";
 
+    var patientId = req.params.id;
+
+    PatientService.getNotifications(patientId).then(function(notifications) {
+        res.status(200).jsonp(notifications);
+    }, function (err){
+        return res.status(500).send(err.message);
+    });
+};
+
+//Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
+PatientController.bulkInsert = function(req,res){
+    "use strict";
+
+    PatientService.bulkInsert(function(err,patients){
+        if (err) {
+            console.log("Exploto todo");
+            // TODO: handle error
+        } else {
+            console.info("%d potatoes were successfully stored.", patients.length);
+            return patients;
+        }
+    });
+};
 
 module.exports = PatientController;

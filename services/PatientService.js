@@ -144,8 +144,8 @@ PatientService.addProfileToPatient = function (newProfile) {
 
 /**
  * Modifica las personas cercanas de un paciente determinado
- * @param   {number} patientId  el ID del paciente a modificar
- * @param   {array} updatedClosestContact los contactos que van a pasar a ser personas cercanas
+ * @param   {number}  patientId el ID del paciente a modificar
+ * @param   {array}   updatedClosestContact los contactos que van a pasar a ser personas cercanas
  * @returns {promise} una promesa con el paciente modificado
  */
 PatientService.updateClosestPeople = function (patientId, updatedClosestContacts){
@@ -155,6 +155,24 @@ PatientService.updateClosestPeople = function (patientId, updatedClosestContacts
         return patient;
     }, function (error) {
         logger.error("Ocurrió un error al editar las personas cercanas del paciente " + patientId, error);
+        return error;
+    });
+};
+
+/**
+ * Recupera todas las notificaciones de un paciente
+ * @param   {number}  patientId el id del paciente
+ * @returns {promise} una promesa con el arreglo de notificaciones
+ */
+PatientService.getNotifications = function (patientId) {
+    "use strict";
+
+    return Patient.findOne({
+        _id: patientId
+    }).then(function (patient) {
+        return patient.notifications;
+    }, function (error) {
+        logger.error("No se pudieron obtener las notificaciones para el paciente con id " + patientId, error);
         return error;
     });
 };
