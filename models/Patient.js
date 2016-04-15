@@ -30,7 +30,7 @@ var PatientSchema = new Schema({
         {
             type: { type: String, required: true },
             message: { type: String, required: true },
-            timeStamp: { type: Date, required: true }
+            timestamp: { type: Date, required: true }
         }
     ]
 
