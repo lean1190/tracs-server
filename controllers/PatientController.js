@@ -2,7 +2,8 @@
 
 /* globals require, module, console */
 
-var PatientService = require("../services/PatientService"),
+var moment = require("moment"),
+    PatientService = require("../services/PatientService"),
     ProfileService = require("../services/ProfileService"),
     UserService = require("../services/UserService");
 
@@ -213,7 +214,7 @@ PatientController.addPatientOpinion = function (req,res){
     var patientId = req.params.id;
 
     newOpinion.description = req.body.description;
-    newOpinion.date = new Date();
+    newOpinion.date = moment().format();
 
     ProfileService.addPatientOpinion(newOpinion, userId, patientId).then(function (profile) {
         res.status(200).jsonp(profile);

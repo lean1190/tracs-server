@@ -6,13 +6,6 @@ var express = require("express"),
     router = express.Router(),
     ProfileController = require("../controllers/ProfileController");
 
-/*router.get("/", UserController.findAll);
-router.post("/", UserController.addUser);
-router.get("/:id", UserController.findById);
-router.put("/:id", UserController.updateUser);
-router.delete("/:id", UserController.deleteUser);*/
 router.get("/userProfiles", ProfileController.findUserProfiles);
-
-/*router.get("/name/:name", UserController.findByName);*/
 
 module.exports = router;
