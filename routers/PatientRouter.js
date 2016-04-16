@@ -10,8 +10,8 @@ router.get("/detail/:id", PatientController.getPatientDetail);
 router.get("/user/:id", PatientController.findUserPatients);
 router.get("/profiles/:id", PatientController.getPatientProfiles);
 router.get("/selectableUsers/:id", PatientController.getSelectableUsers);
-router.get("/notifications/:id", PatientController.getNotifications);
 router.get("/patientOpinions/:id", PatientController.getPatientOpinions);
+router.get("/notifications/:id", PatientController.getNotifications);
 
 router.put("/:id", PatientController.updatePatientDetail);
 router.put("/addProfileToPatient/:id", PatientController.addProfileToPatient);
@@ -19,6 +19,7 @@ router.put("/updatePatientClosestPeople/:id", PatientController.updateClosestPeo
 router.put("/addPatientOpinion/:id", PatientController.addPatientOpinion);
 
 router.post("/", PatientController.add);
+
 //Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
 router.post("/bulkInsert", PatientController.bulkInsert);
 

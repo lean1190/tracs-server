@@ -183,7 +183,7 @@ PatientController.updateClosestPeople = function (req, res){
 PatientController.addProfileToPatient = function(req,res){
     "use strict";
 
-    var newProfile ={
+    var newProfile = {
         patient: req.params.id,
         user: req.body.user,
         description: req.body.description,

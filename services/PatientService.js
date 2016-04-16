@@ -4,12 +4,44 @@
 
 require("../models/Patient");
 
-var mongoose = require("mongoose"),
+var moment = require("moment"),
+    mongoose = require("mongoose"),
     logger = require("../utils/Logger"),
     Patient = mongoose.model("Patient"),
     ProfileService = require("./ProfileService");
 
 var PatientService = {};
+
+/**
+ * Crea un modelo de notificacion a partir de un mensaje y un tipo
+ * Deberia usarse siempre que se quiera agregar una notificación
+ * @param   {string} message el mensaje
+ * @param   {string} type    el tipo
+ * @returns {object} una notificación armada
+ */
+function createNotification(message, type) {
+    "use strict";
+
+    return {
+        message: message,
+        type: type,
+        timestamp: moment().format()
+    };
+}
+
+/**
+ * Agrega una notificacion al arreglo de notificaciones de un paciente
+ * @param   {object} patient un model paciente
+ * @param   {string} message el mensaje
+ * @param   {string} type    el tipo
+ * @returns {object} el mismo paciente con la notificacion agregada
+ */
+function addNotificationToPatient(patient, message, type) {
+    "use strict";
+    patient.notifications.push(createNotification(message, type));
+
+    return patient;
+}
 
 /**
  * Recupera un paciente por su DNI
@@ -68,7 +100,7 @@ PatientService.updatePatientDetail = function (updatedPatient) {
     }, {
         new: true
     }).exec().then(function (patient) {
-        return patient;
+        return addNotificationToPatient(patient, "Se actualizaron datos del perfil", "patient.detail.updated").save();
     }, function (error) {
         logger.error("Ocurrió un error al editar los datos del paciente con ID " + updatedPatient.id, error);
         return error;
@@ -105,7 +137,7 @@ PatientService.add = function (reqPatient, adminUserId) {
             return patient;
         }, function (error) {
             logger.error("No se pudo guardar el paciente con id " + newPatient._id, error);
-
+            return error;
         });
 
     }, function (error) {
@@ -129,7 +161,8 @@ PatientService.addProfileToPatient = function (newProfile) {
             _id: profile.patient
         }).then(function (patient) {
             patient.profiles.push(profile._id);
-            patient.save();
+
+            return addNotificationToPatient(patient, "Hay un nuevo participante", "patient.profile.added").save();
         }, function (error) {
             logger.error("No se pudo obtener el paciente con id " + newProfile.patient, error);
             return error;
@@ -148,11 +181,19 @@ PatientService.addProfileToPatient = function (newProfile) {
  * @param   {array}   updatedClosestContact los contactos que van a pasar a ser personas cercanas
  * @returns {promise} una promesa con el paciente modificado
  */
-PatientService.updateClosestPeople = function (patientId, updatedClosestContacts){
+PatientService.updateClosestPeople = function (patientId, updatedClosestContacts) {
     "use strict";
 
-    return Patient.update({_id: patientId},{$set: { closestPeople: updatedClosestContacts}}).exec().then(function (patient) {
-        return patient;
+    return Patient.findOneAndUpdate({
+        _id: patientId
+    }, {
+        $set: {
+            closestPeople: updatedClosestContacts
+        }
+    }, {
+        new: true
+    }).exec().then(function (patient) {
+        return addNotificationToPatient(patient, "Se actualizaron los contactos", "patient.people.updated").save();
     }, function (error) {
         logger.error("Ocurrió un error al editar las personas cercanas del paciente " + patientId, error);
         return error;
@@ -173,6 +214,27 @@ PatientService.getNotifications = function (patientId) {
         return patient.notifications;
     }, function (error) {
         logger.error("No se pudieron obtener las notificaciones para el paciente con id " + patientId, error);
+        return error;
+    });
+};
+
+/**
+ * Crea una notificación para un paciente dado
+ * @param   {number}  patientId    el id del paciente
+ * @param   {object}  notification la notificacion
+ * @returns {promise} una promesa con el paciente actualizado
+ */
+PatientService.addNotification = function (patientId, notification) {
+    "use strict";
+
+    return Patient.findOne({
+        _id: patientId
+    }).then(function (patient) {
+        // Add the notification
+        patient.notifications.push(notification);
+        return patient.save();
+    }, function (error) {
+        logger.error("No se pudo recuperar el paciente con id " + patientId, error);
         return error;
     });
 };
