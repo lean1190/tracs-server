@@ -34,21 +34,82 @@ var app = new Application({path: __dirname, folder: "public"}, [
 ]);
 
 var io = require('socket.io')(4000);
+var roomMembers = {};
+//var members =[];
+
+//usado para prueba, volar en el futuro
+/*roomMembers["room_570c69414176cb9911ebee51"] = { members:[]};
+roomMembers["room_570c69414176cb9911ebee51"].members.push(
+        {
+            id: "56e48d14db1fb2bb603f2028",
+            name: "Marques Alonzo",
+            picture: "https://lh5.googleusercontent.com/-PhQO5UNCR5E/AAAAAAAAAAI/AAAAAAAAAEA/Nh1KJaVTSXI/photo.jpg"
+        });*/
 
 io.on('connection', function(socket){
 
     socket.on('join:room', function(data){
+
+        console.log(data);
         var room_name = data.room_name;
+
+        if(!roomMembers[room_name]) {
+            roomMembers[room_name] = {
+                    members: []
+                }
+        }
+
+
+        /*roomMembers[room_name].members.push(data.userInfo.id);
+
+        if(!roomMembers[room_name].members[data.userInfo.id]) {
+
+            roomMembers[room_name].members[data.userInfo.id] = {
+
+                    memberInfo: []
+                }
+        }
+        */
+
+        roomMembers[room_name].members.push(data.userInfo.id);
+
+        console.log(roomMembers[room_name].members);
+
+        roomMembers[room_name].members[data.userInfo.id] = {
+
+                    memberInfo: []
+                }
+
+
+        roomMembers[room_name].members[data.userInfo.id].memberInfo.push(data.userInfo);
+
+        console.log(roomMembers[room_name].members[data.userInfo.Id].memberInfo);
+
+
+        console.log(roomMembers[room_name].members);
+
         socket.join(room_name);
+        socket.emit('chat:members', roomMembers[room_name].members);
+
+        //socket.in(room_name).emit('chat:members', roomMembers[room_name].members);
+
+
+        //armar broadcast para todos los otrosque esten en la room y vean el ingreso del nuevo participante
     });
 
 
     socket.on('leave:room', function(msg){
+        console.log("llego al leave");
+        //console.log(roomMembers);
+        roomMembers = [];
+        //console.log(roomMembers);
+        console.log(msg);
+        console.log(msg.room);
         msg.text = msg.user + " has left the room";
-        socket.in(msg.room).emit('exit', msg);
         socket.leave(msg.room);
-    });
+        socket.in(msg.room).emit('exit', msg);
 
+    });
 
     socket.on('send:message', function(msg){
         socket.in(msg.room).emit('message', msg);

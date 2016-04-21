@@ -32,6 +32,12 @@ var PatientSchema = new Schema({
             message: { type: String, required: true },
             timestamp: { type: Date, required: true }
         }
+    ],
+    geoAlert:[
+        {
+
+
+        }
     ]
 
 });
