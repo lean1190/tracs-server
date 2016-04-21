@@ -127,9 +127,8 @@ PatientService.addProfileToPatient = function (newProfile) {
 
     return ProfileService.add(newProfile).then(function (profile) {
 
-        return Patient.findOne({
-            _id: profile.patient
-        }).then(function (patient) {
+        return Patient.findOne({_id: profile.patient}).then(function (patient) {
+
             patient.profiles.push(profile._id);
 
             return NotificationsService.createNotificationForPatient(patient, "Hay un nuevo participante", "patient.profile.added");
@@ -208,6 +207,28 @@ PatientService.addNotification = function (patientId, notification) {
         return error;
     });
 };
+
+/**
+ * Agrega una alerta georeferenciada hecha por el paciente
+ * @param   {number} patientId Id del paciente que emite la alerta
+ * @param   {object}    geoAlert  Objeto con los parametros de geolocalizacion de la alerta
+ * @returns {promise} una promesa con el paciente actualizado
+ */
+PatientService.addGeoAlert = function(patientId, geoAlert){
+
+    return Patient.findOne({_id: patientId}).then(function (patient){
+
+        patient.geoAlert.push(geoAlert);
+        return NotificationsService.createNotificationForPatient(patient, "Hay una nueva alerta del paciente", "patient.geoAlert.added")
+
+    }, function (error) {
+        logger.error("No se pudo recuperar el paciente con id " + patientId, error);
+        return error;
+    });
+
+};
+
+
 
 // Borrador para carga masiva de datos
 PatientService.bulkInsert = function () {

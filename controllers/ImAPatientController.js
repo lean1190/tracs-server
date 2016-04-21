@@ -24,4 +24,26 @@ ImAPatientController.findByDni = function (req, res) {
     });
 };
 
+/**
+ * Agrega una alerta georeferenciada hecha por el paciente
+ * @param   {object}   req [[Description]]
+ * @param   {object} res
+ * @returns {object} El paciente actualizado con su alerta
+ */
+ImAPatientController.addGeoAlert = function (req, res) {
+    "use strict";
+
+    var patientId = req.params.id;
+    var geoAlert = req.body;
+
+    console.log(req.body);
+
+
+    PatientService.addGeoAlert(patientId,geoAlert).then(function (patient) {
+        res.status(200).jsonp(patient);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
+
 module.exports = ImAPatientController;

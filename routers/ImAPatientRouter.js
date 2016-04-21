@@ -8,4 +8,6 @@ var express = require("express"),
 
 router.get("/:dni", ImAPatientController.findByDni);
 
+router.put("/sendGeoAlert/:id", ImAPatientController.addGeoAlert);
+
 module.exports = router;
