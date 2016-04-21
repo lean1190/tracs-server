@@ -71,11 +71,11 @@ io.on('connection', function(socket){
         }
         */
 
-        roomMembers[room_name].members.push(data.userInfo.id);
+        roomMembers[room_name].members.push(data.userInfo);
 
         console.log(roomMembers[room_name].members);
 
-        roomMembers[room_name].members[data.userInfo.id] = {
+        /*roomMembers[room_name].members[data.userInfo.id] = {
 
                     memberInfo: []
                 }
@@ -85,7 +85,7 @@ io.on('connection', function(socket){
 
         console.log(roomMembers[room_name].members[data.userInfo.Id].memberInfo);
 
-
+*/
         console.log(roomMembers[room_name].members);
 
         socket.join(room_name);
@@ -103,11 +103,15 @@ io.on('connection', function(socket){
         //console.log(roomMembers);
         roomMembers = [];
         //console.log(roomMembers);
-        console.log(msg);
+        //console.log(msg);
         console.log(msg.room);
         msg.text = msg.user + " has left the room";
+        console.log(msg);
         socket.leave(msg.room);
-        socket.in(msg.room).emit('exit', msg);
+
+        //socket.to(msg.room).emit('message',msg);
+        //socket.in(msg.room).emit('message', msg);
+        socket.emit('message', msg);
 
     });
 
