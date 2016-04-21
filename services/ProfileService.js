@@ -10,7 +10,8 @@ require("../models/PatientOpinion");
 var mongoose = require("mongoose"),
     logger = require("../utils/Logger"),
     Profile = mongoose.model("Profile"),
-    PatientOpinion = mongoose.model("PatientOpinion");
+    PatientOpinion = mongoose.model("PatientOpinion"),
+    NotificationsService = require("./NotificationsService");
 
 var ProfileService = {};
 
@@ -113,15 +114,15 @@ ProfileService.addPatientOpinion = function(patientOpinion, userId, patientId){
     "use strict";
 
     return ProfileService.getSpecificProfile(patientId, userId).then(function (profile) {
-
         patientOpinion.profile = profile._id;
         var newPatientOpinion = new PatientOpinion(patientOpinion);
 
         return newPatientOpinion.save().then(function(opinion){
-
             profile.latestPatientOpinion = opinion._id;
 
             return profile.save().then(function(updatedProfile){
+                NotificationsService.createNotificationForPatientId(patientId, "Se actualizaron las opiniones", "patient.opinion.updated");
+
                 return updatedProfile;
             }, function(error){
                 logger.error("No se pudo guardar el perfil actualizado con la opinion del paciente",error);

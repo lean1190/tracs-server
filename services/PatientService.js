@@ -4,44 +4,13 @@
 
 require("../models/Patient");
 
-var moment = require("moment"),
-    mongoose = require("mongoose"),
+var mongoose = require("mongoose"),
     logger = require("../utils/Logger"),
     Patient = mongoose.model("Patient"),
-    ProfileService = require("./ProfileService");
+    ProfileService = require("./ProfileService"),
+    NotificationsService = require("./NotificationsService");
 
 var PatientService = {};
-
-/**
- * Crea un modelo de notificacion a partir de un mensaje y un tipo
- * Deberia usarse siempre que se quiera agregar una notificación
- * @param   {string} message el mensaje
- * @param   {string} type    el tipo
- * @returns {object} una notificación armada
- */
-function createNotification(message, type) {
-    "use strict";
-
-    return {
-        message: message,
-        type: type,
-        timestamp: moment().format()
-    };
-}
-
-/**
- * Agrega una notificacion al arreglo de notificaciones de un paciente
- * @param   {object} patient un model paciente
- * @param   {string} message el mensaje
- * @param   {string} type    el tipo
- * @returns {object} el mismo paciente con la notificacion agregada
- */
-function addNotificationToPatient(patient, message, type) {
-    "use strict";
-    patient.notifications.push(createNotification(message, type));
-
-    return patient;
-}
 
 /**
  * Recupera un paciente por su DNI
@@ -100,7 +69,7 @@ PatientService.updatePatientDetail = function (updatedPatient) {
     }, {
         new: true
     }).exec().then(function (patient) {
-        return addNotificationToPatient(patient, "Se actualizaron datos del perfil", "patient.detail.updated").save();
+        return NotificationsService.createNotificationForPatient(patient, "Se actualizaron datos del perfil", "patient.detail.updated");
     }, function (error) {
         logger.error("Ocurrió un error al editar los datos del paciente con ID " + updatedPatient.id, error);
         return error;
@@ -127,7 +96,8 @@ PatientService.add = function (reqPatient, adminUserId) {
     var newProfile = {
         isAdmin: true,
         patient: newPatient._id,
-        user: adminUserId
+        user: adminUserId,
+        description: "Administrador"
     };
 
     return ProfileService.add(newProfile).then(function (profile) {
@@ -162,7 +132,7 @@ PatientService.addProfileToPatient = function (newProfile) {
         }).then(function (patient) {
             patient.profiles.push(profile._id);
 
-            return addNotificationToPatient(patient, "Hay un nuevo participante", "patient.profile.added").save();
+            return NotificationsService.createNotificationForPatient(patient, "Hay un nuevo participante", "patient.profile.added");
         }, function (error) {
             logger.error("No se pudo obtener el paciente con id " + newProfile.patient, error);
             return error;
@@ -193,7 +163,7 @@ PatientService.updateClosestPeople = function (patientId, updatedClosestContacts
     }, {
         new: true
     }).exec().then(function (patient) {
-        return addNotificationToPatient(patient, "Se actualizaron los contactos", "patient.people.updated").save();
+        return NotificationsService.createNotificationForPatient(patient, "Se actualizaron los contactos", "patient.contacts.updated");
     }, function (error) {
         logger.error("Ocurrió un error al editar las personas cercanas del paciente " + patientId, error);
         return error;
@@ -243,28 +213,28 @@ PatientService.addNotification = function (patientId, notification) {
 PatientService.bulkInsert = function () {
     "use strict";
 
-    var patients = [{
-            name: 'potato1',
-            birthDate: '2012-01-01T03:00:00.000Z',
-            DNI: "34567753"
-        },
-        {
-            name: 'potato2',
-            birthDate: '2012-01-01T03:00:00.000Z',
-            DNI: "34567753"
-        }];
-
-    Patient.collection.insert(patients, onInsert);
-
     function onInsert(err, docs) {
         if (err) {
             console.log("Exploto todo");
             // TODO: handle error
         } else {
-            console.info('%d potatoes were successfully stored.', docs.length);
+            console.info("%d potatoes were successfully stored.", docs.length);
             return docs;
         }
     }
+
+    var patients = [{
+            name: "potato1",
+            birthDate: "2012-01-01T03:00:00.000Z",
+            DNI: "34567753"
+        },
+        {
+            name: "potato2",
+            birthDate: "2012-01-01T03:00:00.000Z",
+            DNI: "34567753"
+        }];
+
+    Patient.collection.insert(patients, onInsert);
 
     /*  Patient.collection.insert(patients).exec().then(function (insertedPatients){
               return insertedPatients;
