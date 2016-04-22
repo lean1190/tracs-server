@@ -35,22 +35,12 @@ var app = new Application({path: __dirname, folder: "public"}, [
 
 var io = require('socket.io')(4000);
 var roomMembers = {};
-//var members =[];
-
-//usado para prueba, volar en el futuro
-/*roomMembers["room_570c69414176cb9911ebee51"] = { members:[]};
-roomMembers["room_570c69414176cb9911ebee51"].members.push(
-        {
-            id: "56e48d14db1fb2bb603f2028",
-            name: "Marques Alonzo",
-            picture: "https://lh5.googleusercontent.com/-PhQO5UNCR5E/AAAAAAAAAAI/AAAAAAAAAEA/Nh1KJaVTSXI/photo.jpg"
-        });*/
 
 io.on('connection', function(socket){
 
+    //Escucha en el canal 'join:room' usado cuando un usuario quiere entrar al chat
     socket.on('join:room', function(data){
 
-        console.log(data);
         var room_name = data.room_name;
 
         if(!roomMembers[room_name]) {
@@ -59,62 +49,52 @@ io.on('connection', function(socket){
                 }
         }
 
-
-        /*roomMembers[room_name].members.push(data.userInfo.id);
-
-        if(!roomMembers[room_name].members[data.userInfo.id]) {
-
-            roomMembers[room_name].members[data.userInfo.id] = {
-
-                    memberInfo: []
-                }
-        }
-        */
-
         roomMembers[room_name].members.push(data.userInfo);
 
-        console.log(roomMembers[room_name].members);
+        var enterRoomMsg = {
 
-        /*roomMembers[room_name].members[data.userInfo.id] = {
-
-                    memberInfo: []
-                }
-
-
-        roomMembers[room_name].members[data.userInfo.id].memberInfo.push(data.userInfo);
-
-        console.log(roomMembers[room_name].members[data.userInfo.Id].memberInfo);
-
-*/
-        console.log(roomMembers[room_name].members);
+            user: data.userInfo.name,
+            text: "ha ingresado a la sala",
+            time: new Date()
+        };
 
         socket.join(room_name);
+
+        //Envia a todos los miembros del canal una actualizacion del arreglo de participantes del chat
         socket.emit('chat:members', roomMembers[room_name].members);
 
-        //socket.in(room_name).emit('chat:members', roomMembers[room_name].members);
+        //Envia al usuario que acaba de ingresar al canal el arreglo de participantes del chat
+        socket.in(room_name).emit('chat:members', roomMembers[room_name].members);
 
+        //Envia a todos los miembros del canal el mensaje de entrada del usuario que entra a la sala
+        socket.in(room_name).emit("message",enterRoomMsg);
 
-        //armar broadcast para todos los otrosque esten en la room y vean el ingreso del nuevo participante
     });
 
-
+    //Escucha en el canal 'leave:room' usado cuando un usuario quiere dejar el chat
     socket.on('leave:room', function(msg){
-        console.log("llego al leave");
-        //console.log(roomMembers);
-        roomMembers = [];
-        //console.log(roomMembers);
-        //console.log(msg);
-        console.log(msg.room);
-        msg.text = msg.user + " has left the room";
-        console.log(msg);
+
+        for(var i=0;i<roomMembers[msg.room].members.length;i++){
+
+            if (roomMembers[msg.room].members[i].id=== msg.id){
+
+                roomMembers[msg.room].members.splice(i,1);
+                break;
+            }
+        }
+
+        msg.text = "has left the room";
         socket.leave(msg.room);
 
-        //socket.to(msg.room).emit('message',msg);
-        //socket.in(msg.room).emit('message', msg);
-        socket.emit('message', msg);
+        //Envia a todos los miembros del canal el mensaje de salida del usuario que deja la sala
+        socket.in(msg.room).emit('message', msg);
+
+        //Envia a todos los miembros del canal una actualizacion del arreglo de participantes del chat
+        socket.in(msg.room).emit('chat:members', roomMembers[msg.room].members);
 
     });
 
+    //Escucha en el canal 'send:message' usado cuando se envia un nuevo mensaje
     socket.on('send:message', function(msg){
         socket.in(msg.room).emit('message', msg);
     });
