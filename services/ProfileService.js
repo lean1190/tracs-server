@@ -6,12 +6,14 @@ require("../models/Profile");
 require("../models/Patient");
 require("../models/User");
 require("../models/PatientOpinion");
+require("../models/PatientNote");
 
 var mongoose = require("mongoose"),
     logger = require("../utils/Logger"),
     Profile = mongoose.model("Profile"),
     PatientOpinion = mongoose.model("PatientOpinion"),
-    NotificationsService = require("./NotificationsService");
+    NotificationsService = require("./NotificationsService"),
+    PatientNote = mongoose.model("PatientNote");
 
 var ProfileService = {};
 
@@ -73,9 +75,7 @@ ProfileService.getPatientOpinions = function(patientId){
  */
 ProfileService.getSpecificProfile = function(patientId, userId){
     "use strict";
-
     return Profile.find({patient:patientId, user: userId}).then(function(profile){
-
         return profile[0];
 
     }, function(error){
@@ -135,18 +135,50 @@ ProfileService.addPatientOpinion = function(patientOpinion, userId, patientId){
     });
 };
 
+/**
+ * Devuelve las notas que hizo un usuario sobre un paciente determinado
+ * @param   {number} patientId id del paciente del que se busca las notas
+ * @param   {number} userId    id del usuario que realizo las notas
+ * @returns {promise} una promesa con el perfil con las notas buscadas
+ */
 ProfileService.getPatientNotes = function(patientId,userId){
     "use strict";
 
-    console.log(patientId,userId);
+    return Profile.find({patient:patientId, user: userId}).populate("patientNotes").exec();
+
+};
+
+/**
+ * Crea y agrega una nueva nota al perfil
+ * @param   {number} patientId  id del paciente sobre el que se hizo la nota
+ * @param   {number} userId   id del usuario que realizo la nota
+ * @param   {object} reqPatientNote datos de la nota a guardar
+ * @returns {promise} una promesa con el perfil modificado
+ */
+ProfileService.addPatientNote = function(patientId,userId,reqPatientNote){
+    "use strict";
+
+    var newPatientNote = new PatientNote(reqPatientNote);
 
     return ProfileService.getSpecificProfile(patientId, userId).then(function (profile) {
-        console.log(profile);
-        return profile.patientNotes;
-    }, function(error){
+
+        return newPatientNote.save().then(function(patientNote){
+
+            profile.patientNotes.push(newPatientNote._id);
+
+            return profile.save().then(function(updatedProfile){
+                return updatedProfile;
+            }, function(error){
+                logger.error("No se pudo actualizar el perfil con la nueva opinion", error);
+            })
+
+        }, function(error){
+            logger.error("No se pudo guardar la nueva opinion", error);
+        });
+
+     }, function(error){
         logger.error("No se pudo obtener el perfil", error);
     });
-
-}
+};
 
 module.exports = ProfileService;

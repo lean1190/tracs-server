@@ -170,8 +170,6 @@ PatientController.updateClosestPeople = function (req, res){
 
     var closestPeople = req.body;
     var patientId = req.params.id;
-    console.log(closestPeople);
-    console.log(patientId);
 
     PatientService.updateClosestPeople(patientId,closestPeople).then(function (patient) {
         res.status(200).jsonp(patient);
@@ -245,7 +243,7 @@ PatientController.getNotifications = function(req, res) {
 /**
  * Obtiene las opiniones de los diferentes perfiles que fueron hechas sobre un paciente determinado
  * @param   {object} req {get: id}
- * @param   {object} res [[Description]]
+ * @param   {object} res
  * @returns {object} las opiniones junto a los usuarios que las hicieron
  */
 PatientController.getPatientOpinions = function (req,res){
@@ -260,17 +258,50 @@ PatientController.getPatientOpinions = function (req,res){
     });
 };
 
+/**
+ * Obtiene las que hizo un usuario sobre un paciente
+ * @param   {object}   req contiene el id del usuario y del paciente
+ * @param   {object} res [[Description]]
+ * @returns {object} las notas que hizo el usuario sobre un paciente determinado
+ */
 PatientController.getPatientNotes = function(req,res){
-    var patientId = req.params.id;
-    var userId = req.body.userId;
 
-    ProfileService.getPatientNotes(patientId,userId).then(function(patientNotes){
-        res.status(200).jsonp(patientNotes);
+    var patientId = req.params.idPatient;
+    var userId = req.params.idUser;
+
+    ProfileService.getPatientNotes(patientId,userId).then(function(profile){
+
+        res.status(200).jsonp(profile[0].patientNotes);
+
     }, function (err) {
         return res.status(500).send(err.message);
     });
 }
 
+/**
+ * Agrega una nueva nota sobre un paciente
+ * @param   {object} req id del paciente a agregar conjuntamente con la informacion de la nueva nota
+ * @param   {object} res
+ * @returns {object} la nota creada
+ */
+PatientController.addPatientNote = function(req,res){
+
+    var patientId = req.params.id;
+    var userId = req.body.user;
+
+    var patientNote = {
+
+        title: req.body.title,
+        description: req.body.description,
+        date: new Date()
+    }
+
+    ProfileService.addPatientNote(patientId,userId, patientNote).then(function(createdNote){
+        res.status(200).jsonp(createdNote);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+}
 
 //Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
 PatientController.bulkInsert = function(req,res){
