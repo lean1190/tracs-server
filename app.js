@@ -35,6 +35,7 @@ var app = new Application({path: __dirname, folder: "public"}, [
 
 var io = require('socket.io')(4000);
 var roomMembers = {};
+var roomMsgHist = {};
 
 io.on('connection', function(socket){
 
@@ -45,11 +46,34 @@ io.on('connection', function(socket){
 
         if(!roomMembers[room_name]) {
             roomMembers[room_name] = {
-                    members: []
-                }
+                members: []
+            }
+        }
+
+        if(!roomMsgHist[room_name]) {
+            roomMsgHist[room_name] = {
+                messages:[]
+            }
+        }
+
+        //Se recorre la lista de miembros para asegurar que el usuario no este duplicado [<<METER EN UN METODO APARTE cleanChatMembers(roomMembers[room_name],data.userInfo.id)>>]
+
+        for(var i=0;i<roomMembers[room_name].members.length;i++){
+            if (roomMembers[room_name].members[i].id=== data.userInfo.id){
+                roomMembers[room_name].members.splice(i,1);
+                break;
+            }
         }
 
         roomMembers[room_name].members.push(data.userInfo);
+
+
+        for (var i = 0;i<roomMsgHist[room_name].messages.length;i++){
+
+            //Envia al usuario que se cabade unir al chat el historial de mensajes que ha sido enviado hasta el momento en su canal
+            socket.emit("hist:messages",roomMsgHist[room_name].messages[i]);
+        }
+
 
         var enterRoomMsg = {
 
@@ -74,6 +98,9 @@ io.on('connection', function(socket){
     //Escucha en el canal 'leave:room' usado cuando un usuario quiere dejar el chat
     socket.on('leave:room', function(msg){
 
+
+        //Se recorre la lista de miembros para borrar al usuario que deja la sala [<<METER EN UN METODO APARTE cleanChatMembers(roomMembers[msg.room],msg.id)>>]
+
         for(var i=0;i<roomMembers[msg.room].members.length;i++){
 
             if (roomMembers[msg.room].members[i].id=== msg.id){
@@ -96,6 +123,8 @@ io.on('connection', function(socket){
 
     //Escucha en el canal 'send:message' usado cuando se envia un nuevo mensaje
     socket.on('send:message', function(msg){
+        roomMsgHist[msg.room].messages.push(msg);
+        console.log(roomMsgHist[msg.room].messages);
         socket.in(msg.room).emit('message', msg);
     });
 
