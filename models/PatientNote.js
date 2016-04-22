@@ -5,22 +5,17 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-var NoteSchema = new Schema({
-    
+var PatientNoteSchema = new Schema({
+
+    title: { type: String, required: true },
     description: { type: String, required: true },
     date: { type: Date, required: true },
     tags: [String],
-    isComplex: { type:Boolean, required: true},
+    //isComplex: { type:Boolean, required: true},
     attachmentFiles:[{type : Schema.Types.ObjectId, ref : 'AttachmentFile'}]
 
 });
 
-NoteSchema.prototype.findNotes = function(){
+module.exports = mongoose.model("PatientNote", PatientNoteSchema);
 
-    NoteSchema.find().populate('attachmentFiles').exect();
 
-}
-
-module.exports = mongoose.model("Note", NoteSchema);
-
-           

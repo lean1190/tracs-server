@@ -14,9 +14,4 @@ var DiagnosisSchema = new Schema({
 
 });
 
-/*DiagnosisSchema.prototype.getDiagnoses = function(){
-
-    DiagnosisSchema.find().populate('medications').exec()
-};
-    */
 module.exports = mongoose.model("Diagnosis", DiagnosisSchema);

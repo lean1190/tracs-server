@@ -12,6 +12,7 @@ router.get("/profiles/:id", PatientController.getPatientProfiles);
 router.get("/selectableUsers/:id", PatientController.getSelectableUsers);
 router.get("/patientOpinions/:id", PatientController.getPatientOpinions);
 router.get("/notifications/:id", PatientController.getNotifications);
+router.get("/patientNotes/:id", PatientController.getPatientNotes);
 
 router.put("/:id", PatientController.updatePatientDetail);
 router.put("/addProfileToPatient/:id", PatientController.addProfileToPatient);

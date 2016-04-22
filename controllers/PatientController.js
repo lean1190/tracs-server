@@ -241,6 +241,7 @@ PatientController.getNotifications = function(req, res) {
     });
 };
 
+
 /**
  * Obtiene las opiniones de los diferentes perfiles que fueron hechas sobre un paciente determinado
  * @param   {object} req {get: id}
@@ -258,6 +259,18 @@ PatientController.getPatientOpinions = function (req,res){
         return res.status(500).send(err.message);
     });
 };
+
+PatientController.getPatientNotes = function(req,res){
+    var patientId = req.params.id;
+    var userId = req.body.userId;
+
+    ProfileService.getPatientNotes(patientId,userId).then(function(patientNotes){
+        res.status(200).jsonp(patientNotes);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+}
+
 
 //Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
 PatientController.bulkInsert = function(req,res){

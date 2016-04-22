@@ -135,4 +135,18 @@ ProfileService.addPatientOpinion = function(patientOpinion, userId, patientId){
     });
 };
 
+ProfileService.getPatientNotes = function(patientId,userId){
+    "use strict";
+
+    console.log(patientId,userId);
+
+    return ProfileService.getSpecificProfile(patientId, userId).then(function (profile) {
+        console.log(profile);
+        return profile.patientNotes;
+    }, function(error){
+        logger.error("No se pudo obtener el perfil", error);
+    });
+
+}
+
 module.exports = ProfileService;
