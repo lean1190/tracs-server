@@ -5,15 +5,18 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-var DiagnosisSchema = new Schema({
+var ChatHistorySchema = new Schema({
 
     roomId: { type: String, required: true },
+
     messages:[{
 
-            userName: { type: String, required: true },
-            text: { type: String, required: true },
-            timestamp: { type: Date, required: true }
+        userName: { type: String, required: true },
+        text: { type: String, required: true },
+        timestamp: { type: Date, required: true }
 
     }]
 
 });
+
+module.exports = mongoose.model("ChatHistory", ChatHistorySchema);
