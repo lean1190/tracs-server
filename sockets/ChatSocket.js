@@ -3,15 +3,20 @@
 /* globals console, module, require */
 
 var moment = require("moment"),
-    logger = require("../utils/Logger");
+    logger = require("../utils/Logger"),
+    ChatService = require("../services/ChatService");
 
 var chatSocket = function ChatSocket(io) {
     "use strict";
 
-    // Variables que manejan el estado de miembros
-    // e historial de mensajes de cada room
-    var roomMembers = {},
-        roomMsgHist = {};
+    // Variable que manejan el estado de miembros de cada sala.
+    var roomMembers = {};
+
+    //Almacena los mensajes historicos de la sala recuperados de la base. Solo se llena una vez, cuando entra el primer miembro de una sala
+    var roomMsgHist = {};
+
+    //Almacena los mensajes nuevos que aun no fueron guardados. Se guardan una vez que el ultimo integrante del chat se va
+    var roomCurrentMsg = {};
 
     io.on("connection", function (socket) {
 
@@ -33,13 +38,37 @@ var chatSocket = function ChatSocket(io) {
                 roomMembers[roomName] = {
                     members: []
                 };
+
+                //Guarda la sala en la base la primera vez que se crea. Para posteriores entradas a la sala se valida que ya existe y no la guarda.
+                ChatService.addChatRoom(roomName);
             }
 
             if (!roomMsgHist[roomName]) {
+
                 roomMsgHist[roomName] = {
+                    messages:[]
+                };
+
+                //Trae los mensajes historicos de la sala
+                roomMsgHist[roomName].messages = ChatService.getRoomMessages(roomName);
+
+                /*var mockMessage = {
+                    'room': roomName,
+                    'userName': "Martin Trejo",
+                    'userId': "56e47e0d8c7fad2342557a2b",
+                    'text': "Mensaje Historial 1",
+                    'time': "2016-04-22T20:56:15.543Z"
+                };
+                roomMsgHist[roomName].messages.push(mockMessage);*/
+            };
+
+            if (!roomCurrentMsg[roomName]){
+                  roomCurrentMsg[roomName] = {
                     messages: []
                 };
-            }
+            };
+
+            console.log (roomMsgHist[roomName].messages);
 
             // Se recorre la lista de miembros para asegurar que el usuario no este duplicado
             cleanChatMembers(roomName, data.userInfo.id);
@@ -47,9 +76,14 @@ var chatSocket = function ChatSocket(io) {
             // Agrega el usuario al arreglo de miembros del room
             roomMembers[roomName].members.push(data.userInfo);
 
+            // Envia al usuario que se acaba de unir al chat el historial de mensajes que ha sido enviado hasta el momento en su canal
             for (var i = 0; i < roomMsgHist[roomName].messages.length; i++) {
-                // Envia al usuario que se acaba de unir al chat el historial de mensajes que ha sido enviado hasta el momento en su canal
                 socket.emit("hist:messages", roomMsgHist[roomName].messages[i]);
+            };
+
+            // Envia al usuario que se acaba de unir al chat los mensajes enviados que aun no han sido guardados en la base
+            for (var x = 0; x < roomCurrentMsg[roomName].messages.length; x++) {
+                socket.emit("hist:messages", roomMsgHist[roomName].messages[x]);
             }
 
             var enterRoomMsg = {
@@ -71,7 +105,16 @@ var chatSocket = function ChatSocket(io) {
         }
 
         function leaveRoom(data) {
+
             var roomName = data.room;
+            var roomMessages = roomCurrentMsg[roomName].messages;
+
+            //Si es el ultimo participante en abandonar el chat, se guardan los mensajes nuevos en la base
+            if (((roomMessages.length)-1) == 0){
+
+                ChatService.saveRoomMessages(roomName,roomMessages);
+                roomMessages =[];
+            }
 
             cleanChatMembers(roomName, data.userInfo.id);
 
@@ -88,7 +131,7 @@ var chatSocket = function ChatSocket(io) {
         }
 
         function sendMessage (msg) {
-            roomMsgHist[msg.room].messages.push(msg);
+            roomCurrentMsg[msg.room].messages.push(msg);
             socket.in(msg.room).emit("message", msg);
         }
 
