@@ -49,17 +49,11 @@ var chatSocket = function ChatSocket(io) {
                     messages:[]
                 };
 
-                //Trae los mensajes historicos de la sala
-                roomMsgHist[roomName].messages = ChatService.getRoomMessages(roomName);
+            };
 
-                /*var mockMessage = {
-                    'room': roomName,
-                    'userName': "Martin Trejo",
-                    'userId': "56e47e0d8c7fad2342557a2b",
-                    'text': "Mensaje Historial 1",
-                    'time': "2016-04-22T20:56:15.543Z"
-                };
-                roomMsgHist[roomName].messages.push(mockMessage);*/
+            //Trae los mensajes historicos de la sala solo si es el primer usuario que ingresa a la sala
+            if (roomMembers[roomName].members.length == 0){
+                roomMsgHist[roomName].messages = ChatService.getRoomMessages(roomName);
             };
 
             if (!roomCurrentMsg[roomName]){
@@ -68,13 +62,13 @@ var chatSocket = function ChatSocket(io) {
                 };
             };
 
+            // Agrega el usuario al arreglo de miembros del room
+            roomMembers[roomName].members.push(data.userInfo);
+
             console.log (roomMsgHist[roomName].messages);
 
             // Se recorre la lista de miembros para asegurar que el usuario no este duplicado
             cleanChatMembers(roomName, data.userInfo.id);
-
-            // Agrega el usuario al arreglo de miembros del room
-            roomMembers[roomName].members.push(data.userInfo);
 
             // Envia al usuario que se acaba de unir al chat el historial de mensajes que ha sido enviado hasta el momento en su canal
             for (var i = 0; i < roomMsgHist[roomName].messages.length; i++) {
@@ -109,11 +103,18 @@ var chatSocket = function ChatSocket(io) {
             var roomName = data.room;
             var roomMessages = roomCurrentMsg[roomName].messages;
 
-            //Si es el ultimo participante en abandonar el chat, se guardan los mensajes nuevos en la base
-            if (((roomMessages.length)-1) == 0){
+            //Si es el ultimo participante en abandonar la sala de chat,
+            if (((roomMembers[roomName].members.length)-1) == 0){
 
+                //Se guardan los mensajes enviados durante la ultima sesión de chat
                 ChatService.saveRoomMessages(roomName,roomMessages);
+
+                //Se limpian los mensajes enviados durante la ultima sesion de chat que aun no habian sido guardados
                 roomMessages =[];
+
+                //Se limpian los mensajes historicos que habian sido recuperados al iniciar la sala.
+                roomMsgHist[roomName].messages = [];
+
             }
 
             cleanChatMembers(roomName, data.userInfo.id);
