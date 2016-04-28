@@ -11,76 +11,52 @@ var mongoose = require("mongoose"),
 var ChatService = {};
 
 ChatService.addChatRoom = function(roomName){
+    "use strict";
 
     var newChatRoom = {
         roomId: roomName,
         messages: []
     };
 
-    var chatRoom = new Chat(newChatRoom);
-
-
-    Chat.find({roomId: roomName}, function (err, resultRooms) {
-
-        if (err){
-            logger.error("No se pudo encontrar la sala", err);
-        };
-
+    Chat.find({roomId: roomName}).exec().then(function (resultRooms) {
         if (!(resultRooms.length)){
-
             var chatRoom = new Chat(newChatRoom);
-            console.log(chatRoom);
-            chatRoom.save(function (err) {
-                if (err){
-                    logger.error("No se pudo agregar la nueva sala", err);
-                    return err;
-                };
-            });
+            console.log("### addChatRoom", chatRoom);
+
+            return chatRoom.save();
         }
+    }, function(error) {
+        logger.error("No se pudo agregar la nueva sala " + roomName, error);
+        return error;
     });
 };
 
-ChatService.saveRoomMessages = function(roomName,roomMessages){
+ChatService.saveRoomMessages = function(roomName, roomMessages){
+    "use strict";
 
     console.log("llego al leave message");
-    Chat.findOne({roomId: roomName}, function (err, chatRoom) {
+    return Chat.findOne({roomId: roomName}).then(function (chatRoom) {
 
-        if (err){ logger.error("No se pudo obtener la sala", err);
-        };
-
-        for (var i = 0; i<roomMessages.length;i++) {
+        for (var i = 0; i < roomMessages.length;i++) {
             chatRoom.messages.push(roomMessages[i]);
         }
 
-        chatRoom.save(function (err) {
-            if (err){
-                logger.error("No se pudo agregar la nueva sala", err);
-            };
-
-        });
+        return chatRoom.save();
+    }, function(error) {
+        logger.error("No se pudo obtener la sala " + roomName, error);
+        return error;
     });
 };
 
 ChatService.getRoomMessages = function(roomName){
+    "use strict";
 
-/*  return Chat.findOne({roomId: roomName}).then(function(chatRoom){
+    return Chat.findOne({roomId: roomName}).then(function(chatRoom){
         return chatRoom.messages;
-
     }, function(error){
-        logger.error("No se pudo obtener la sala",error);
+        logger.error("No se pudo obtener la sala " + roomName, error);
         return error;
-    });*/
-
-    /*Chat.findOne({roomId: roomName},function (err, chatRoom ) {
-
-        if (err){
-            logger.error("No se pudo obtener la sala", err);
-        };
-
-        return chatRoom.messages;
-    });*/
-
-    //return Chat.findOne({roomId: roomName}, "messages").exec();
+    });
 };
 
 module.exports = ChatService;

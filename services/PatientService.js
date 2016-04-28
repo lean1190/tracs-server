@@ -215,11 +215,12 @@ PatientService.addNotification = function (patientId, notification) {
  * @returns {promise} una promesa con el paciente actualizado
  */
 PatientService.addGeoAlert = function(patientId, geoAlert){
+    "use strict";
 
     return Patient.findOne({_id: patientId}).then(function (patient){
 
         patient.geoAlert.push(geoAlert);
-        return NotificationsService.createNotificationForPatient(patient, "Hay una nueva alerta del paciente", "patient.geoAlert.added")
+        return NotificationsService.createNotificationForPatient(patient, "Hay una nueva alerta del paciente", "patient.geoAlert.added");
 
     }, function (error) {
         logger.error("No se pudo recuperar el paciente con id " + patientId, error);
