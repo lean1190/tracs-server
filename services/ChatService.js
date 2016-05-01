@@ -1,6 +1,6 @@
 /*jshint bitwise: false, camelcase: true, curly: true, eqeqeq: true, globals: false, freeze: true, immed: true, nocomma: true, newcap: true, noempty: true, nonbsp: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, latedef: true*/
 
-/* globals require, module, console */
+/* globals require, module */
 
 require("../models/ChatHistory");
 
@@ -21,7 +21,6 @@ ChatService.addChatRoom = function(roomName){
     Chat.find({roomId: roomName}).exec().then(function (resultRooms) {
         if (!(resultRooms.length)){
             var chatRoom = new Chat(newChatRoom);
-            console.log("### addChatRoom", chatRoom);
 
             return chatRoom.save();
         }
@@ -34,7 +33,6 @@ ChatService.addChatRoom = function(roomName){
 ChatService.saveRoomMessages = function(roomName, roomMessages){
     "use strict";
 
-    console.log("llego al leave message");
     return Chat.findOne({roomId: roomName}).then(function (chatRoom) {
 
         for (var i = 0; i < roomMessages.length;i++) {
