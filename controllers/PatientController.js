@@ -5,7 +5,8 @@
 var moment = require("moment"),
     PatientService = require("../services/PatientService"),
     ProfileService = require("../services/ProfileService"),
-    UserService = require("../services/UserService");
+    UserService = require("../services/UserService"),
+    PatientNoteService = require("../services/PatientNoteService");
 
 var PatientController = {};
 
@@ -277,6 +278,19 @@ PatientController.getPatientNotes = function(req,res){
         return res.status(500).send(err.message);
     });
 }
+
+PatientController.getPatientNote = function (req, res) {
+    "use strict";
+
+    var noteId = req.params.noteId;
+    console.log(noteId);
+    PatientNoteService.getPatientNote(noteId).then(function (note) {
+        console.log(note);
+        res.status(200).jsonp(note);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
 
 /**
  * Agrega una nueva nota sobre un paciente
