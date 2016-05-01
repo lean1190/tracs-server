@@ -62,13 +62,13 @@ var chatSocket = function ChatSocket(io) {
                 };
             };
 
+            // Se recorre la lista de miembros para asegurar que el usuario no este duplicado
+            cleanChatMembers(roomName, data.userInfo.id);
+
             // Agrega el usuario al arreglo de miembros del room
             roomMembers[roomName].members.push(data.userInfo);
 
             console.log (roomMsgHist[roomName].messages);
-
-            // Se recorre la lista de miembros para asegurar que el usuario no este duplicado
-            cleanChatMembers(roomName, data.userInfo.id);
 
             // Envia al usuario que se acaba de unir al chat el historial de mensajes que ha sido enviado hasta el momento en su canal
             for (var i = 0; i < roomMsgHist[roomName].messages.length; i++) {
@@ -104,7 +104,12 @@ var chatSocket = function ChatSocket(io) {
             var roomMessages = roomCurrentMsg[roomName].messages;
 
             //Si es el ultimo participante en abandonar la sala de chat,
+
+            console.log(roomMembers[roomName].members.length);
+
             if (((roomMembers[roomName].members.length)-1) == 0){
+
+                console.log("entro aqui");
 
                 //Se guardan los mensajes enviados durante la ultima sesión de chat
                 ChatService.saveRoomMessages(roomName,roomMessages);
@@ -132,8 +137,10 @@ var chatSocket = function ChatSocket(io) {
         }
 
         function sendMessage (msg) {
+
             roomCurrentMsg[msg.room].messages.push(msg);
             socket.in(msg.room).emit("message", msg);
+
         }
 
         // Escucha en el canal "join:room" usado cuando un usuario quiere entrar al chat
