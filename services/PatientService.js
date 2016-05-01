@@ -127,7 +127,9 @@ PatientService.addProfileToPatient = function (newProfile) {
 
     return ProfileService.add(newProfile).then(function (profile) {
 
-        return Patient.findOne({_id: profile.patient}).then(function (patient) {
+        return Patient.findOne({
+            _id: profile.patient
+        }).then(function (patient) {
 
             patient.profiles.push(profile._id);
 
@@ -214,13 +216,18 @@ PatientService.addNotification = function (patientId, notification) {
  * @param   {object}    geoAlert  Objeto con los parametros de geolocalizacion de la alerta
  * @returns {promise} una promesa con el paciente actualizado
  */
-PatientService.addGeoAlert = function(patientId, geoAlert){
+PatientService.addGeoAlert = function (patientId, geoAlert) {
     "use strict";
 
-    return Patient.findOne({_id: patientId}).then(function (patient){
+    return Patient.findOne({
+        _id: patientId
+    }).then(function (patient) {
 
         patient.geoAlert.push(geoAlert);
-        return NotificationsService.createNotificationForPatient(patient, "Hay una nueva alerta del paciente", "patient.geoAlert.added");
+        return NotificationsService.createNotificationForPatient(patient, "Hay una nueva alerta del paciente", "patient.geoAlert.added", {
+            latitude: geoAlert.latitude,
+            longitude: geoAlert.longitude
+        });
 
     }, function (error) {
         logger.error("No se pudo recuperar el paciente con id " + patientId, error);

@@ -30,6 +30,7 @@ var PatientSchema = new Schema({
         {
             type: { type: String, required: true },
             message: { type: String, required: true },
+            data: {},
             timestamp: { type: Date, required: true }
         }
     ],

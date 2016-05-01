@@ -25,12 +25,16 @@ var NotificationsService = {};
  * @param   {string} type    el tipo
  * @returns {object} una notificación armada
  */
-NotificationsService.createNotification = function (message, type) {
+NotificationsService.createNotification = function (message, type, data) {
     "use strict";
+
+    // Podría no venir este parámetro
+    data = data || {};
 
     return {
         message: message,
         type: type,
+        data: data,
         timestamp: moment().format()
     };
 };
@@ -42,10 +46,10 @@ NotificationsService.createNotification = function (message, type) {
  * @param   {string}  type    el tipo
  * @returns {promise} una promesa con el resultado de guardar el paciente
  */
-NotificationsService.createNotificationForPatient = function (patient, message, type) {
+NotificationsService.createNotificationForPatient = function (patient, message, type, data) {
     "use strict";
 
-    patient.notifications.push(NotificationsService.createNotification(message, type));
+    patient.notifications.push(NotificationsService.createNotification(message, type, data));
 
     return patient.save().then(null, function (error) {
         logger.error("No se pudo agregar la notificacion " + message + " para el paciente con id " + patient._id, error);
@@ -59,11 +63,11 @@ NotificationsService.createNotificationForPatient = function (patient, message, 
  * @param   {string}  type    el tipo
  * @returns {promise} una promesa con el resultado de guardar el paciente
  */
-NotificationsService.createNotificationForPatientId = function (patientId, message, type) {
+NotificationsService.createNotificationForPatientId = function (patientId, message, type, data) {
     "use strict";
 
     return Patient.findById(patientId).then(function (patient) {
-        return NotificationsService.createNotificationForPatient(patient, message, type);
+        return NotificationsService.createNotificationForPatient(patient, message, type, data);
     });
 };
 
