@@ -3,12 +3,15 @@
 /* globals require, module, console */
 
 require("../models/Patient");
+require("../models/Diagnosis");
 
 var mongoose = require("mongoose"),
     logger = require("../utils/Logger"),
     Patient = mongoose.model("Patient"),
+    Diagnosis = mongoose.model("Diagnosis"),
     ProfileService = require("./ProfileService"),
     NotificationsService = require("./NotificationsService");
+
 
 var PatientService = {};
 
@@ -47,6 +50,18 @@ PatientService.getPatientDetail = function (patientId) {
     });
 
 };
+
+/**
+ * Devuelve la informacion del ultimo diagnostico realizado al paciente
+ * @param   {number}  patientId id del paciente del que se quiere buscar su diagnostico
+ * @returns {promise} una promesa con la informacion de diagnostico del paciente
+ */
+PatientService.getPatientDiagnosis = function(patientId){
+    "use strict";
+
+    return Patient.findOne({"_id": patientId}, "latestDiagnosis -_id").populate("latestDiagnosis").exec();
+
+}
 
 /**
  * Edita la información básica de un paciente
@@ -236,6 +251,32 @@ PatientService.addGeoAlert = function (patientId, geoAlert) {
 
 };
 
+/**
+ * Agrega un nuevo diagnostico al paciente. Esta entrada pasar a figurar como latestDiagnosis
+ * @param   {object} reqDiagnosis informacion del diagnostico a agregar
+ * @returns {promise} una promesa con el ultimo diagnostico agregado
+ */
+PatientService.addPatientDiagnosis = function(reqDiagnosis){
+    "use strict";
+
+    var newDiagnosis = new Diagnosis(reqDiagnosis);
+
+    return newDiagnosis.save().then(function(diagnosis){
+
+        return Patient.findOne({_id: diagnosis.patient}).then(function(patient){
+
+            patient.latestDiagnosis = diagnosis._id;
+            return patient.save();
+
+        },function (error) {
+            logger.error("No se pudo recuperar el paciente con id " + diagnosis.patient, error);
+            return error;
+        });
+    },function (error) {
+        logger.error("No se pudo guardar el diagnostico ", error);
+        return error;
+    });
+};
 
 
 // Borrador para carga masiva de datos

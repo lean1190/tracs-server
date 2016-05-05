@@ -283,14 +283,26 @@ PatientController.getPatientNote = function (req, res) {
     "use strict";
 
     var noteId = req.params.noteId;
-    console.log(noteId);
+
     PatientNoteService.getPatientNote(noteId).then(function (note) {
-        console.log(note);
         res.status(200).jsonp(note);
     }, function (err) {
         return res.status(500).send(err.message);
     });
 };
+
+PatientController.getPatientDiagnosis = function (req, res) {
+    "use strict";
+
+    var patientId = req.params.id;
+
+    PatientService.getPatientDiagnosis(patientId).then(function (result) {;
+        res.status(200).jsonp(result.latestDiagnosis);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
+
 
 /**
  * Agrega una nueva nota sobre un paciente
@@ -316,6 +328,31 @@ PatientController.addPatientNote = function(req,res){
         return res.status(500).send(err.message);
     });
 }
+
+/**
+ * Agrega un diagnostico sobreun paciente
+ * @param   {object}   req id del paciente al cualse asigna el diagnostico conjuntamente con la informacion del diagnostico
+ * @param   {object} res
+ * @returns {object} el diagnostico creado
+ */
+PatientController.addPatientDiagnosis = function(req,res){
+
+
+    var newDiagnosis = {
+        patient: req.body.patient,
+        description: req.body.description,
+        inCaseOfCrisis: req.body.inCaseOfCrisis,
+        date: moment().format()
+    };
+
+    PatientService.addPatientDiagnosis(newDiagnosis).then(function(createdDiagnosis){
+        res.status(200).jsonp(createdDiagnosis);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+}
+
+
 
 //Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
 PatientController.bulkInsert = function(req,res){

@@ -10,6 +10,7 @@ var DiagnosisSchema = new Schema({
     description: { type: String, required: true },
     date: { type: Date, required: true },
     inCaseOfCrisis: String,
+    patient: {type : Schema.Types.ObjectId, ref : "Patient"},
     medications: [{type : Schema.Types.ObjectId, ref : "Medication"}]
 
 });
