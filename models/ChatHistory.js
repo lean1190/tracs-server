@@ -14,6 +14,7 @@ var ChatHistorySchema = new Schema({
         userId: { type: String, required: true },
         userName: { type: String, required: true },
         text: { type: String, required: true },
+        picture: { type: String },
         time: { type: Date, required: true }
 
     }]
