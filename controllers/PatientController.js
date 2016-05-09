@@ -253,6 +253,7 @@ PatientController.getPatientOpinions = function (req,res){
     var patientId = req.params.id;
 
     ProfileService.getPatientOpinions(patientId).then(function (patientOpinions) {
+        console.log(patientOpinions);
         res.status(200).jsonp(patientOpinions);
     }, function (err) {
         return res.status(500).send(err.message);
