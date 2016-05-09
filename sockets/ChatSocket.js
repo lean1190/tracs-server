@@ -93,7 +93,7 @@ var chatSocket = function ChatSocket(io) {
                 }
 
                 var enterRoomMsg = {
-                    user: data.userInfo.name,
+                    userName: data.userInfo.name,
                     text: "ingresó",
                     time: moment().format()
                 };
