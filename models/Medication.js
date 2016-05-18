@@ -9,7 +9,8 @@ var MedicationSchema = new Schema({
 
     drug: { type: String, required: true },
     dosis: { type: String, required: true },
-    frequence: { type: String, required: true }
+    frequence: { type: String, required: true },
+    date: { type: Date, required: true }
 });
 
 module.exports = mongoose.model("Medication", MedicationSchema);

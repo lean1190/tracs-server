@@ -15,6 +15,7 @@ var // Config modules
     ProfileRouter = require("./routers/ProfileRouter"),
     ImAPatientRouter = require("./routers/ImAPatientRouter"),
     DiagnosisRouter = require("./routers/DiagnosisRouter"),
+    PatientNoteRouter = require("./routers/PatientNoteRouter"),
 
     // Sockets modules
     ChatSocket = require("./sockets/ChatSocket"),
@@ -35,7 +36,8 @@ var app = new Application({path: __dirname, folder: "public"}, [
     {route: "/patient", handler: PatientRouter},
     {route: "/profile", handler: ProfileRouter},
     {route: "/imAPatient", handler: ImAPatientRouter},
-    {route: "/diagnosis", handler: DiagnosisRouter}
+    {route: "/diagnosis", handler: DiagnosisRouter},
+    {route: "/patientNote", handler: PatientNoteRouter}
 ]);
 
 // ===== SOCKETS SETUP

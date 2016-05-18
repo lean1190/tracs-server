@@ -14,7 +14,6 @@ router.get("/patientOpinions/:id", PatientController.getPatientOpinions);
 router.get("/notifications/:id", PatientController.getNotifications);
 router.get("/patientNotes/:idPatient/:idUser", PatientController.getPatientNotes);
 router.get("/patientNote/:noteId", PatientController.getPatientNote);
-router.get("/patientDiagnosis/:id", PatientController.getPatientDiagnosis);
 
 router.put("/:id", PatientController.updatePatientDetail);
 router.put("/addProfileToPatient/:id", PatientController.addProfileToPatient);

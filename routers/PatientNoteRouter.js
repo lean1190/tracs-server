@@ -4,10 +4,8 @@
 
 var express = require("express"),
     router = express.Router(),
-    DiagnosisController = require("../controllers/DiagnosisController");
+    PatientNoteController = require("../controllers/PatientNoteController");
 
-    router.get("/diagnosisMedication/:id", DiagnosisController.getDiagnosisMedications);
-    router.get("/:id", DiagnosisController.getDiagnosis);
-    router.put("/addDiagnosisMedication/:id", DiagnosisController.addDiagnosisMedication);
+    router.put("/updatePatientNote/:id", PatientNoteController.updatePatientNote);
 
 module.exports = router;

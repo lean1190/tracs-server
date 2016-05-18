@@ -7,11 +7,17 @@ var Schema = mongoose.Schema;
 
 var DiagnosisSchema = new Schema({
     
+    name: { type: String, required: true },
     description: { type: String, required: true },
     date: { type: Date, required: true },
-    inCaseOfCrisis: String,
+/*    vitalHistory: {
+        description: String,
+        prevTherapyPlace: String,
+        prevTherapyDuration: String
+    },*/
     patient: {type : Schema.Types.ObjectId, ref : "Patient"},
-    medications: [{type : Schema.Types.ObjectId, ref : "Medication"}]
+    medications: [{type : Schema.Types.ObjectId, ref : "Medication"}],
+    madeBy: [{type : Schema.Types.ObjectId, ref : "User"}]
 
 });
 

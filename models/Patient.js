@@ -14,14 +14,21 @@ var PatientSchema = new Schema({
     picture: String,
     generalDescription: String,
     phoneNumber: String,
+    /*schoolInfo: {
+        name: String,
+        address: String,
+        city: String
+    },
+    */
     latestDiagnosis: { type: Schema.Types.ObjectId, ref : "Diagnosis" },
+
     profiles: [{ type: Schema.Types.ObjectId, ref : "Profile" }],
     treatment: [{ type: Schema.Types.ObjectId, ref : "Treatment" }],
     closestPeople: [
         {
             personId: { type: String, required: true },
             name: { type: String, required: true },
-            phoneNumber: { type: String, required: true },
+            phoneNumber: { type: String},
             picture: { type: String, required: true },
             priority: { type: Number, required: true }
         }
@@ -47,17 +54,6 @@ var PatientSchema = new Schema({
         }
     ]
 });
-
-//Ejemplo Geo paquete georef
-
-/*accuracy: 3.9000000953674316
-altitude: 15.044444
-altitudeAccuracy: null
-heading: null
-latitude: 65.9667
-longitude: -18.5333
-speed: 0
-timestamp: 1461207020650*/
 
 module.exports = mongoose.model("Patient", PatientSchema);
 

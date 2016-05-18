@@ -7,6 +7,19 @@ var moment = require("moment"),
 
 var DiagnosisController = {};
 
+
+DiagnosisController.getDiagnosis = function (req, res) {
+    "use strict";
+
+    var diagnosisId = req.params.id;
+
+    DiagnosisService.getDiagnosis(diagnosisId).then(function (diagnosis) {;
+        res.status(200).jsonp(diagnosis);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
+
 DiagnosisController.getDiagnosisMedications = function (req, res) {
     "use strict";
 
@@ -23,6 +36,7 @@ DiagnosisController.addDiagnosisMedication = function (req, res){
 
     var diagnosisId = req.params.id;
     var newMedication = req.body;
+    newMedication.date = new Date();
 
     console.log(newMedication, diagnosisId);
 

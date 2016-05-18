@@ -15,4 +15,20 @@ PatientNoteService.getPatientNote = function(noteId){
     return PatientNote.findOne({_id: noteId}).exec();
 };
 
+PatientNoteService.updatePatientNote = function (reqNote, noteId){
+    "use strict"
+
+    return PatientNote.findOne({_id: noteId}).then(function (note) {
+
+        console.log(note);
+        note.title = reqNote.title;
+        note.description = reqNote.description;
+        return note.save();
+
+    }, function (error) {
+        logger.error("No se pudo actualizar la nota " + noteId, error);
+        return error;
+    });
+}
+
 module.exports = PatientNoteService;

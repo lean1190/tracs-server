@@ -292,18 +292,6 @@ PatientController.getPatientNote = function (req, res) {
     });
 };
 
-PatientController.getPatientDiagnosis = function (req, res) {
-    "use strict";
-
-    var patientId = req.params.id;
-
-    PatientService.getPatientDiagnosis(patientId).then(function (result) {;
-        res.status(200).jsonp(result.latestDiagnosis);
-    }, function (err) {
-        return res.status(500).send(err.message);
-    });
-};
-
 
 /**
  * Agrega una nueva nota sobre un paciente
@@ -342,8 +330,9 @@ PatientController.addPatientDiagnosis = function(req,res){
     var newDiagnosis = {
         patient: req.body.patient,
         description: req.body.description,
-        inCaseOfCrisis: req.body.inCaseOfCrisis,
-        date: moment().format()
+        //vitalHistory: req.body.vitalHistory,
+        date: moment().format(),
+        madeBy : req.body.madeBy
     };
 
     PatientService.addPatientDiagnosis(newDiagnosis).then(function(createdDiagnosis){
@@ -371,3 +360,4 @@ PatientController.bulkInsert = function(req,res){
 };
 
 module.exports = PatientController;
+

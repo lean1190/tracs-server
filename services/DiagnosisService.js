@@ -12,6 +12,19 @@ var mongoose = require("mongoose"),
 
 var DiagnosisService = {};
 
+
+/**
+ * Devuelve la informacion del ultimo diagnostico realizado al paciente
+ * @param   {number}  patientId id del paciente del que se quiere buscar su diagnostico
+ * @returns {promise} una promesa con la informacion de diagnostico del paciente
+ */
+DiagnosisService.getDiagnosis = function(diagnosisId){
+    "use strict";
+
+    return Diagnosis.findOne({"_id": diagnosisId}).populate("madeBy").exec();
+
+};
+
 DiagnosisService.getDiagnosisMedications = function (diagnosisId) {
     "use strict";
 

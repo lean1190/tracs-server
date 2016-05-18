@@ -52,18 +52,6 @@ PatientService.getPatientDetail = function (patientId) {
 };
 
 /**
- * Devuelve la informacion del ultimo diagnostico realizado al paciente
- * @param   {number}  patientId id del paciente del que se quiere buscar su diagnostico
- * @returns {promise} una promesa con la informacion de diagnostico del paciente
- */
-PatientService.getPatientDiagnosis = function(patientId){
-    "use strict";
-
-    return Patient.findOne({"_id": patientId}, "latestDiagnosis -_id").populate("latestDiagnosis").exec();
-
-}
-
-/**
  * Edita la información básica de un paciente
  * @param   {object}  updatedPatient el paciente con los datos actualizados
  * @returns {promise} una promesa con el paciente actualizado
@@ -265,7 +253,9 @@ PatientService.addPatientDiagnosis = function(reqDiagnosis){
 
         return Patient.findOne({_id: diagnosis.patient}).then(function(patient){
 
+            console.log(patient);
             patient.latestDiagnosis = diagnosis._id;
+            console.log(patient.latestDiagnosis);
             return patient.save();
 
         },function (error) {
