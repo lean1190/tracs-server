@@ -12,8 +12,8 @@ var PatientNoteSchema = new Schema({
     date: { type: Date, required: true },
     tags: [String],
     //isComplex: { type:Boolean, required: true},
-    attachmentFiles:[{type : Schema.Types.ObjectId, ref : 'AttachmentFile'}]
-
+    //attachmentFiles:[{type : Schema.Types.ObjectId, ref : 'AttachmentFile'}]
+    profile: {type: Schema.Types.ObjectId, ref: "Profile"}
 });
 
 module.exports = mongoose.model("PatientNote", PatientNoteSchema);

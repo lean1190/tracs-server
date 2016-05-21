@@ -23,6 +23,7 @@ var PatientSchema = new Schema({
     latestDiagnosis: { type: Schema.Types.ObjectId, ref : "Diagnosis" },
 
     profiles: [{ type: Schema.Types.ObjectId, ref : "Profile" }],
+
     treatment: [{ type: Schema.Types.ObjectId, ref : "Treatment" }],
     closestPeople: [
         {

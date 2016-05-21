@@ -7,5 +7,5 @@ var express = require("express"),
     ProfileController = require("../controllers/ProfileController");
 
 router.get("/userProfiles", ProfileController.findUserProfiles);
-
+router.delete("/:idPatient/:idUser", ProfileController.removeProfile);
 module.exports = router;

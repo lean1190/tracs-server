@@ -31,4 +31,9 @@ PatientNoteService.updatePatientNote = function (reqNote, noteId){
     });
 }
 
+PatientNoteService.deleteFromProfile = function (profileId){
+
+    return PatientNote.find({ profile:profileId }).remove().exec();
+}
+
 module.exports = PatientNoteService;

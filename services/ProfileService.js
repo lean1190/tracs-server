@@ -13,7 +13,10 @@ var mongoose = require("mongoose"),
     Profile = mongoose.model("Profile"),
     PatientOpinion = mongoose.model("PatientOpinion"),
     NotificationsService = require("./NotificationsService"),
-    PatientNote = mongoose.model("PatientNote");
+    PatientNote = mongoose.model("PatientNote"),
+    PatientNoteService = require("./PatientNoteService"),
+    //PatientService = require ("./PatientService"),
+    PatientOpinionService = require ("./PatientOpinionService");
 
 var ProfileService = {};
 
@@ -116,8 +119,8 @@ ProfileService.addPatientOpinion = function(patientOpinion, userId, patientId){
     return ProfileService.getSpecificProfile(patientId, userId).then(function (profile) {
         patientOpinion.profile = profile._id;
         var newPatientOpinion = new PatientOpinion(patientOpinion);
+        return PatientOpinionService.addOpinion(newPatientOpinion).then(function(opinion){
 
-        return newPatientOpinion.save().then(function(opinion){
             profile.latestPatientOpinion = opinion._id;
 
             return profile.save().then(function(updatedProfile){
@@ -155,6 +158,7 @@ ProfileService.getPatientNotes = function(patientId,userId){
  * @param   {object} reqPatientNote datos de la nota a guardar
  * @returns {promise} una promesa con el perfil modificado
  */
+
 ProfileService.addPatientNote = function(patientId,userId,reqPatientNote){
     "use strict";
 
@@ -162,6 +166,7 @@ ProfileService.addPatientNote = function(patientId,userId,reqPatientNote){
 
     return ProfileService.getSpecificProfile(patientId, userId).then(function (profile) {
 
+        newPatientNote.profile = profile._id;
         return newPatientNote.save().then(function(patientNote){
 
             profile.patientNotes.push(newPatientNote._id);
@@ -170,7 +175,7 @@ ProfileService.addPatientNote = function(patientId,userId,reqPatientNote){
                 return updatedProfile;
             }, function(error){
                 logger.error("No se pudo actualizar el perfil con la nueva opinion", error);
-            })
+            });
 
         }, function(error){
             logger.error("No se pudo guardar la nueva opinion", error);
@@ -178,6 +183,41 @@ ProfileService.addPatientNote = function(patientId,userId,reqPatientNote){
 
      }, function(error){
         logger.error("No se pudo obtener el perfil", error);
+    });
+};
+
+ProfileService.removeProfile = function(patientId, userId){
+    "use strict";
+
+    //Se busca el id del profile
+    return ProfileService.getSpecificProfile(patientId, userId).then(function(profile){
+        //Se borran las notas relacionadas al perfil
+        return PatientNoteService.deleteFromProfile(profile._id).then(function(deletedNote){
+            //Se borran las opiniones relacionadas al perfil
+            return PatientOpinionService.deleteFromProfile(profile._id).then(function(deletedOpinions){
+                //Se borra el perfil de la lista de perfiles del paciente
+
+                /* return PatientService.deleteProfile(patientId,profile._id).then(function(updatedPatient){*/
+
+                    return profile.remove().then(function(deletedProfile){
+                        return deletedProfile;
+                    }, function(error){
+                        logger.error("No se pudo borrar el perfil", error);
+                    });
+
+                /*},function(error){
+                    logger.error("No se pudo borrar el perfil en el paciente", error);
+                });*/
+
+            }, function(error){
+                logger.error("No se pudieron borrar las opiniones relacionadas al perfil", error);
+            });
+        }, function(error){
+            logger.error("No se pudo borrar las notas relacionadas al perfil", error);
+        });
+
+    }, function(error){
+        logger.error("No se pudo obtener el perfil buscado", error);
     });
 };
 

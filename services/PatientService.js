@@ -102,7 +102,6 @@ PatientService.add = function (reqPatient, adminUserId) {
         user: adminUserId,
         description: "Administrador"
     };
-
     return ProfileService.add(newProfile).then(function (profile) {
 
         newPatient.profiles.push(profile._id);
@@ -117,7 +116,6 @@ PatientService.add = function (reqPatient, adminUserId) {
         logger.error("No se pudo guardar el profile para el paciente con id " + newPatient._id, error);
         return error;
     });
-
 };
 
 /**
@@ -213,12 +211,18 @@ PatientService.addNotification = function (patientId, notification) {
     });
 };
 
+/*PatientService.deleteProfile = function (patientId,profileId){
+
+    return Patient.update({_id: patientId},{ $pullAll: {profiles: [profileId] } }).exec();
+};*/
+
 /**
  * Agrega una alerta georeferenciada hecha por el paciente
  * @param   {number} patientId Id del paciente que emite la alerta
  * @param   {object}    geoAlert  Objeto con los parametros de geolocalizacion de la alerta
  * @returns {promise} una promesa con el paciente actualizado
  */
+
 PatientService.addGeoAlert = function (patientId, geoAlert) {
     "use strict";
 
