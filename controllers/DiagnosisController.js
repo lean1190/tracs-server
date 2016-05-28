@@ -36,7 +36,6 @@ DiagnosisController.addDiagnosisMedication = function (req, res){
 
     var diagnosisId = req.params.id;
     var newMedication = req.body;
-    newMedication.date = new Date();
 
     console.log(newMedication, diagnosisId);
 
