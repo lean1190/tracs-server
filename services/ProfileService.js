@@ -16,6 +16,7 @@ var mongoose = require("mongoose"),
     PatientNote = mongoose.model("PatientNote"),
     PatientNoteService = require("./PatientNoteService"),
     //PatientService = require ("./PatientService"),
+    Patient = mongoose.model("Patient"),
     PatientOpinionService = require ("./PatientOpinionService");
 
 var ProfileService = {};
@@ -76,7 +77,7 @@ ProfileService.getPatientOpinions = function(patientId){
  * @param   {number} userId    Id del usuario del perfil a buscar
  * @returns {promise} una promesa con el perfil correspondiente al usuario y paciente deseado
  */
-ProfileService.getSpecificProfile = function(patientId, userId){
+ProfileService.getProfile = function(patientId, userId){
     "use strict";
     return Profile.find({patient:patientId, user: userId}).then(function(profile){
         return profile[0];
@@ -116,7 +117,7 @@ ProfileService.add = function(reqProfile) {
 ProfileService.addPatientOpinion = function(patientOpinion, userId, patientId){
     "use strict";
 
-    return ProfileService.getSpecificProfile(patientId, userId).then(function (profile) {
+    return ProfileService.getProfile(patientId, userId).then(function (profile) {
         patientOpinion.profile = profile._id;
         var newPatientOpinion = new PatientOpinion(patientOpinion);
         return PatientOpinionService.addOpinion(newPatientOpinion).then(function(opinion){
@@ -164,7 +165,7 @@ ProfileService.addPatientNote = function(patientId,userId,reqPatientNote){
 
     var newPatientNote = new PatientNote(reqPatientNote);
 
-    return ProfileService.getSpecificProfile(patientId, userId).then(function (profile) {
+    return ProfileService.getProfile(patientId, userId).then(function (profile) {
 
         newPatientNote.profile = profile._id;
         return newPatientNote.save().then(function(patientNote){
@@ -190,16 +191,18 @@ ProfileService.removeProfile = function(patientId, userId){
     "use strict";
 
     //Se busca el id del profile
-    return ProfileService.getSpecificProfile(patientId, userId).then(function(profile){
+    return ProfileService.getProfile(patientId, userId).then(function(profile){
         //Se borran las notas relacionadas al perfil
         return PatientNoteService.deleteFromProfile(profile._id).then(function(deletedNote){
             //Se borran las opiniones relacionadas al perfil
             return PatientOpinionService.deleteFromProfile(profile._id).then(function(deletedOpinions){
                 //Se borra el perfil de la lista de perfiles del paciente
 
-                /* return PatientService.deleteProfile(patientId,profile._id).then(function(updatedPatient){*/
+                 //return PatientService.deleteProfile(patientId,profile._id).then(function(updatedPatient){
 
                     return profile.remove().then(function(deletedProfile){
+
+                        //Patient.update({_id: patientId},{ $pullAll: {profiles: [profile._id] } }).exec();
                         return deletedProfile;
                     }, function(error){
                         logger.error("No se pudo borrar el perfil", error);
@@ -214,8 +217,7 @@ ProfileService.removeProfile = function(patientId, userId){
             });
         }, function(error){
             logger.error("No se pudo borrar las notas relacionadas al perfil", error);
-        });
-
+        })
     }, function(error){
         logger.error("No se pudo obtener el perfil buscado", error);
     });

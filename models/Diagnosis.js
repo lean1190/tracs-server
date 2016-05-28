@@ -17,7 +17,7 @@ var DiagnosisSchema = new Schema({
     },*/
     patient: {type : Schema.Types.ObjectId, ref : "Patient"},
     medications: [{type : Schema.Types.ObjectId, ref : "Medication"}],
-    madeBy: [{type : Schema.Types.ObjectId, ref : "User"}]
+    madeBy: {type : Schema.Types.ObjectId, ref : "User"}
 
 });
 

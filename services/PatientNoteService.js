@@ -31,9 +31,24 @@ PatientNoteService.updatePatientNote = function (reqNote, noteId){
     });
 }
 
+/**
+ * Borra todas las notas relacionadas a un perfil determinado
+ * @param   {number} profileId id del perfil que esta siendo borrado
+ * @returns {promise} una promesa
+ */
 PatientNoteService.deleteFromProfile = function (profileId){
 
     return PatientNote.find({ profile:profileId }).remove().exec();
+}
+
+/**
+ * Borra una nota determinada
+ * @param   {number}  noteId id de la nota a borrar
+ * @returns {promesa} una promesa con la nota borrada
+ */
+PatientNoteService.deleteNote = function (noteId){
+
+    return PatientNote.find({ _id:noteId }).remove().exec();
 }
 
 module.exports = PatientNoteService;

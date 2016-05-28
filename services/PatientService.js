@@ -97,6 +97,7 @@ PatientService.add = function (reqPatient, adminUserId) {
     var newPatient = new Patient(reqPatient);
 
     var newProfile = {
+        isParent: false,
         isAdmin: true,
         patient: newPatient._id,
         user: adminUserId,

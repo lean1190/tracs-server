@@ -8,7 +8,8 @@ require("../models/Medication");
 var mongoose = require("mongoose"),
     logger = require("../utils/Logger"),
     Diagnosis = mongoose.model("Diagnosis"),
-    Medication = mongoose.model("Medication");
+    Medication = mongoose.model("Medication"),
+    MedicationService = require("./MedicationService");
 
 var DiagnosisService = {};
 
@@ -25,6 +26,11 @@ DiagnosisService.getDiagnosis = function(diagnosisId){
 
 };
 
+/**
+ * Devuelve las medicaciones relacionadas a un diagnostico
+ * @param   {number}  diagnosisId id del diagnostico que tienen las medicaciones  a buscar
+ * @returns {promise} una promesa con las medicaciones encontradas
+ */
 DiagnosisService.getDiagnosisMedications = function (diagnosisId) {
     "use strict";
 
@@ -34,13 +40,18 @@ DiagnosisService.getDiagnosisMedications = function (diagnosisId) {
         "medications -_id").populate("medications").exec();
 };
 
+/**
+ * Agrega medicaciones al diagnostico
+ * @param   {number}  diagnosisId   id del diagnostico al que se le van a agregar medicaciones
+ * @param   {object}  reqMedication medicacion que va a ser agregada
+ * @returns {promise} una promesa con el diagnostico modificado
+ */
 DiagnosisService.addDiagnosisMedications = function (diagnosisId, reqMedication) {
     "use strict";
 
     var newMedication = new Medication(reqMedication);
 
-    return newMedication.save().then(function (medication) {
-
+    return MedicationService.addMedication(newMedication).then(function(medication){
         return Diagnosis.findOne({
             _id: diagnosisId
         }).then(function (diagnosis) {

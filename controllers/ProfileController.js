@@ -23,6 +23,16 @@ ProfileController.findUserProfiles = function (req, res) {
     });
 };
 
+ProfileController.getProfile = function (req, res) {
+    "use strict";
+
+    ProfileService.getProfile(req.params.idPatient, req.params.idUser).then(function (profile) {
+        res.status(200).jsonp(profile);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
+
 
 ProfileController.removeProfile = function(req,res){
 

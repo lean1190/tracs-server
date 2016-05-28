@@ -187,7 +187,8 @@ PatientController.addProfileToPatient = function(req,res){
         patient: req.params.id,
         user: req.body.user,
         description: req.body.description,
-        isAdmin: false
+        isAdmin: false,
+        isParent: req.body.isParent || false
     };
 
     PatientService.addProfileToPatient(newProfile).then(function(patient){
@@ -327,9 +328,11 @@ PatientController.addPatientNote = function(req,res){
 PatientController.addPatientDiagnosis = function(req,res){
 
 
+    console.log(req.body);
     var newDiagnosis = {
         patient: req.body.patient,
         description: req.body.description,
+        name: req.body.name,
         //vitalHistory: req.body.vitalHistory,
         date: moment().format(),
         madeBy : req.body.madeBy

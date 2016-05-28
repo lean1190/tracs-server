@@ -9,6 +9,7 @@ var ProfileSchema = new Schema({
     
     description: String,
     isAdmin: { type: Boolean, required: true },
+    isParent: {type: Boolean, required: true},
     patientNotes: [{type : Schema.Types.ObjectId, ref : "PatientNote"}],
     //notifications:[{type : Schema.Types.ObjectId, ref : "Notification"}],
     reports: [{type : Schema.Types.ObjectId, ref : "Report"}],
