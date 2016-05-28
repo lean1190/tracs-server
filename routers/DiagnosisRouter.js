@@ -8,6 +8,7 @@ var express = require("express"),
 
     router.get("/diagnosisMedication/:id", DiagnosisController.getDiagnosisMedications);
     router.get("/:id", DiagnosisController.getDiagnosis);
+    router.put("/updateDiagnosis/:id", DiagnosisController.updateDiagnosis);
     router.put("/addDiagnosisMedication/:id", DiagnosisController.addDiagnosisMedication);
 
 module.exports = router;

@@ -31,13 +31,27 @@ DiagnosisController.getDiagnosisMedications = function (req, res) {
     });
 };
 
+DiagnosisController.updateDiagnosis = function (req, res){
+    "use strict";
+
+    var diagnosisId = req.params.id;
+    var updatedDiagnosis = req.body;
+
+    DiagnosisService.updateDiagnosis(diagnosisId, updatedDiagnosis).then(function(diagnosis) {
+
+        res.status(200).jsonp(diagnosis);
+
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
+
+
 DiagnosisController.addDiagnosisMedication = function (req, res){
     "use strict";
 
     var diagnosisId = req.params.id;
     var newMedication = req.body;
-
-    console.log(newMedication, diagnosisId);
 
     DiagnosisService.addDiagnosisMedications(diagnosisId, newMedication).then(function(medication) {
 

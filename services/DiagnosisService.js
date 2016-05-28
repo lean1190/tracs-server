@@ -70,5 +70,20 @@ DiagnosisService.addDiagnosisMedications = function (diagnosisId, reqMedication)
 
 };
 
+DiagnosisService.updateDiagnosis = function (diagnosisId, reqDiagnosis){
+    "use strict";
+
+    return Diagnosis.findOne({_id: diagnosisId}).then(function (diagnosis) {
+
+        diagnosis.name = reqDiagnosis.name;
+        diagnosis.description = reqDiagnosis.description;
+        return diagnosis.save();
+
+    }, function (error) {
+        logger.error("No se pudo actualizar el diagnostico " + diagnosisId, error);
+        return error;
+    });
+}
+
 
 module.exports = DiagnosisService;
