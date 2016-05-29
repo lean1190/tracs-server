@@ -256,12 +256,14 @@ PatientService.addPatientDiagnosis = function(reqDiagnosis){
 
     return newDiagnosis.save().then(function(diagnosis){
 
-        return Patient.findOne({_id: diagnosis.patient}).then(function(patient){
+        NotificationsService.createNotificationForPatientId(diagnosis.patient, "Se ha modificado el diagnóstico del paciente", "patient.diagnosis.updated");
 
-            console.log(patient);
+        Patient.findOne({_id: diagnosis.patient}).then(function(patient){
+
             patient.latestDiagnosis = diagnosis._id;
-            console.log(patient.latestDiagnosis);
-            return patient.save();
+            patient.save();
+
+            //NotificationsService.createNotificationForPatientId(diagnosis.patient, "Se ha modificado el diagnóstico del paciente", "patient.diagnosis.updated");
 
         },function (error) {
             logger.error("No se pudo recuperar el paciente con id " + diagnosis.patient, error);

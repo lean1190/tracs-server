@@ -9,7 +9,9 @@ var mongoose = require("mongoose"),
     logger = require("../utils/Logger"),
     Diagnosis = mongoose.model("Diagnosis"),
     Medication = mongoose.model("Medication"),
-    MedicationService = require("./MedicationService");
+    MedicationService = require("./MedicationService"),
+    Patient = mongoose.model("Patient"),
+    NotificationsService = require("./NotificationsService");
 
 var DiagnosisService = {};
 
@@ -55,9 +57,10 @@ DiagnosisService.addDiagnosisMedications = function (diagnosisId, reqMedication)
         return Diagnosis.findOne({
             _id: diagnosisId
         }).then(function (diagnosis) {
-            console.log(diagnosis, diagnosisId);
+
             diagnosis.medications.push(medication._id);
-            return diagnosis.save();
+            diagnosis.save();
+            return NotificationsService.createNotificationForPatientId(diagnosis.patient, "Se ha modificado la medicación", "patient.medication.updated");
 
         }, function (error) {
             logger.error("No se pudo recuperar el diagnostico con id " + diagnosisId, error);
@@ -77,7 +80,9 @@ DiagnosisService.updateDiagnosis = function (diagnosisId, reqDiagnosis){
 
         diagnosis.name = reqDiagnosis.name;
         diagnosis.description = reqDiagnosis.description;
-        return diagnosis.save();
+        diagnosis.save();
+
+        return NotificationsService.createNotificationForPatientId(diagnosis.patient, "Se ha modificado el diagnóstico", "patient.diagnosis.updated");
 
     }, function (error) {
         logger.error("No se pudo actualizar el diagnostico " + diagnosisId, error);
