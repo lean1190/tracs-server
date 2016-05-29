@@ -254,7 +254,6 @@ PatientController.getPatientOpinions = function (req,res){
     var patientId = req.params.id;
 
     ProfileService.getPatientOpinions(patientId).then(function (patientOpinions) {
-        console.log(patientOpinions);
         res.status(200).jsonp(patientOpinions);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -326,9 +325,6 @@ PatientController.addPatientNote = function(req,res){
  * @returns {object} el diagnostico creado
  */
 PatientController.addPatientDiagnosis = function(req,res){
-
-
-    console.log(req.body);
     var newDiagnosis = {
         patient: req.body.patient,
         description: req.body.description,
