@@ -36,9 +36,6 @@ ImAPatientController.addGeoAlert = function (req, res) {
     var patientId = req.params.id;
     var geoAlert = req.body;
 
-    console.log(req.body);
-
-
     PatientService.addGeoAlert(patientId,geoAlert).then(function (patient) {
         res.status(200).jsonp(patient);
     }, function (err) {
