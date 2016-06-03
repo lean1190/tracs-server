@@ -118,12 +118,15 @@ ProfileService.addPatientOpinion = function(patientOpinion, userId, patientId){
     "use strict";
 
     return ProfileService.getProfile(patientId, userId).then(function (profile) {
+
         patientOpinion.profile = profile._id;
+
         var newPatientOpinion = new PatientOpinion(patientOpinion);
+
         return PatientOpinionService.addOpinion(newPatientOpinion).then(function(opinion){
 
             profile.latestPatientOpinion = opinion._id;
-
+            console.log(profile);
             return profile.save().then(function(updatedProfile){
                 NotificationsService.createNotificationForPatientId(patientId, "Se actualizaron las opiniones", "patient.opinion.updated");
 

@@ -56,28 +56,48 @@ PatientService.getPatientDetail = function (patientId) {
  * @param   {object}  updatedPatient el paciente con los datos actualizados
  * @returns {promise} una promesa con el paciente actualizado
  */
-PatientService.updatePatientDetail = function (updatedPatient) {
+PatientService.updatePatientGeneralInfo = function (patientId, updatedPatient) {
+    "use strict";
+
+    return Patient.findOne({
+        _id: patientId
+    }).then(function (patient) {
+
+        patient.DNI = updatedPatient.DNI;
+        patient.name = updatedPatient.name;
+        patient.phoneNumber= updatedPatient.phoneNumber;
+        patient.generalDescription = updatedPatient.generalDescription;
+        patient.birthDate = updatedPatient.birthDate;
+
+        NotificationsService.createNotificationForPatientId(patientId, "Se actualizaron datos del perfil", "patient.detail.updated");
+
+        return patient.save();
+
+    }, function (error) {
+        logger.error("Ocurrió un error al editar los datos del paciente con ID " + patientId, error);
+        return error;
+    });
+};
+
+PatientService.updatePatientContactInfo = function(patientId, updatedContactInfo){
     "use strict";
 
     return Patient.findOneAndUpdate({
-        _id: updatedPatient.id
+        _id: patientId
     }, {
         $set: {
-            DNI: updatedPatient.DNI,
-            name: updatedPatient.name,
-            phoneNumber: updatedPatient.phoneNumber,
-            generalDescription: updatedPatient.generalDescription,
-            birthDate: updatedPatient.birthDate
+            contactInfo: updatedContactInfo
         }
     }, {
         new: true
     }).exec().then(function (patient) {
         return NotificationsService.createNotificationForPatient(patient, "Se actualizaron datos del perfil", "patient.detail.updated");
     }, function (error) {
-        logger.error("Ocurrió un error al editar los datos del paciente con ID " + updatedPatient.id, error);
+        logger.error("Ocurrió un error al editar la informacion de contacto del paciente " + patientId, error);
         return error;
     });
-};
+
+}
 
 /**
  * Agrega un paciente nuevo y le asocia un perfil administrador

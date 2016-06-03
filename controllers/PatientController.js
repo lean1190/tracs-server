@@ -99,6 +99,7 @@ PatientController.add = function (req, res) {
         DNI: req.body.dni,
         phoneNumber: req.body.phoneNr,
         notifications: [],
+        contactInfo : {},
 
         // Mock data!!!
         closestPeople: [
@@ -146,25 +147,45 @@ PatientController.add = function (req, res) {
  * @param   {object} res
  * @returns {object} el paciente modificado
  */
-PatientController.updatePatientDetail = function (req,res){
+PatientController.updatePatientGeneralInfo = function (req,res){
     "use strict";
 
-    var updatedPatient = {
-        id: req.body._id,
+    var patientId = req.params.id;
+    var updatedPatientGeneralInfo = {
+
         name: req.body.name,
-        birthDate: req.body.birthDate, //"12/12/2012"
-        generalDescription: req.body.generalDescription || "", //"description"
+        birthDate: req.body.birthDate,
+        generalDescription: req.body.generalDescription || "",
         DNI: req.body.DNI || "",
         phoneNumber: req.body.phoneNumber || ""
     };
 
-    PatientService.updatePatientDetail(updatedPatient).then(function (patient) {
-        res.status(200).jsonp(patient);
+    PatientService.updatePatientGeneralInfo(patientId,updatedPatientGeneralInfo).then(function (updatedPatient) {
+        res.status(200).jsonp(updatedPatient);
     }, function (err) {
         return res.status(500).send(err.message);
     });
 
 };
+
+/**
+ * Actualiza la informacion de contacto del paciente
+ * @param   {object} req informacion de contacto actualizada
+ * @param   {object} res
+ * @returns {object} el paciente modificado
+ */
+PatientController.updatePatientContactInfo = function(req,res){
+    "use strict"
+
+    var updatedPatientContactInfo = req.body;
+    var patientId = req.params.id;
+    console.log("llegue aca");
+    PatientService.updatePatientContactInfo(patientId,updatedPatientContactInfo).then(function (updatedPatient) {
+        res.status(200).jsonp(updatedPatient);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+}
 
 PatientController.updateClosestPeople = function (req, res){
     "use strict";

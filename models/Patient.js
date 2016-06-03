@@ -14,12 +14,11 @@ var PatientSchema = new Schema({
     picture: String,
     generalDescription: String,
     phoneNumber: String,
-    /*schoolInfo: {
+    contactInfo: {
         name: String,
         address: String,
         city: String
     },
-    */
     latestDiagnosis: { type: Schema.Types.ObjectId, ref : "Diagnosis" },
 
     profiles: [{ type: Schema.Types.ObjectId, ref : "Profile" }],
