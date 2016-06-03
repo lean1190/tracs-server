@@ -130,12 +130,15 @@ ProfileService.addPatientOpinion = function(patientOpinion, userId, patientId){
                 return updatedProfile;
             }, function(error){
                 logger.error("No se pudo guardar el perfil actualizado con la opinion del paciente",error);
+                return error;
             });
         }, function(error){
             logger.error("No se pudo guardar la nueva opinion sobre el paciente", error);
+            return error;
         });
     }, function(error){
         logger.error("No se pudo obtener el perfil", error);
+        return error;
     });
 };
 
@@ -168,22 +171,25 @@ ProfileService.addPatientNote = function(patientId,userId,reqPatientNote){
     return ProfileService.getProfile(patientId, userId).then(function (profile) {
 
         newPatientNote.profile = profile._id;
-        return newPatientNote.save().then(function(patientNote){
+        return newPatientNote.save().then(function() {
 
             profile.patientNotes.push(newPatientNote._id);
 
             return profile.save().then(function(updatedProfile){
                 return updatedProfile;
             }, function(error){
-                logger.error("No se pudo actualizar el perfil con la nueva opinion", error);
+                logger.error("No se pudo actualizar el perfil con la nueva nota", error);
+                return error;
             });
 
         }, function(error){
-            logger.error("No se pudo guardar la nueva opinion", error);
+            logger.error("No se pudo guardar la nueva nota", error);
+            return error;
         });
 
      }, function(error){
         logger.error("No se pudo obtener el perfil", error);
+        return error;
     });
 };
 
@@ -214,12 +220,15 @@ ProfileService.removeProfile = function(patientId, userId){
 
             }, function(error){
                 logger.error("No se pudieron borrar las opiniones relacionadas al perfil", error);
+                return error;
             });
         }, function(error){
             logger.error("No se pudo borrar las notas relacionadas al perfil", error);
-        })
+            return error;
+        });
     }, function(error){
         logger.error("No se pudo obtener el perfil buscado", error);
+        return error;
     });
 };
 
