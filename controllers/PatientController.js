@@ -34,7 +34,6 @@ PatientController.findUserPatients = function (req, res) {
  * @param   {object} res
  * @returns {object} el paciente con el total de su informacion
  */
-
 PatientController.getPatientDetail = function (req, res) {
     "use strict";
 
@@ -100,38 +99,8 @@ PatientController.add = function (req, res) {
         phoneNumber: req.body.phoneNr,
         notifications: [],
         contactInfo : {},
-
-        // Mock data!!!
-        closestPeople: [
-            {
-                personId: req.body.admin,
-                name: "Prueba1",
-                phoneNumber: "2214180840",
-                picture: "http://notihoy.com/site/wp-content/uploads/2015/03/emilia11-755x380.jpg",
-                priority: Math.floor((Math.random() * 3) + 1)
-            },
-            {
-                personId: req.body.admin,
-                name: "Prueba2",
-                phoneNumber: "2214180840",
-                picture: "http://www.hercampus.com/sites/default/files/2015/02/15/Natalie-Dormer%3A-People-Magazine-2014--01-662x883.jpg",
-                priority: Math.floor((Math.random() * 3) + 1)
-            },
-            {
-                personId: req.body.admin,
-                name: "Prueba3",
-                phoneNumber: "2214180840",
-                picture: "http://losandes.com.ar/files/image/15/11/image563bbefa2720d3.37124491.jpg",
-                priority: Math.floor((Math.random() * 3) + 1)
-            },
-            {
-                personId: req.body.admin,
-                name: "Prueba4",
-                phoneNumber: "2214180840",
-                picture: "https://i.ytimg.com/vi/x4Iu_ibISac/hqdefault.jpg",
-                priority: Math.floor((Math.random() * 3) + 1)
-            }
-        ]
+        closestPeople: [],
+        history:{}
     };
 
     PatientService.add(newPatient, req.body.admin).then(function (patient) {
@@ -187,20 +156,34 @@ PatientController.updatePatientContactInfo = function(req,res){
     });
 }
 
+/*
+ * Actualiza los contactos del paciente
+ * @param   {object} req
+ * @param   {object} res
+ * @returns {object} el paciente modificado
+ */
+
 PatientController.updateClosestPeople = function (req, res){
     "use strict";
 
-    var closestPeople = req.body;
-    var patientId = req.params.id;
+    var closestPeople = req.body,
+        patientId = req.params.id;
 
     PatientService.updateClosestPeople(patientId,closestPeople).then(function (patient) {
         res.status(200).jsonp(patient);
     }, function (err) {
         return res.status(500).send(err.message);
     });
-
 };
 
+PatientCOn
+
+/**
+ * Agrega un perfil participante al tratamiento del paciente
+ * @param   {object} req
+ * @param   {object} res
+ * @returns {object} el paciente modificado
+ */
 PatientController.addProfileToPatient = function(req,res){
     "use strict";
 
@@ -283,11 +266,12 @@ PatientController.getPatientOpinions = function (req,res){
 
 /**
  * Obtiene las que hizo un usuario sobre un paciente
- * @param   {object}   req contiene el id del usuario y del paciente
+ * @param   {object} req contiene el id del usuario y del paciente
  * @param   {object} res [[Description]]
  * @returns {object} las notas que hizo el usuario sobre un paciente determinado
  */
 PatientController.getPatientNotes = function(req,res){
+    "use strict";
 
     var patientId = req.params.idPatient;
     var userId = req.params.idUser;
@@ -299,8 +283,14 @@ PatientController.getPatientNotes = function(req,res){
     }, function (err) {
         return res.status(500).send(err.message);
     });
-}
+};
 
+/**
+ * Recupera una nota de un paciente
+ * @param   {object} req
+ * @param   {object} res
+ * @returns {object} la nota
+ */
 PatientController.getPatientNote = function (req, res) {
     "use strict";
 
@@ -321,6 +311,7 @@ PatientController.getPatientNote = function (req, res) {
  * @returns {object} la nota creada
  */
 PatientController.addPatientNote = function(req,res){
+    "use strict";
 
     var patientId = req.params.id;
     var userId = req.body.user;
@@ -330,22 +321,24 @@ PatientController.addPatientNote = function(req,res){
         title: req.body.title,
         description: req.body.description,
         date: new Date()
-    }
+    };
 
     ProfileService.addPatientNote(patientId,userId, patientNote).then(function(createdNote){
         res.status(200).jsonp(createdNote);
     }, function (err) {
         return res.status(500).send(err.message);
     });
-}
+};
 
 /**
- * Agrega un diagnostico sobreun paciente
- * @param   {object}   req id del paciente al cualse asigna el diagnostico conjuntamente con la informacion del diagnostico
+ * Agrega un diagnostico sobre un paciente
+ * @param   {object} req id del paciente al cualse asigna el diagnostico conjuntamente con la informacion del diagnostico
  * @param   {object} res
  * @returns {object} el diagnostico creado
  */
 PatientController.addPatientDiagnosis = function(req,res){
+    "use strict";
+
     var newDiagnosis = {
         patient: req.body.patient,
         description: req.body.description,
@@ -360,12 +353,10 @@ PatientController.addPatientDiagnosis = function(req,res){
     }, function (err) {
         return res.status(500).send(err.message);
     });
-}
+};
 
-
-
-//Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
-PatientController.bulkInsert = function(req,res){
+// Borrador para carga masiva de datos
+PatientController.bulkInsert = function(){
     "use strict";
 
     PatientService.bulkInsert(function(err,patients){
