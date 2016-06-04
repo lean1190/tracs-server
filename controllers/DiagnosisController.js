@@ -54,10 +54,7 @@ DiagnosisController.addDiagnosisMedication = function (req, res){
     var newMedication = req.body;
 
     DiagnosisService.addDiagnosisMedications(diagnosisId, newMedication).then(function(medication) {
-
-        console.log("return",medication);
         res.status(200).jsonp(medication);
-
     }, function (err) {
         return res.status(500).send(err.message);
     });

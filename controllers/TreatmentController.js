@@ -19,7 +19,6 @@ TreatmentController.addTreatment = function (req, res) {
     "use strict";
 
     Treatment = mongoose.model("Treatment");
-    console.log('entre al addTreatment');
     var newTreatment = new Treatment();
     newTreatment.description = "asdasdasdasd";
     res.json(newTreatment);
