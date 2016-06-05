@@ -41,6 +41,13 @@ var PatientSchema = new Schema({
             timestamp: { type: Date, required: true }
         }
     ],
+
+    history: {
+        description: String,
+        prevTherapyPlace: String,
+        prevTherapyDuration: String
+    },
+
     geoAlert:[
         {
             accuracy: Number,

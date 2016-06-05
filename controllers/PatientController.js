@@ -176,7 +176,18 @@ PatientController.updateClosestPeople = function (req, res){
     });
 };
 
-PatientCOn
+PatientController.updatePatientHistory = function (req, res){
+    "use strict";
+
+    var patientHistory = req.body,
+        patientId = req.params.id;
+
+    PatientService.updatePatientHistory(patientId,patientHistory).then(function (patient) {
+        res.status(200).jsonp(patient);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
 
 /**
  * Agrega un perfil participante al tratamiento del paciente

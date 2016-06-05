@@ -99,6 +99,26 @@ PatientService.updatePatientContactInfo = function(patientId, updatedContactInfo
 
 }
 
+PatientService.updatePatientHistory = function(patientId, updatedPatientHistory){
+    "use strict";
+
+    return Patient.findOneAndUpdate({
+        _id: patientId
+    }, {
+        $set: {
+            history: updatedPatientHistory
+        }
+    }, {
+        new: true
+    }).exec().then(function (patient) {
+        return patient;
+    }, function (error) {
+        logger.error("Ocurrió un error al editar la informacion de la historia del paciente " + patientId, error);
+        return error;
+    });
+
+}
+
 /**
  * Agrega un paciente nuevo y le asocia un perfil administrador
  * @param   {object}  reqPatient  el paciente con los datos básicos

@@ -17,9 +17,10 @@ router.get("/patientNote/:noteId", PatientController.getPatientNote);
 
 router.put("/updatePatientGeneralInfo/:id", PatientController.updatePatientGeneralInfo);
 router.put("/updatePatientContactInfo/:id", PatientController.updatePatientContactInfo);
+router.put("/updatePatientClosestPeople/:id", PatientController.updateClosestPeople);
+router.put("/updatePatientHistory/:id", PatientController.updatePatientHistory);
 
 router.put("/addProfileToPatient/:id", PatientController.addProfileToPatient);
-router.put("/updatePatientClosestPeople/:id", PatientController.updateClosestPeople);
 router.put("/addPatientOpinion/:id", PatientController.addPatientOpinion);
 router.put("/addPatientNote/:id", PatientController.addPatientNote);
 router.put("/addPatientDiagnosis/:id", PatientController.addPatientDiagnosis);
