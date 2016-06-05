@@ -15,9 +15,8 @@ var mongoose = require("mongoose"),
     NotificationsService = require("./NotificationsService"),
     PatientNote = mongoose.model("PatientNote"),
     PatientNoteService = require("./PatientNoteService"),
-    //PatientService = require ("./PatientService"),
     Patient = mongoose.model("Patient"),
-    PatientOpinionService = require ("./PatientOpinionService");
+    PatientOpinionService = require("./PatientOpinionService");
 
 var ProfileService = {};
 
@@ -29,18 +28,32 @@ var ProfileService = {};
 ProfileService.findUserProfiles = function (userId) {
     "use strict";
 
-    return Profile.find({"user": userId}).populate("patient").exec();
-};
+    // return Profile.find({"user": userId}).populate("patient").exec();
+
+    return Profile.find({
+        "user": userId
+    }).populate({
+        path: "patient",
+        model: "Patient",
+        populate: {
+            path: "latestDiagnosis",
+            model: "Diagnosis"
+        }
+    }).exec();
+
+}
 
 /**
  * Devuelve todos los perfiles que tiene asignado un paciente
  * @param   {number} patientId paciente del cual quiero saber los perfiles que tiene asignado
  * @returns {promise} una promesa con los perfiles actuales del paciente
  */
-ProfileService.findPatientProfiles = function (patientId){
+ProfileService.findPatientProfiles = function (patientId) {
     "use strict";
 
-    return Profile.find({patient: patientId}).populate("user").exec();
+    return Profile.find({
+        patient: patientId
+    }).populate("user").exec();
 };
 
 
@@ -49,10 +62,12 @@ ProfileService.findPatientProfiles = function (patientId){
  * @param   {number} patientId paciente del cual quiero saber los usuarios asignados a sus perfiles
  * @returns {promise} una promesa con los usuarios que actualmente estan relacionados a los perfiles del paciente
  */
-ProfileService.getPatientUsers = function(patientId){
+ProfileService.getPatientUsers = function (patientId) {
     "use strict";
 
-    return Profile.find({patient: patientId},"user -_id").then(function(profiles){
+    return Profile.find({
+        patient: patientId
+    }, "user -_id").then(function (profiles) {
         return profiles;
     }, function (error) {
         logger.error("No se pudo obtener los usuarios relacionados al paciente", error);
@@ -65,10 +80,12 @@ ProfileService.getPatientUsers = function(patientId){
  * @param   {number} patientId Id del paciente del cual se quieren obtener las opiniones
  * @returns {promise} Una promesa con las opiniones sobre un paciente
  */
-ProfileService.getPatientOpinions = function(patientId){
+ProfileService.getPatientOpinions = function (patientId) {
     "use strict";
 
-    return Profile.find({"patient": patientId},"user latestPatientOpinion -_id").populate("latestPatientOpinion user").exec();
+    return Profile.find({
+        "patient": patientId
+    }, "user latestPatientOpinion -_id").populate("latestPatientOpinion user").exec();
 };
 
 /**
@@ -77,13 +94,16 @@ ProfileService.getPatientOpinions = function(patientId){
  * @param   {number} userId    Id del usuario del perfil a buscar
  * @returns {promise} una promesa con el perfil correspondiente al usuario y paciente deseado
  */
-ProfileService.getProfile = function(patientId, userId){
+ProfileService.getProfile = function (patientId, userId) {
     "use strict";
-    return Profile.find({patient:patientId, user: userId}).then(function(profile){
+    return Profile.find({
+        patient: patientId,
+        user: userId
+    }).then(function (profile) {
         return profile[0];
 
-    }, function(error){
-        logger.error("No se pudo obtener el perfil relacionado al paciente y usuario especificados",error);
+    }, function (error) {
+        logger.error("No se pudo obtener el perfil relacionado al paciente y usuario especificados", error);
         return error;
     });
 };
@@ -93,12 +113,12 @@ ProfileService.getProfile = function(patientId, userId){
  * @param   {object}  reqProfile el perfil con los datos básicos
  * @returns {promise} una promesa con el perfil creado
  */
-ProfileService.add = function(reqProfile) {
+ProfileService.add = function (reqProfile) {
     "use strict";
 
     var newProfile = new Profile(reqProfile);
 
-    return newProfile.save().then(function(profile){
+    return newProfile.save().then(function (profile) {
         return profile;
     }, function (error) {
         logger.error("No se pudo guardar el profile", error);
@@ -114,7 +134,7 @@ ProfileService.add = function(reqProfile) {
  * @param   {number} patientId      Id del paciente sobre el cual se esta emitiendo una opinion
  * @returns {promise} Una promesa con el perfil que se esta modificando
  */
-ProfileService.addPatientOpinion = function(patientOpinion, userId, patientId){
+ProfileService.addPatientOpinion = function (patientOpinion, userId, patientId) {
     "use strict";
 
     return ProfileService.getProfile(patientId, userId).then(function (profile) {
@@ -123,23 +143,23 @@ ProfileService.addPatientOpinion = function(patientOpinion, userId, patientId){
 
         var newPatientOpinion = new PatientOpinion(patientOpinion);
 
-        return PatientOpinionService.addOpinion(newPatientOpinion).then(function(opinion){
+        return PatientOpinionService.addOpinion(newPatientOpinion).then(function (opinion) {
 
             profile.latestPatientOpinion = opinion._id;
             console.log(profile);
-            return profile.save().then(function(updatedProfile){
+            return profile.save().then(function (updatedProfile) {
                 NotificationsService.createNotificationForPatientId(patientId, "Se actualizaron las opiniones", "patient.opinion.updated");
 
                 return updatedProfile;
-            }, function(error){
-                logger.error("No se pudo guardar el perfil actualizado con la opinion del paciente",error);
+            }, function (error) {
+                logger.error("No se pudo guardar el perfil actualizado con la opinion del paciente", error);
                 return error;
             });
-        }, function(error){
+        }, function (error) {
             logger.error("No se pudo guardar la nueva opinion sobre el paciente", error);
             return error;
         });
-    }, function(error){
+    }, function (error) {
         logger.error("No se pudo obtener el perfil", error);
         return error;
     });
@@ -151,10 +171,13 @@ ProfileService.addPatientOpinion = function(patientOpinion, userId, patientId){
  * @param   {number} userId    id del usuario que realizo las notas
  * @returns {promise} una promesa con el perfil con las notas buscadas
  */
-ProfileService.getPatientNotes = function(patientId,userId){
+ProfileService.getPatientNotes = function (patientId, userId) {
     "use strict";
 
-    return Profile.find({patient:patientId, user: userId}).populate("patientNotes").exec();
+    return Profile.find({
+        patient: patientId,
+        user: userId
+    }).populate("patientNotes").exec();
 
 };
 
@@ -166,7 +189,7 @@ ProfileService.getPatientNotes = function(patientId,userId){
  * @returns {promise} una promesa con el perfil modificado
  */
 
-ProfileService.addPatientNote = function(patientId,userId,reqPatientNote){
+ProfileService.addPatientNote = function (patientId, userId, reqPatientNote) {
     "use strict";
 
     var newPatientNote = new PatientNote(reqPatientNote);
@@ -174,62 +197,62 @@ ProfileService.addPatientNote = function(patientId,userId,reqPatientNote){
     return ProfileService.getProfile(patientId, userId).then(function (profile) {
 
         newPatientNote.profile = profile._id;
-        return newPatientNote.save().then(function() {
+        return newPatientNote.save().then(function () {
 
             profile.patientNotes.push(newPatientNote._id);
 
-            return profile.save().then(function(updatedProfile){
+            return profile.save().then(function (updatedProfile) {
                 return updatedProfile;
-            }, function(error){
+            }, function (error) {
                 logger.error("No se pudo actualizar el perfil con la nueva nota", error);
                 return error;
             });
 
-        }, function(error){
+        }, function (error) {
             logger.error("No se pudo guardar la nueva nota", error);
             return error;
         });
 
-     }, function(error){
+    }, function (error) {
         logger.error("No se pudo obtener el perfil", error);
         return error;
     });
 };
 
-ProfileService.removeProfile = function(patientId, userId){
+ProfileService.removeProfile = function (patientId, userId) {
     "use strict";
 
     //Se busca el id del profile
-    return ProfileService.getProfile(patientId, userId).then(function(profile){
+    return ProfileService.getProfile(patientId, userId).then(function (profile) {
         //Se borran las notas relacionadas al perfil
-        return PatientNoteService.deleteFromProfile(profile._id).then(function(deletedNote){
+        return PatientNoteService.deleteFromProfile(profile._id).then(function (deletedNote) {
             //Se borran las opiniones relacionadas al perfil
-            return PatientOpinionService.deleteFromProfile(profile._id).then(function(deletedOpinions){
+            return PatientOpinionService.deleteFromProfile(profile._id).then(function (deletedOpinions) {
                 //Se borra el perfil de la lista de perfiles del paciente
 
-                 //return PatientService.deleteProfile(patientId,profile._id).then(function(updatedPatient){
+                //return PatientService.deleteProfile(patientId,profile._id).then(function(updatedPatient){
 
-                    return profile.remove().then(function(deletedProfile){
+                return profile.remove().then(function (deletedProfile) {
 
-                        //Patient.update({_id: patientId},{ $pullAll: {profiles: [profile._id] } }).exec();
-                        return deletedProfile;
-                    }, function(error){
-                        logger.error("No se pudo borrar el perfil", error);
-                    });
+                    //Patient.update({_id: patientId},{ $pullAll: {profiles: [profile._id] } }).exec();
+                    return deletedProfile;
+                }, function (error) {
+                    logger.error("No se pudo borrar el perfil", error);
+                });
 
                 /*},function(error){
                     logger.error("No se pudo borrar el perfil en el paciente", error);
                 });*/
 
-            }, function(error){
+            }, function (error) {
                 logger.error("No se pudieron borrar las opiniones relacionadas al perfil", error);
                 return error;
             });
-        }, function(error){
+        }, function (error) {
             logger.error("No se pudo borrar las notas relacionadas al perfil", error);
             return error;
         });
-    }, function(error){
+    }, function (error) {
         logger.error("No se pudo obtener el perfil buscado", error);
         return error;
     });
