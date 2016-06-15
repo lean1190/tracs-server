@@ -314,6 +314,23 @@ PatientController.getPatientNote = function (req, res) {
     });
 };
 
+PatientController.deleteProfile = function (req, res) {
+    "use strict";
+
+    var patientId = req.params.patientId;
+    var profileId = req.params.profileId;
+
+
+    PatientService.deleteProfile(patientId,profileId).then(function (resp) {
+        console.log(resp);
+        res.status(200).jsonp(resp);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
+
+
+
 
 /**
  * Agrega una nueva nota sobre un paciente

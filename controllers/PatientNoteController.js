@@ -18,4 +18,17 @@ PatientNoteController.updatePatientNote= function (req, res) {
     });
 };
 
+PatientNoteController.deleteNote = function (req, res) {
+    "use strict";
+
+    var noteId = req.params.id;
+    PatientNoteService.deleteNote(noteId).then(function (note) {
+        res.status(200).jsonp(note);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
+
+
+
 module.exports = PatientNoteController;

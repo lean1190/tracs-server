@@ -11,4 +11,6 @@ var express = require("express"),
     router.put("/updateDiagnosis/:id", DiagnosisController.updateDiagnosis);
     router.put("/addDiagnosisMedication/:id", DiagnosisController.addDiagnosisMedication);
 
+    router.delete("/deleteDiagnosisMedication/:diagnosisId/:medicationId", DiagnosisController.deleteDiagnosisMedication);
+
 module.exports = router;

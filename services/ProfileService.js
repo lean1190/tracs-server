@@ -230,19 +230,13 @@ ProfileService.removeProfile = function (patientId, userId) {
             return PatientOpinionService.deleteFromProfile(profile._id).then(function (deletedOpinions) {
                 //Se borra el perfil de la lista de perfiles del paciente
 
-                //return PatientService.deleteProfile(patientId,profile._id).then(function(updatedPatient){
-
                 return profile.remove().then(function (deletedProfile) {
 
-                    //Patient.update({_id: patientId},{ $pullAll: {profiles: [profile._id] } }).exec();
+                    Patient.update({_id: patientId},{ $pullAll: {profiles: [profile._id] } }).exec();
                     return deletedProfile;
                 }, function (error) {
                     logger.error("No se pudo borrar el perfil", error);
                 });
-
-                /*},function(error){
-                    logger.error("No se pudo borrar el perfil en el paciente", error);
-                });*/
 
             }, function (error) {
                 logger.error("No se pudieron borrar las opiniones relacionadas al perfil", error);

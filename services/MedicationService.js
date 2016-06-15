@@ -27,5 +27,11 @@ MedicationService.addMedication = function(newMedication){
 
 };
 
+MedicationService.deleteMedication = function(medicationId){
+    "use strict";
+
+    return Medication.find({ _id: medicationId }).remove().exec();
+}
+
 
 module.exports = MedicationService;

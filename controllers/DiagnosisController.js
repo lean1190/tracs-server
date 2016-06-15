@@ -60,4 +60,18 @@ DiagnosisController.addDiagnosisMedication = function (req, res){
     });
 };
 
+DiagnosisController.deleteDiagnosisMedication = function(req, res){
+    "use strict";
+
+    var diagnosisId = req.params.diagnosisId;
+    var medicationId = req.params.medicationId;
+
+    DiagnosisService.deleteDiagnosisMedication(diagnosisId, medicationId).then(function(medication) {
+        res.status(200).jsonp(medication);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+
+};
+
 module.exports = DiagnosisController;

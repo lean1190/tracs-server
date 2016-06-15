@@ -90,5 +90,17 @@ DiagnosisService.updateDiagnosis = function (diagnosisId, reqDiagnosis){
     });
 }
 
+DiagnosisService.deleteDiagnosisMedication = function (diagnosisId, medicationId){
+    "use strict";
+
+    return MedicationService.deleteMedication(medicationId).then(function(deletedMedication){
+
+        return Diagnosis.update({_id: diagnosisId},{ $pullAll: {medications: [medicationId] } }).exec();
+
+    }, function (error) {
+        logger.error("No se pudo borrar la medicación ", error);
+        return error;
+    });
+}
 
 module.exports = DiagnosisService;

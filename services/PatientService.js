@@ -252,10 +252,10 @@ PatientService.addNotification = function (patientId, notification) {
     });
 };
 
-/*PatientService.deleteProfile = function (patientId,profileId){
+PatientService.deleteProfile = function (patientId,profileId){
 
     return Patient.update({_id: patientId},{ $pullAll: {profiles: [profileId] } }).exec();
-};*/
+};
 
 /**
  * Agrega una alerta georeferenciada hecha por el paciente

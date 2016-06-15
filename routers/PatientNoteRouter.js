@@ -7,5 +7,6 @@ var express = require("express"),
     PatientNoteController = require("../controllers/PatientNoteController");
 
     router.put("/updatePatientNote/:id", PatientNoteController.updatePatientNote);
+    router.delete("/:noteId", PatientNoteController.deleteNote);
 
 module.exports = router;

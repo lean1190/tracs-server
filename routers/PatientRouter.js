@@ -27,6 +27,8 @@ router.put("/addPatientDiagnosis/:id", PatientController.addPatientDiagnosis);
 
 router.post("/", PatientController.add);
 
+//router.delete("/:patientId/:profileId", PatientController.deleteProfile);
+
 //Borrador para carga masiva de datos. Me los guarda pero tira un error por el .exec(). Despues lo termino de analizar
 router.post("/bulkInsert", PatientController.bulkInsert);
 
