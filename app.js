@@ -1,6 +1,6 @@
 /* jshint bitwise: false, curly: true, eqeqeq: true, globals: false, freeze: true, immed: true, nocomma: true, newcap: true, noempty: true, nonbsp: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, latedef: true */
 
-/* globals console, require, module, __dirname */
+/* globals require, module, __dirname */
 
 var // Config modules
     Database = require("./config/Database"),

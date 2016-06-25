@@ -1,6 +1,6 @@
 /*jshint bitwise: false, camelcase: true, curly: true, eqeqeq: true, globals: false, freeze: true, immed: true, nocomma: true, newcap: true, noempty: true, nonbsp: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, latedef: true*/
 
-/* globals require, module, console */
+/* globals require, module */
 
 var UserService = require("../services/UserService");
 
@@ -95,6 +95,16 @@ UserController.deleteUser = function (req, res) {
     "use strict";
     UserService.deleteUser(req.params.id).then(function () {
         res.status(200).jsonp(true);
+    }, function (err) {
+        return res.status(500).send(err.message);
+    });
+};
+
+
+UserController.savePushToken = function (req, res) {
+    "use strict";
+    UserService.savePushToken(req.body).then(function (user) {
+        res.status(200).jsonp(user);
     }, function (err) {
         return res.status(500).send(err.message);
     });

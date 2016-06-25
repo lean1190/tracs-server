@@ -15,6 +15,7 @@ var UserSchema = new Schema({
     phoneNumber: String,
     accessToken: String,
     refreshToken: String,
+    pushToken: String,
     profiles:[{type : Schema.Types.ObjectId, ref : "Profile"}]
 
 });

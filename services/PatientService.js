@@ -6,12 +6,12 @@ require("../models/Patient");
 require("../models/Diagnosis");
 
 var mongoose = require("mongoose"),
+    request = require("request"),
     logger = require("../utils/Logger"),
     Patient = mongoose.model("Patient"),
     Diagnosis = mongoose.model("Diagnosis"),
     ProfileService = require("./ProfileService"),
     NotificationsService = require("./NotificationsService");
-
 
 var PatientService = {};
 
@@ -97,7 +97,7 @@ PatientService.updatePatientContactInfo = function(patientId, updatedContactInfo
         return error;
     });
 
-}
+};
 
 PatientService.updatePatientHistory = function(patientId, updatedPatientHistory){
     "use strict";
@@ -117,7 +117,7 @@ PatientService.updatePatientHistory = function(patientId, updatedPatientHistory)
         return error;
     });
 
-}
+};
 
 /**
  * Agrega un paciente nuevo y le asocia un perfil administrador
@@ -253,7 +253,7 @@ PatientService.addNotification = function (patientId, notification) {
 };
 
 PatientService.deleteProfile = function (patientId,profileId){
-
+    "use strict";
     return Patient.update({_id: patientId},{ $pullAll: {profiles: [profileId] } }).exec();
 };
 
@@ -269,14 +269,63 @@ PatientService.addGeoAlert = function (patientId, geoAlert) {
 
     return Patient.findOne({
         _id: patientId
-    }).then(function (patient) {
+    }).populate({
+        path: "profiles",
+        model: "Profile",
+        populate: {
+            path: "user",
+            model: "User"
+        }
+    }).exec().then(function (patient) {
+        var pushData = {
+            tokens: [],
+            payload: {
+                "patient": {
+                    _id: patient._id,
+                    name: patient.name,
+                    picture: patient.picture
+                },
+                "coordinates": {
+                    latitude: geoAlert.coords.latitude,
+                    longitude: geoAlert.coords.longitude
+                }
+            }
+        };
+        // Recupera los tokens push de casa usuario participante
+        // para mandarle una notificacion
+        pushData.tokens = patient.profiles.map(function(profile) {
+            return profile.user.pushToken;
+        });
+
+        var options = {
+            url: "https://api.ionic.io/push/notifications",
+            method: "POST",
+            json: true,
+            headers: {
+                // Ionic API KEY
+                "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyNjA4MDA2My02ZDllLTQyYmItOWUwZS0yZDgyZWVhNTlkNTgifQ.86oRYuBnyk2UXsX1SMGKeOBlJjOzhlFvP0uYRJmgwM8"
+            },
+            body: {
+                "tokens": pushData.tokens,
+                "profile": "tracs_push",
+                "notification": {
+                    "title": "Alerta de paciente",
+                    "message": patient.name + " necesita ayuda!!",
+                    "android": {
+                        "message": patient.name + " necesita ayuda!!",
+                        "payload": pushData.payload
+                    }
+                }
+            }
+        };
+
+        request(options);
 
         patient.geoAlert.push(geoAlert);
         return NotificationsService.createNotificationForPatient(patient, "Hay una nueva alerta del paciente", "patient.geoAlert.added", {
-            latitude: geoAlert.latitude,
-            longitude: geoAlert.longitude
+            latitude: geoAlert.coords.latitude,
+            longitude: geoAlert.coords.longitude
         });
-
     }, function (error) {
         logger.error("No se pudo recuperar el paciente con id " + patientId, error);
         return error;

@@ -12,7 +12,7 @@ router.get("/:id", UserController.findById);
 router.post("/", UserController.addUser);
 
 router.put("/:id", UserController.updateUser);
-
+router.put("/save/push", UserController.savePushToken);
 
 router.delete("/:id", UserController.deleteUser);
 

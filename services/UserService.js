@@ -1,6 +1,6 @@
 /*jshint bitwise: false, camelcase: true, curly: true, eqeqeq: true, globals: false, freeze: true, immed: true, nocomma: true, newcap: true, noempty: true, nonbsp: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, latedef: true*/
 
-/* globals require, module, console */
+/* globals require, module */
 
 require("../models/User");
 require("../models/Treatment");
@@ -139,6 +139,20 @@ UserService.deleteUser = function (userId) {
             logger.error("Ocurrió un error al borrar al usuario con id " + userId, err);
             return err;
         });
+    });
+};
+
+UserService.savePushToken = function (data) {
+    "use strict";
+    return User.findOneAndUpdate( {_id: data.userId}, {
+        $set: {
+            pushToken: data.pushToken
+        }
+    }, { new: true } ).exec().then(function(user) {
+        return user;
+    }, function(err) {
+        logger.error("Ocurrió un error al guardar el token push para el usuario con id " + data.userId, err);
+        return err;
     });
 };
 
