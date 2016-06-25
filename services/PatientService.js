@@ -283,7 +283,8 @@ PatientService.addGeoAlert = function (patientId, geoAlert) {
                 "patient": {
                     _id: patient._id,
                     name: patient.name,
-                    picture: patient.picture
+                    picture: patient.picture,
+                    phoneNumber: patient.phoneNumber
                 },
                 "coordinates": {
                     latitude: geoAlert.coords.latitude,
