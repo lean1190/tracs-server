@@ -21,7 +21,7 @@ PatientNoteController.updatePatientNote= function (req, res) {
 PatientNoteController.deleteNote = function (req, res) {
     "use strict";
 
-    var noteId = req.params.id;
+    var noteId = req.params.noteId;
     PatientNoteService.deleteNote(noteId).then(function (note) {
         res.status(200).jsonp(note);
     }, function (err) {

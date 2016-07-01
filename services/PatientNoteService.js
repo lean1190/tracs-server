@@ -34,6 +34,7 @@ PatientNoteService.updatePatientNote = function (reqNote, noteId){
  * @returns {promise} una promesa
  */
 PatientNoteService.deleteFromProfile = function (profileId){
+    "use strict"
 
     return PatientNote.find({ profile:profileId }).remove().exec();
 }
@@ -44,6 +45,7 @@ PatientNoteService.deleteFromProfile = function (profileId){
  * @returns {promesa} una promesa con la nota borrada
  */
 PatientNoteService.deleteNote = function (noteId){
+    "use strict"
 
     return PatientNote.find({ _id:noteId }).remove().exec();
 }
