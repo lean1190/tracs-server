@@ -96,10 +96,12 @@ ProfileService.getPatientOpinions = function (patientId) {
  */
 ProfileService.getProfile = function (patientId, userId) {
     "use strict";
+
     return Profile.find({
         patient: patientId,
         user: userId
     }).then(function (profile) {
+
         return profile[0];
 
     }, function (error) {
@@ -223,16 +225,16 @@ ProfileService.removeProfile = function (patientId, userId) {
     "use strict";
 
     //Se busca el id del profile
+    console.log(patientId,userId);
+
     return ProfileService.getProfile(patientId, userId).then(function (profile) {
         //Se borran las notas relacionadas al perfil
-        return PatientNoteService.deleteFromProfile(profile._id).then(function (deletedNote) {
+        return PatientNoteService.deleteFromProfile(profile._id/*profileId*/).then(function (deletedNote) {
             //Se borran las opiniones relacionadas al perfil
-            return PatientOpinionService.deleteFromProfile(profile._id).then(function (deletedOpinions) {
+            return PatientOpinionService.deleteFromProfile(profile._id/*profileId*/).then(function (deletedOpinions) {
                 //Se borra el perfil de la lista de perfiles del paciente
-
                 return profile.remove().then(function (deletedProfile) {
-
-                    Patient.update({_id: patientId},{ $pullAll: {profiles: [profile._id] } }).exec();
+                    Patient.update({_id: patientId},{ $pullAll: {profiles: [profile._id/*profileId*/] } }).exec();
                     return deletedProfile;
                 }, function (error) {
                     logger.error("No se pudo borrar el perfil", error);

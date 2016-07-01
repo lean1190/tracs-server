@@ -39,8 +39,10 @@ ProfileController.removeProfile = function(req,res){
     var userId = req.params.idUser;
     var patientId = req.params.idPatient;
 
+    //var profileId = req.params.idProfile;
 
-    ProfileService.removeProfile(patientId, userId).then(function(deletedProfile){
+
+    ProfileService.removeProfile(patientId, userId/*patientId,profileId*/).then(function(deletedProfile){
         res.status(200).jsonp(deletedProfile);
     }, function (err) {
         return res.status(500).send(err.message);

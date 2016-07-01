@@ -348,10 +348,10 @@ PatientService.addPatientDiagnosis = function(reqDiagnosis){
 
         NotificationsService.createNotificationForPatientId(diagnosis.patient, "Se ha modificado el diagnóstico del paciente", "patient.diagnosis.updated");
 
-        Patient.findOne({_id: diagnosis.patient}).then(function(patient){
+        return Patient.findOne({_id: diagnosis.patient}).then(function(patient){
 
             patient.latestDiagnosis = diagnosis._id;
-            patient.save();
+            return patient.save();
 
             //NotificationsService.createNotificationForPatientId(diagnosis.patient, "Se ha modificado el diagnóstico del paciente", "patient.diagnosis.updated");
 

@@ -148,7 +148,6 @@ PatientController.updatePatientContactInfo = function(req,res){
 
     var updatedPatientContactInfo = req.body;
     var patientId = req.params.id;
-    console.log("llegue aca");
     PatientService.updatePatientContactInfo(patientId,updatedPatientContactInfo).then(function (updatedPatient) {
         res.status(200).jsonp(updatedPatient);
     }, function (err) {
@@ -322,7 +321,6 @@ PatientController.deleteProfile = function (req, res) {
 
 
     PatientService.deleteProfile(patientId,profileId).then(function (resp) {
-        console.log(resp);
         res.status(200).jsonp(resp);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -377,7 +375,9 @@ PatientController.addPatientDiagnosis = function(req,res){
     };
 
     PatientService.addPatientDiagnosis(newDiagnosis).then(function(createdDiagnosis){
+
         res.status(200).jsonp(createdDiagnosis);
+
     }, function (err) {
         return res.status(500).send(err.message);
     });
