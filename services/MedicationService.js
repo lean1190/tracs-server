@@ -31,7 +31,19 @@ MedicationService.deleteMedication = function(medicationId){
     "use strict";
 
     return Medication.find({ _id: medicationId }).remove().exec();
-}
+};
 
+/**
+ * Devuelve las medicaciones relacionadas a un diagnostico
+ * @param   {number}  diagnosisId id del diagnostico que tienen las medicaciones  a buscar
+ * @returns {promise} una promesa con las medicaciones encontradas
+ */
+MedicationService.getDiagnosisMedications = function(diagnosisId){
+    "use strict";
+    console.log(diagnosisId);
+     return Medication.find({
+            diagnosis: diagnosisId
+        }).populate("prescribedBy").exec();
+};
 
 module.exports = MedicationService;

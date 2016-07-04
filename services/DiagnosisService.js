@@ -28,19 +28,21 @@ DiagnosisService.getDiagnosis = function(diagnosisId){
 
 };
 
+//REemplazado por un metodo en el medication service();
+
 /**
  * Devuelve las medicaciones relacionadas a un diagnostico
  * @param   {number}  diagnosisId id del diagnostico que tienen las medicaciones  a buscar
  * @returns {promise} una promesa con las medicaciones encontradas
  */
-DiagnosisService.getDiagnosisMedications = function (diagnosisId) {
+/*DiagnosisService.getDiagnosisMedications = function (diagnosisId) {
     "use strict";
 
     return Diagnosis.findOne({
             _id: diagnosisId
         },
         "medications -_id").populate("medications").exec();
-};
+};*/
 
 /**
  * Agrega medicaciones al diagnostico

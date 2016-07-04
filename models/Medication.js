@@ -10,7 +10,9 @@ var MedicationSchema = new Schema({
     drug: { type: String, required: true },
     dosis: { type: String, required: true },
     frequence: { type: String, required: true },
-    date: { type: Date, required: true }
+    date: { type: Date, required: true },
+    prescribedBy: {type: Schema.Types.ObjectId, ref : "User"},
+    diagnosis: {type: Schema.Types.ObjectId, ref: "Diagnosis"}
 });
 
 module.exports = mongoose.model("Medication", MedicationSchema);
