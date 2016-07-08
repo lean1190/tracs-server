@@ -40,7 +40,6 @@ MedicationService.deleteMedication = function(medicationId){
  */
 MedicationService.getDiagnosisMedications = function(diagnosisId){
     "use strict";
-    console.log(diagnosisId);
      return Medication.find({
             diagnosis: diagnosisId
         }).populate("prescribedBy").exec();

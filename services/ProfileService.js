@@ -148,7 +148,6 @@ ProfileService.addPatientOpinion = function (patientOpinion, userId, patientId) 
         return PatientOpinionService.addOpinion(newPatientOpinion).then(function (opinion) {
 
             profile.latestPatientOpinion = opinion._id;
-            console.log(profile);
             return profile.save().then(function (updatedProfile) {
                 NotificationsService.createNotificationForPatientId(patientId, "Se actualizaron las opiniones", "patient.opinion.updated");
 
@@ -225,8 +224,6 @@ ProfileService.removeProfile = function (patientId, userId) {
     "use strict";
 
     //Se busca el id del profile
-    console.log(patientId,userId);
-
     return ProfileService.getProfile(patientId, userId).then(function (profile) {
         //Se borran las notas relacionadas al perfil
         return PatientNoteService.deleteFromProfile(profile._id/*profileId*/).then(function (deletedNote) {

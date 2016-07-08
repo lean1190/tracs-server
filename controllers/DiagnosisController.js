@@ -26,7 +26,6 @@ DiagnosisController.getDiagnosisMedications = function (req, res) {
 
     var diagnosisId = req.params.id;
     MedicationService.getDiagnosisMedications(diagnosisId).then(function (medications) {
-        console.log(medications);
         res.status(200).jsonp(medications);
     }, function (err) {
         return res.status(500).send(err.message);
@@ -54,7 +53,6 @@ DiagnosisController.addDiagnosisMedication = function (req, res){
 
     var diagnosisId = req.params.id;
     var newMedication = req.body;
-    console.log(newMedication);
 
     DiagnosisService.addDiagnosisMedications(diagnosisId, newMedication).then(function(medication) {
         res.status(200).jsonp(medication);
