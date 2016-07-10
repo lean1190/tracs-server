@@ -141,7 +141,7 @@ PatientController.updatePatientGeneralInfo = function (req,res){
  * Actualiza la informacion de contacto del paciente
  * @param   {object} req informacion de contacto actualizada
  * @param   {object} res
- * @returns {object} el paciente modificado
+ * @returns {promise} el paciente modificado
  */
 PatientController.updatePatientContactInfo = function(req,res){
     "use strict"

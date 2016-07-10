@@ -16,8 +16,8 @@ var PatientSchema = new Schema({
     phoneNumber: String,
     contactInfo: {
         name: String,
-        address: String,
-        city: String
+        phoneNumber: String,
+        address: String
     },
     latestDiagnosis: { type: Schema.Types.ObjectId, ref : "Diagnosis" },
 
