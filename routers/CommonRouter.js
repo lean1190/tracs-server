@@ -3,8 +3,7 @@
 /* globals require, module, console */
 
 var express = require("express"),
-    router = express.Router(),
-    passport = require("passport");
+    router = express.Router();
 
 router.get("/", function (req, res) {
     "use strict";
