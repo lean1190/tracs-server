@@ -8,7 +8,7 @@ var express = require("express"),
 
 router.get("/", function (req, res) {
     "use strict";
-    res.status(200).send({"SayHi" : "Hello!"});
+    res.status(200).send({"SayHi" : "Hello from TRACS!"});
 
     return;
 });
