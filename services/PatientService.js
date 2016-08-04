@@ -320,6 +320,7 @@ PatientService.addGeoAlert = function (patientId, geoAlert) {
             }
         };
 
+        logger.info("Enviando push a los dispositivos", pushData.tokens);
         request(options);
 
         patient.geoAlert.push(geoAlert);
