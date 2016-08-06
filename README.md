@@ -39,3 +39,10 @@ npm install -g mocha
 
 set NODE_ENV=testing && mocha
 ```
+
+Para deployar en Heroku
+```
+#!javascript
+git push heroku master
+heroku open
+```
