@@ -22,6 +22,8 @@ Para levantar el server en development
 ```
 #!javascript
 npm start
+
+package.json: [start: node-inspector & nodemon --debug ./bin/www]
 ```
 
 Para levantar el server en production

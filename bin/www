@@ -8,6 +8,7 @@ var app = require('../app');
 var debug = require('debug')('tracs-server:server');
 var http = require('http');
 var logger = require('../utils/Logger');
+var ChatSocket = require("../sockets/ChatSocket");
 
 /**
  * Get port from environment and store in Express.
@@ -21,6 +22,12 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+/**
+ * Sockets setup
+ */
+var io = require("socket.io").listen(server),
+    chatSocket = new ChatSocket(io);
 
 /**
  * Listen on provided port, on all network interfaces.

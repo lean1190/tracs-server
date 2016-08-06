@@ -16,9 +16,6 @@ var // Config modules
     DiagnosisRouter = require("./routers/DiagnosisRouter"),
     PatientNoteRouter = require("./routers/PatientNoteRouter"),
 
-    // Sockets modules
-    ChatSocket = require("./sockets/ChatSocket"),
-
     // Environment configs
     config = require("./utils/Config");
 
@@ -37,9 +34,5 @@ var app = new Application({path: __dirname, folder: "public"}, [
     {route: "/diagnosis", handler: DiagnosisRouter},
     {route: "/patientNote", handler: PatientNoteRouter}
 ]);
-
-// ===== SOCKETS SETUP
-var io = require("socket.io")(4000),
-    chatSocket = new ChatSocket(io);
 
 module.exports = app;
